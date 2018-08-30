@@ -40,6 +40,7 @@ let VELMOVINGFRICTION = CGFloat(0.2)
 let PH = Int(25)      //Player height
 let PW = Int(22)      //Player width
 let TILESIZE = Int(32)
+let COLLISION_GIVE = CGFloat(0.2) // Move back by this amount when colliding
 
 var keysDown: [KeyCode: Bool] = [
     .left: false,
@@ -82,9 +83,9 @@ let blocks = [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
-    [0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
-    [0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,S,S,S],
-    [S,S,S,S,S,S,0,0,0,0,0,0,0,0,0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
+    [0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [S,S,S,S,S,S,0,0,0,0,0,0,0,0,0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S]
 ]
 
@@ -306,8 +307,12 @@ class GameScene: SKScene {
     }
     
     func collision_detection_map() {
-        player.position.x += vel.x //setXf(fx + velx)
-        fPrecalculatedY = player.position.y + vel.y
+//        player.position.x += vel.x //setXf(fx + velx)
+        
+        let targetPlayerPostition = CGPoint(x: player.position.x + vel.x, y: player.position.y)
+        
+        
+//        fPrecalculatedY = player.position.y + vel.y
         
 //        //        let fPlatformVelX = CGFloat(0)
 //        //        let fPlatformVelY = CGFloat(0)
@@ -317,12 +322,40 @@ class GameScene: SKScene {
 //
 //        player.position.y = fTempY
         
+        
+        
         //  x axis (--)
+        
         if player.position.y + CGFloat(PH) >= 0.0 {
             if vel.x > 0.01 {
-                player.position = mapcolldet_move(movePosition: player.position, horizontallyInDirection: 3);
+                // Moving right
+                
+                var collide = false
+                while player.position.x < targetPlayerPostition.x - COLLISION_GIVE && !collide {
+                    player.position.x = min(player.position.x + CGFloat(TILESIZE), targetPlayerPostition.x)
+                    let result = mapcolldet_move(movePosition: player.position, horizontallyInDirection: 3)
+                    player.position = result.position
+                    collide = result.collide
+//                    let newPosition = mapcolldet_move(movePosition: player.position, horizontallyInDirection: 3)
+//                    if newPosition != player.position {
+//                        collide = true
+//                    }
+//                    player.position = newPosition
+                }
+                
             } else if vel.x < -0.01 {
-                player.position = mapcolldet_move(movePosition: player.position, horizontallyInDirection: 1);
+                // Moving left
+                var collide = false
+                while player.position.x > targetPlayerPostition.x + COLLISION_GIVE && !collide {
+                    player.position.x = max(player.position.x - CGFloat(TILESIZE), targetPlayerPostition.x)
+                    let result = mapcolldet_move(movePosition: player.position, horizontallyInDirection: 1)
+                    player.position = result.position
+                    collide = result.collide
+//                    if newPosition != player.position {
+//                        collide = true
+//                    }
+//                    player.position = newPosition
+                }
             }
         }
         
@@ -332,7 +365,7 @@ class GameScene: SKScene {
         
     }
     
-    func mapcolldet_move(movePosition position: CGPoint, horizontallyInDirection direction: Int) -> CGPoint {
+    func mapcolldet_move(movePosition position: CGPoint, horizontallyInDirection direction: Int) -> (position: CGPoint, collide: Bool) {
         // left 1
         // right 3
         //        let counter_direction = direction == 1 ? 3 : 1
@@ -366,8 +399,10 @@ class GameScene: SKScene {
 //        print("mapcolldet_moveHorizontally: \(tx), \(ty) -> \(toptile)")
         
         //collide with solid, ice, and death and all sides death
+        var collide = false
         if TileTypeFlag(rawValue: toptile).contains(.solid) || TileTypeFlag(rawValue: bottomtile).contains(.solid) {
             
+            collide = true
             // Debug
             if TileTypeFlag(rawValue: toptile).contains(.solid) {
                 collideBlockNode.isHidden = false
@@ -389,11 +424,11 @@ class GameScene: SKScene {
             if direction == 1 {
                 // move to the edge of the tile
                 //                setXf( (float) ((tx << 5) + TILESIZE) + 0.2f);
-                position.x = CGFloat((tx << 5) + TILESIZE) + 0.2
+                position.x = CGFloat((tx << 5) + TILESIZE) + COLLISION_GIVE
             } else {
                 // move to the edge of the tile (tile on the right -> mind the player width)
                 //                setXf((float)((tx << 5) - PW) - 0.2f);
-                position.x = CGFloat((tx << 5) - PW) - 0.2
+                position.x = CGFloat((tx << 5) - PW) - COLLISION_GIVE
             }
             
             // Why save the old here? shouln't the one in update() be enough
@@ -409,7 +444,7 @@ class GameScene: SKScene {
             
             //            flipsidesifneeded();
         }
-        return position
+        return (position, collide)
     }
     
     
