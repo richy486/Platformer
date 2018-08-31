@@ -13,6 +13,15 @@ import GameplayKit
 class ViewController: NSViewController {
 
     @IBOutlet var skView: SKView!
+    
+    // origin bottom left
+    let speedLabel: NSTextField = {
+        let view = NSTextField(frame: NSRect(x: 10, y: 420, width: 300, height: 50))
+        view.stringValue = "Speed"
+        view.textColor = NSColor.white
+        view.isEditable = false
+        return view
+    }()
     let speedSlider: NSSlider = {
         let view = NSSlider(frame: NSRect(x: 10, y: 400, width: 300, height: 50))
         view.minValue = 0
@@ -21,6 +30,13 @@ class ViewController: NSViewController {
         return view
     }()
     
+    let accelLabel: NSTextField = {
+        let view = NSTextField(frame: NSRect(x: 10, y: 370, width: 300, height: 50))
+        view.stringValue = "Acceleration"
+        view.textColor = NSColor.white
+        view.isEditable = false
+        return view
+    }()
     let accelSlider: NSSlider = {
         let view = NSSlider(frame: NSRect(x: 10, y: 350, width: 300, height: 50))
         view.minValue = 0
@@ -51,11 +67,13 @@ class ViewController: NSViewController {
         }
         
         
-        self.view.addSubview(speedSlider)
+        view.addSubview(speedLabel)
+        view.addSubview(speedSlider)
         speedSlider.target = self
         speedSlider.action = #selector(updateSpeed)
         
-        self.view.addSubview(accelSlider)
+        view.addSubview(accelLabel)
+        view.addSubview(accelSlider)
         accelSlider.target = self
         accelSlider.action = #selector(updateAccel)
     }

@@ -14,6 +14,7 @@ enum KeyCode: Int {
     case down = 125
     case up = 126
     case z = 6
+    case a = 0
 }
 
 public struct IntPoint {
@@ -32,6 +33,16 @@ public struct IntPoint {
             return IntPoint()
         }
     }
+    
+    var cgPoint: CGPoint {
+        return CGPoint(x: CGFloat(x), y: CGFloat(y))
+    }
+}
+
+extension CGPoint {
+    var intPoint: IntPoint {
+        return IntPoint(x: Int(x), y: Int(y))
+    }
 }
 
 //let VELMOVINGADD = CGFloat(0.5)
@@ -39,13 +50,18 @@ public struct IntPoint {
 let VELMOVINGFRICTION = CGFloat(0.2)
 let PH = Int(25)      //Player height
 let PW = Int(22)      //Player width
+let HALFPH = Int(12)
+let HALFPW = Int(11)
 let TILESIZE = Int(32)
 let COLLISION_GIVE = CGFloat(0.2) // Move back by this amount when colliding
+let VELSTOPJUMP = CGFloat(5.0)
+let VELJUMP = CGFloat(9.0)    //velocity for jumping
 
 var keysDown: [KeyCode: Bool] = [
     .left: false,
     .right: false,
     .z: false,
+    .a: false,
     .up: false,
     .down: false
 ]
@@ -128,12 +144,33 @@ class GameScene: SKScene {
     var fOld: CGPoint = CGPoint.zero
     var oldvel: CGPoint = CGPoint.zero
     
-    var i = IntPoint.zero //x, y coordinate (top left of the player rectangle)
-    var f = CGPoint.zero
+    private var _i = IntPoint.zero
+    var i: IntPoint { //x, y coordinate (top left of the player rectangle)
+        set {
+            _f = newValue.cgPoint
+            _i = newValue
+        }
+        get {
+            return _i
+        }
+    }
+    private var _f = CGPoint.zero
+    var f: CGPoint {
+        set {
+            _f = newValue
+            _i = newValue.intPoint
+        }
+        get {
+            return _f
+        }
+    }
     var fPrecalculatedY = CGFloat(0)
     var iHorizontalPlatformCollision = Int(0)
     var iVerticalPlatformCollision = Int(0)
     var iPlatformCollisionPlayerId = Int(0)
+    
+    var lockjump = false
+    var inair = false
     
     let selectedBlockNode: SKShapeNode = {
         let node = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
@@ -188,13 +225,14 @@ class GameScene: SKScene {
             }
         }
         
+        f = CGPoint(x: 10 * TILESIZE, y: (blocks.count - 2) * TILESIZE)
         player = SKShapeNode(rect: CGRect(x: 0, y: 0, width: PW, height: PH))
         player.fillColor = .red
-        player.position = CGPoint(x: 10 * TILESIZE, y: (blocks.count - 2) * TILESIZE)
+        player.position = f
         player.name = "player"
         addChild(player)
         
-        fOld = player.position
+        fOld = f
         
         addChild(selectedBlockNode)
         addChild(collideBlockNode)
@@ -213,6 +251,8 @@ class GameScene: SKScene {
     override func keyDown(with event: NSEvent) {
         if let keyCode = KeyCode(rawValue: Int(event.keyCode)) {
             keysDown[keyCode] = true
+        } else {
+            print("unused key code: \(event.keyCode)")
         }
     }
     
@@ -234,30 +274,69 @@ class GameScene: SKScene {
         
     }
     
+    // void CPlayer::move()
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
         
-        if keysDown.values.dropFirst().allSatisfy({ $0 == keysDown.values.first }) {
-            decreaseVelocity()
+        var movementDirectionX = CGFloat(0.0)
+//        if keysDown.values.dropFirst().allSatisfy({ $0 == keysDown.values.first }) {
+        if keysDown[.left] == keysDown[.right] {
+            // Both left and right down or both left and right up
+            movementDirectionX = 0.0
         } else if keysDown[.left] == true {
-            accelerateX(-1.0)
+//            accelerateX(-1.0)
+            movementDirectionX = -1.0
         } else if keysDown[.right] == true {
-            accelerateX(1.0)
+//            accelerateX(1.0)
+            movementDirectionX = 1.0
         } else if keysDown[.z] == true {
-            accelerateX(1.0)
+//            accelerateX(1.0)
+            movementDirectionX = 1.0
             keysDown[.z] = false
-        } else if keysDown[.up] == true {
-            accelerateY(-1.0)
-        } else if keysDown[.down] == true {
-            accelerateY(1.0)
         }
-        fOld = player.position
+//        else if keysDown[.up] == true {
+//            accelerateY(-1.0)
+//        } else if keysDown[.down] == true {
+//            accelerateY(1.0)
+//        }
+        
+        
+        
+//        if keysDown[.a] == true {
+//            // Jump!
+//
+//            if !lockjump {
+//                if !inair {
+//                    if tryFallingThroughPlatform(inDirectionX: movementDirectionX) {
+//
+//                    } else {
+//                        jump(inDirectionX: movementDirectionX, jumpModifier: 1.0)
+//
+//                    }
+//                }
+//            }
+//        } else {
+//            enableFreeFall()
+//        }
+        
+        if movementDirectionX != 0.0 {
+            accelerateX(movementDirectionX)
+        } else {
+            decreaseVelocity()
+        }
+        
+        
+        
+        fOld = f
         collision_detection_map()
         
-        // Replace this with jump code
-        player.position.y += vel.y
+//        // Replace this with jump code
+//        player.position.y += vel.y
+        
+        player.position = f
     }
     
+    // void CPlayer::accelerate(float direction)
     func accelerateX(_ direction: CGFloat) {
         vel.x += AppState.shared.VELMOVINGADD * direction
         let maxVel = AppState.shared.VELMOVING
@@ -266,6 +345,8 @@ class GameScene: SKScene {
             vel.x = maxVel * direction
         }
     }
+    
+    // for testing
     func accelerateY(_ direction: CGFloat) {
         vel.y += AppState.shared.VELMOVINGADD * direction
         let maxVel = AppState.shared.VELMOVING
@@ -291,25 +372,50 @@ class GameScene: SKScene {
         }
         
         
-        if vel.y > 0.0 {
-            vel.y -= VELMOVINGFRICTION
-            
-            if vel.y < 0.0 {
-                vel.y = 0.0
-            }
-        } else if vel.y < 0.0 {
-            vel.y += VELMOVINGFRICTION
-            
-            if vel.y > 0.0 {
-                vel.y = 0.0
-            }
+//        if vel.y > 0.0 {
+//            vel.y -= VELMOVINGFRICTION
+//
+//            if vel.y < 0.0 {
+//                vel.y = 0.0
+//            }
+//        } else if vel.y < 0.0 {
+//            vel.y += VELMOVINGFRICTION
+//
+//            if vel.y > 0.0 {
+//                vel.y = 0.0
+//            }
+//        }
+    }
+    
+//    void CPlayer::Jump(short iMove, float jumpModifier, bool fKuriboBounce)
+    func jump(inDirectionX movementDirectionX: CGFloat, jumpModifier: CGFloat) {
+        lockjump = true
+        
+        vel.y = -VELJUMP * jumpModifier;
+        inair = true;
+        
+//        //Need to help the player off the platform otherwise it will collide with them again
+//        platform = nil
+    }
+    
+    func enableFreeFall() {
+        lockjump = false
+        if vel.y < -VELSTOPJUMP {
+            vel.y = -VELSTOPJUMP
         }
+    }
+    
+    func tryFallingThroughPlatform(inDirectionX movementDirectionX: CGFloat) -> Bool {
+        
+        // TODO: fall through code
+        let fallThrough = false
+        return fallThrough
     }
     
     func collision_detection_map() {
 //        player.position.x += vel.x //setXf(fx + velx)
         
-        let targetPlayerPostition = CGPoint(x: player.position.x + vel.x, y: player.position.y)
+        let targetPlayerPostition = CGPoint(x: f.x + vel.x, y: f.y)
         
         
 //        fPrecalculatedY = player.position.y + vel.y
@@ -326,40 +432,47 @@ class GameScene: SKScene {
         
         //  x axis (--)
         
-        if player.position.y + CGFloat(PH) >= 0.0 {
+        if f.y + CGFloat(PH) >= 0.0 {
             if vel.x > 0.01 {
                 // Moving right
                 
                 var collide = false
-                while player.position.x < targetPlayerPostition.x - COLLISION_GIVE && !collide {
-                    player.position.x = min(player.position.x + CGFloat(TILESIZE), targetPlayerPostition.x)
-                    let result = mapcolldet_move(movePosition: player.position, horizontallyInDirection: 3)
-                    player.position = result.position
+                while f.x < targetPlayerPostition.x - COLLISION_GIVE && !collide {
+                    f.x = min(f.x + CGFloat(TILESIZE), targetPlayerPostition.x)
+                    let result = mapcolldet_move(movePosition: f, horizontallyInDirection: 3)
+                    f = result.position
                     collide = result.collide
-//                    let newPosition = mapcolldet_move(movePosition: player.position, horizontallyInDirection: 3)
-//                    if newPosition != player.position {
+//                    let newPosition = mapcolldet_move(movePosition: f, horizontallyInDirection: 3)
+//                    if newPosition != f {
 //                        collide = true
 //                    }
-//                    player.position = newPosition
+//                    f = newPosition
                 }
                 
             } else if vel.x < -0.01 {
                 // Moving left
                 var collide = false
-                while player.position.x > targetPlayerPostition.x + COLLISION_GIVE && !collide {
-                    player.position.x = max(player.position.x - CGFloat(TILESIZE), targetPlayerPostition.x)
-                    let result = mapcolldet_move(movePosition: player.position, horizontallyInDirection: 1)
-                    player.position = result.position
+                while f.x > targetPlayerPostition.x + COLLISION_GIVE && !collide {
+                    f.x = max(f.x - CGFloat(TILESIZE), targetPlayerPostition.x)
+                    let result = mapcolldet_move(movePosition: f, horizontallyInDirection: 1)
+                    f = result.position
                     collide = result.collide
-//                    if newPosition != player.position {
+//                    if newPosition != f {
 //                        collide = true
 //                    }
-//                    player.position = newPosition
+//                    f = newPosition
                 }
             }
         }
         
         //  then y axis (|)
+        var txl = 0
+        var txr = 0
+        var txc = 0
+        var iPlayerL = i.x
+        var iPlayerC = i.x + HALFPW
+        var iPlayerR = i.x + PW
+        
         
         
         
