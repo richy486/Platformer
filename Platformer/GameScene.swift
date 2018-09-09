@@ -56,6 +56,10 @@ let TILESIZE = Int(32)
 let COLLISION_GIVE = CGFloat(0.2) // Move back by this amount when colliding
 let VELSTOPJUMP = CGFloat(5.0)
 let VELJUMP = CGFloat(9.0)    //velocity for jumping
+let BOUNCESTRENGTH = CGFloat(0.5)
+let GRAVITATION = CGFloat(0.40)
+let MAXVELY = CGFloat(20.0)
+
 
 var keysDown: [KeyCode: Bool] = [
     .left: false,
@@ -77,6 +81,7 @@ struct TileTypeFlag: OptionSet {
 }
 
 let S = TileTypeFlag.solid.rawValue
+let T = TileTypeFlag.solid_on_top.rawValue
 
 let blocks = [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
@@ -99,7 +104,7 @@ let blocks = [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
-    [0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,S,0,0,0,0,0,0,0,0,0,0,0,S,S,S,0,T,T,T,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [S,S,S,S,S,S,0,0,0,0,0,0,0,0,0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S]
@@ -172,6 +177,8 @@ class GameScene: SKScene {
     var lockjump = false
     var inair = false
     
+    var fallthroughTile = false // bool fallthrough;
+    
     let selectedBlockNode: SKShapeNode = {
         let node = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
         node.fillColor = .clear
@@ -213,14 +220,26 @@ class GameScene: SKScene {
         // Blocks
         for (y, xBlocks) in blocks.enumerated() {
             for (x, blockVal) in xBlocks.enumerated() {
-                if blockVal > 0 {
+                
+//                guard let blockType = TileTypeFlag(rawValue: blockVal) else {
+//                    continue
+//                }
+                
+                switch blockVal {
+                case TileTypeFlag.solid.rawValue:
                     let blockNode = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
                     blockNode.fillColor = .yellow
                     blockNode.strokeColor = .white
                     blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
                     addChild(blockNode)
-                    
-                    
+                case TileTypeFlag.solid_on_top.rawValue:
+                    let blockNode = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: 5))
+                    blockNode.fillColor = .yellow
+                    blockNode.strokeColor = .white
+                    blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
+                    addChild(blockNode)
+                default:
+                    continue
                 }
             }
         }
@@ -302,22 +321,22 @@ class GameScene: SKScene {
         
         
         
-//        if keysDown[.a] == true {
-//            // Jump!
-//
-//            if !lockjump {
-//                if !inair {
-//                    if tryFallingThroughPlatform(inDirectionX: movementDirectionX) {
-//
-//                    } else {
-//                        jump(inDirectionX: movementDirectionX, jumpModifier: 1.0)
-//
-//                    }
-//                }
-//            }
-//        } else {
-//            enableFreeFall()
-//        }
+        if keysDown[.a] == true {
+            // Jump!
+
+            if !lockjump {
+                if !inair {
+                    if tryFallingThroughPlatform(inDirectionX: movementDirectionX) {
+
+                    } else {
+                        jump(inDirectionX: movementDirectionX, jumpModifier: 1.0)
+
+                    }
+                }
+            }
+        } else {
+            enableFreeFall()
+        }
         
         if movementDirectionX != 0.0 {
             accelerateX(movementDirectionX)
@@ -418,7 +437,7 @@ class GameScene: SKScene {
         let targetPlayerPostition = CGPoint(x: f.x + vel.x, y: f.y)
         
         
-//        fPrecalculatedY = player.position.y + vel.y
+        fPrecalculatedY = player.position.y + vel.y
         
 //        //        let fPlatformVelX = CGFloat(0)
 //        //        let fPlatformVelY = CGFloat(0)
@@ -473,9 +492,38 @@ class GameScene: SKScene {
         var iPlayerC = i.x + HALFPW
         var iPlayerR = i.x + PW
         
+        txl = iPlayerL / TILESIZE
+        txc = iPlayerC / TILESIZE
+        txr = iPlayerR / TILESIZE
         
+        var alignedBlockX = 0
+        var unAlignedBlockX = 0
+        var unAlignedBlockFX = CGFloat(0)
         
+        let overlaptxl = (txl << 5) + TILESIZE + 1
         
+        if i.x + HALFPW < overlaptxl {
+            alignedBlockX = txl
+            unAlignedBlockX = txr
+            unAlignedBlockFX = CGFloat((txr << 5) - PW) - 0.2
+        } else {
+            alignedBlockX = txr
+            unAlignedBlockX = txl
+            unAlignedBlockFX = CGFloat((txl << 5) + TILESIZE) + 0.2
+        }
+        
+        let fMovingUp = vel.y
+        
+        if fMovingUp < -0.01 {
+            //moving up
+            mapcolldet_moveUpward(txl: txl, txc: txc, txr: txr, alignedBlockX: alignedBlockX, unAlignedBlockX: unAlignedBlockX, unAlignedBlockFX: unAlignedBlockFX);
+        } else {
+            //moving down / on ground
+            mapcolldet_moveDownward(txl: txl, txc: txc, txr: txr, alignedBlockX: alignedBlockX, unAlignedBlockX: unAlignedBlockX, unAlignedBlockFX: unAlignedBlockFX);
+        }
+        
+        // if (!platform) {
+        fallthroughTile = false
     }
     
     func mapcolldet_move(movePosition position: CGPoint, horizontallyInDirection direction: Int) -> (position: CGPoint, collide: Bool) {
@@ -561,5 +609,144 @@ class GameScene: SKScene {
     }
     
     
+//    void CPlayer::mapcolldet_moveUpward(short txl, short txc, short txr,
+//    short alignedBlockX, short unAlignedBlockX, float unAlignedBlockFX)
     
+    
+    func mapcolldet_moveUpward(txl: Int,
+                               txc: Int,
+                               txr: Int,
+                               alignedBlockX: Int,
+                               unAlignedBlockX: Int,
+                               unAlignedBlockFX: CGFloat) {
+        
+        // moving up
+        fallthroughTile = false
+        
+        // fPrecalculatedY is set in collision_detection_map
+        let ty = Int(fPrecalculatedY) / TILESIZE
+        
+        
+        // Using tiles instead of IO_Block
+//        let toptile = map(x: tx, y: ty)
+//        let bottomtile = map(x: tx, y: ty2)
+        
+        //Player hit a solid
+        let alignedTileType = map(x: alignedBlockX, y: ty)
+        
+//        if (alignedTileType & tile_flag_solid) &&
+//            !(alignedTileType & tile_flag_super_or_player_death_bottom) &&
+//            (!(alignedTileType & tile_flag_death_on_bottom) || isInvincible() || isShielded() || shyguy) {}
+        if TileTypeFlag(rawValue: alignedTileType).contains(.solid) {
+            f.y = CGFloat((ty << 5) + TILESIZE) + 0.2
+            fOld.y = f.y - 1.0
+            
+            if vel.y < 0.0 {
+                vel.y = -vel.y * BOUNCESTRENGTH
+            }
+            
+            return
+        }
+        
+        //Player squeezed around the block
+        let unalignedTileType = map(x: unAlignedBlockX, y: ty)
+//        if (unalignedTileType & tile_flag_solid) &&
+//           !(unalignedTileType & tile_flag_super_or_player_death_bottom) &&
+//           (!(unalignedTileType & tile_flag_death_on_bottom) || isInvincible() || isShielded() || shyguy) {
+        if TileTypeFlag(rawValue: unalignedTileType).contains(.solid) {
+            f.x = unAlignedBlockFX
+            fOld.x = f.x
+            
+            f.y = fPrecalculatedY
+            vel.y += GRAVITATION
+        }
+        
+//    else if ((alignedTileType & tile_flag_player_or_death_on_bottom) || (unalignedTileType & tile_flag_player_or_death_on_bottom)) {
+        else {
+            f.y = fPrecalculatedY
+            vel.y += GRAVITATION
+        }
+        
+        inair = true
+        
+        
+    }
+    
+//    void CPlayer::mapcolldet_moveDownward(short txl, short txc, short txr,
+//    short alignedBlockX, short unAlignedBlockX, float unAlignedBlockFX)
+    
+    func mapcolldet_moveDownward(txl: Int,
+                                 txc: Int,
+                                 txr: Int,
+                                 alignedBlockX: Int,
+                                 unAlignedBlockX: Int,
+                                 unAlignedBlockFX: CGFloat) {
+        let ty = (Int(fPrecalculatedY) + PH) / TILESIZE
+        
+        let lefttile = map(x: txl, y: ty)
+        let righttile = map(x: txr, y: ty)
+        
+        let fGapSupport = false // VELTURBOMOVING
+        
+        let fSolidTileUnderPlayer = TileTypeFlag(rawValue: lefttile).contains(.solid) ||
+                                    TileTypeFlag(rawValue: righttile).contains(.solid)
+        
+//        if (lefttile & tile_flag_solid_on_top || righttile & tile_flag_solid_on_top || fGapSupport) &&
+//            fOldY + PH <= (ty << 5)
+        if (TileTypeFlag(rawValue: lefttile).contains(.solid_on_top) ||
+                TileTypeFlag(rawValue: righttile).contains(.solid_on_top) ||
+                fGapSupport) &&
+            fOld.y + CGFloat(PH) <= CGFloat(ty << 5) {
+            
+            // on ground
+            // Deal with player down jumping through solid on top tiles
+            
+            if fallthroughTile && !fSolidTileUnderPlayer {
+                f.y = CGFloat((ty << 5) - PH) + 0.2
+                inair = true
+                
+            } else {
+                // we were above the tile in the previous frame
+                f.y = CGFloat((ty << 5) - PH) - 0.2
+                vel.y = GRAVITATION
+                
+                // if (!platform) {
+                inair = false
+            }
+            
+            fOld.y = f.y - GRAVITATION
+            if iVerticalPlatformCollision == 0 {
+                // Kill player
+            }
+            
+        }
+        
+        if fSolidTileUnderPlayer {
+            // on ground
+            
+            f.y = CGFloat((ty << 5) - PH) - 0.2
+            vel.y = GRAVITATION //1 so we test against the ground again int the next frame (0 would test against the ground in the next+1 frame)
+            
+            //if (!platform) {
+            inair = false
+        } else {
+            // falling (in air)
+            f.y = fPrecalculatedY
+            vel.y = cap(fallingVelocity: GRAVITATION + vel.y)
+            
+            //if (!platform) {
+            inair = true;
+        }
+        
+        
+        
+    }
+    
+    // ObjectBase.h
+    private func cap(fallingVelocity vel: CGFloat) -> CGFloat {
+        if vel > MAXVELY {
+            return MAXVELY
+        }
+        return vel
+    }
 }
