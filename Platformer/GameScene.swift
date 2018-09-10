@@ -88,7 +88,7 @@ struct TileTypeFlag: OptionSet {
 let S = TileTypeFlag.solid.rawValue
 let T = TileTypeFlag.solid_on_top.rawValue
 
-let blocks = [
+var blocks = [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
@@ -128,6 +128,19 @@ func map(x: Int, y: Int) -> Int {
     return xBlocks[x]
 }
 
+func setMap(x: Int, y: Int, tileType: TileTypeFlag) {
+    
+    guard y >= 0 && y < blocks.count else {
+        return
+    }
+    let xBlocks = blocks[y]
+    guard x >= 0 && x < xBlocks.count else {
+        return
+    }
+    
+    blocks[y][x] = tileType.rawValue
+}
+
 func posToTilePos(_ position: CGPoint) -> (x: Int, y: Int) {
     let x = Int(position.x + 0.5) / TILESIZE
     let y = (Int(position.y + 0.5) / TILESIZE) //+ 1
@@ -147,6 +160,8 @@ class GameScene: SKScene {
     private var vel: CGPoint = CGPoint.zero //velocity on x, y axis
     private var fOld: CGPoint = CGPoint.zero
     private var oldvel: CGPoint = CGPoint.zero
+    
+    private var blockNodes: [SKNode] = []
     
     private let localCamera = SKCameraNode()
     
@@ -198,6 +213,8 @@ class GameScene: SKScene {
         return node
     }()
     
+    
+    
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         
@@ -208,28 +225,7 @@ class GameScene: SKScene {
         self.camera = localCamera
         
         
-        // Blocks
-        for (y, xBlocks) in blocks.enumerated() {
-            for (x, blockVal) in xBlocks.enumerated() {
-                
-                switch blockVal {
-                case S:
-                    let blockNode = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
-                    blockNode.fillColor = .yellow
-                    blockNode.strokeColor = .white
-                    blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
-                    addChild(blockNode)
-                case T:
-                    let blockNode = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: 5))
-                    blockNode.fillColor = .yellow
-                    blockNode.strokeColor = .white
-                    blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
-                    addChild(blockNode)
-                default:
-                    continue
-                }
-            }
-        }
+        setupBlocks()
         
         f = CGPoint(x: 10 * TILESIZE, y: (blocks.count - 2) * TILESIZE)
         player = SKShapeNode(rect: CGRect(x: 0, y: 0, width: PW, height: PH))
@@ -269,7 +265,7 @@ class GameScene: SKScene {
     }
     
     override func mouseDown(with event: NSEvent) {
-//        let location = event.location(in: masterNode)
+
         let location = event.location(in: self)
         let tile = posToTile(location)
         let tilePos = posToTilePos(location)
@@ -278,6 +274,17 @@ class GameScene: SKScene {
         
         selectedBlockNode.isHidden = false
         selectedBlockNode.position = CGPoint(x: tilePos.x * TILESIZE, y: tilePos.y * TILESIZE)
+        
+        switch AppState.shared.editMode {
+        case .paint:
+            setMap(x: tilePos.x, y: tilePos.y, tileType: .solid)
+            setupBlocks()
+        case .erase:
+            setMap(x: tilePos.x, y: tilePos.y, tileType: .nonsolid)
+            setupBlocks()
+        default:
+            break
+        }
         
     }
     
@@ -345,6 +352,38 @@ class GameScene: SKScene {
         player.position = f
         
 //        localCamera.position = player.position
+    }
+    
+    private func setupBlocks() {
+        blockNodes.forEach { node in
+            node.removeFromParent()
+        }
+        blockNodes.removeAll()
+        
+        // Blocks
+        for (y, xBlocks) in blocks.enumerated() {
+            for (x, blockVal) in xBlocks.enumerated() {
+                
+                switch blockVal {
+                case S:
+                    let blockNode = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
+                    blockNode.fillColor = .yellow
+                    blockNode.strokeColor = .white
+                    blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
+                    addChild(blockNode)
+                    blockNodes.append(blockNode)
+                case T:
+                    let blockNode = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: 5))
+                    blockNode.fillColor = .yellow
+                    blockNode.strokeColor = .white
+                    blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
+                    addChild(blockNode)
+                    blockNodes.append(blockNode)
+                default:
+                    continue
+                }
+            }
+        }
     }
     
     // void CPlayer::accelerate(float direction)
@@ -504,6 +543,11 @@ class GameScene: SKScene {
             f = potentialPosition
         }
         fallthroughTile = false
+        
+        // Reset gravity if on the ground
+        if !inair {
+            vel.y = AppState.shared.GRAVITATION
+        }
     }
     
     func mapcolldet_move(movePosition position: CGPoint, horizontallyInDirection direction: Int) -> (position: CGPoint, collide: Bool) {

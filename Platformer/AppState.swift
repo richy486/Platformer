@@ -8,6 +8,20 @@
 
 import Foundation
 
+enum EditMode: Int, CaseIterable {
+    case none
+    case paint
+    case erase
+    
+    var name: String {
+        switch self {
+        case .none: return "None"
+        case .paint: return "Paint"
+        case .erase: return "Erase"
+        }
+    }
+}
+
 class AppState {
     static var shared = AppState()
     
@@ -17,4 +31,6 @@ class AppState {
     var VELJUMP = CGFloat(9.0)
     var VELSTOPJUMP = CGFloat(5.0)
     var GRAVITATION = CGFloat(0.40)
+    
+    var editMode: EditMode = .none
 }

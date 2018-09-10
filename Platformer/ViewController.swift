@@ -97,21 +97,6 @@ class ViewController: NSViewController {
         return view
     }()
     
-//    let accelLabel: NSTextField = {
-//        let view = NSTextField(frame: NSRect(x: 10, y: 470, width: 300, height: 50))
-//        view.stringValue = "Acceleration"
-//        view.textColor = NSColor.white
-//        view.isEditable = false
-//        return view
-//    }()
-//    let accelSlider: NSSlider = {
-//        let view = NSSlider(frame: NSRect(x: 10, y: 450, width: 300, height: 50))
-//        view.minValue = 0
-//        view.maxValue = 100
-//        view.doubleValue = Double(AppState.shared.VELMOVINGADD)
-//        view.trackFillColor = NSColor.green
-//        return view
-//    }()
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -157,6 +142,16 @@ class ViewController: NSViewController {
         view.addSubview(gravSlider)
         gravSlider.target = self
         gravSlider.action = #selector(updateGrav)
+        
+        let modeSwitchControl = NSSegmentedControl(labels: EditMode.allCases.map { $0.name },
+                                      trackingMode: .selectOne,
+                                      target: self,
+                                      action: #selector(updateMode))
+        modeSwitchControl.frame = CGRect(x: view.frame.width/2 - 100, y: view.frame.height - 60, width: 200, height: 50)
+        modeSwitchControl.selectedSegment = AppState.shared.editMode.rawValue
+        view.addSubview(modeSwitchControl)
+        
+        
     }
     
     @objc func updateSpeed(sender: NSSlider) {
@@ -183,6 +178,13 @@ class ViewController: NSViewController {
         let val = CGFloat(sender.doubleValue)
         print("new gravitation: \(val)")
         AppState.shared.GRAVITATION = val
+    }
+    @objc func updateMode(sender: NSSegmentedControl) {
+        guard let mode = EditMode(rawValue: sender.selectedSegment) else {
+            return
+        }
+        
+        AppState.shared.editMode = mode
     }
 }
 
