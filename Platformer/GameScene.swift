@@ -516,17 +516,17 @@ class GameScene: SKScene {
         if vel.y < -0.01 {
             //moving up
             var collide = false
-            var potentialVelocity = vel
+//            var potentialVelocity = vel
             var potentialPosition = f
 //            fPrecalculatedY = player.position.y + vel.y
             
-            var count = 0
+//            var count = 0
             while f.y > targetPlayerPostition.y + COLLISION_GIVE && !collide {
 
                 f.y = max(f.y - CGFloat(TILESIZE), targetPlayerPostition.y)
 //            f.y = targetPlayerPostition.y
                 let result = mapcolldet_moveUpward(movePosition: f,
-                                                   velocity: vel,
+//                                                   velocity: vel,
                                                    txl: txl,
                                                    txc: txc,
                                                    txr: txr,
@@ -535,27 +535,31 @@ class GameScene: SKScene {
                                                    unAlignedBlockFX: unAlignedBlockFX)
                 collide = result.collide
                 potentialPosition = result.position
-                potentialVelocity = result.velocity
+//                potentialVelocity = result.velocity
                 
-                count += 1
+//                count += 1
+            }
+            if collide && vel.y < 0.0 {
+                print("bounce")
+                vel.y = -vel.y * BOUNCESTRENGTH
             }
             f = potentialPosition
-            vel = potentialVelocity
-            if count > 0 {
-                print("up count: \(count)")
-            }
+//            vel = potentialVelocity
+//            if count > 0 {
+//                print("up count: \(count)")
+//            }
             
             
         } else {
             //moving down / on ground
             var collide = false
-            var potentialVelocity = vel
+//            var potentialVelocity = vel
             var potentialPosition = f
             while f.y < targetPlayerPostition.y - COLLISION_GIVE && !collide {
                 f.y = min(f.y + CGFloat(TILESIZE), targetPlayerPostition.y)
 //            f.y = targetPlayerPostition.y
                 let result = mapcolldet_moveDownward(movePosition: f,
-                                                     velocity: vel,
+//                                                     velocity: vel,
                                                      txl: txl,
                                                      txc: txc,
                                                      txr: txr,
@@ -565,10 +569,10 @@ class GameScene: SKScene {
 //                f = result.position
                 collide = result.collide
                 potentialPosition = result.position
-                potentialVelocity = result.velocity
+//                potentialVelocity = result.velocity
             }
             f = potentialPosition
-            vel = potentialVelocity
+//            vel = potentialVelocity
 //            if collide {
 ////                vel.y += GRAVITATION
 //                vel.y = GRAVITATION
@@ -666,15 +670,15 @@ class GameScene: SKScene {
     
     
     func mapcolldet_moveUpward(movePosition position: CGPoint,
-                               velocity: CGPoint,
+//                               velocity: CGPoint,
                                txl: Int,
                                txc: Int,
                                txr: Int,
                                alignedBlockX: Int,
                                unAlignedBlockX: Int,
-                               unAlignedBlockFX: CGFloat) -> (position: CGPoint, velocity: CGPoint, collide: Bool) {
+                               unAlignedBlockFX: CGFloat) -> (position: CGPoint, collide: Bool) {
         var position = position
-        var velocity = velocity
+//        var velocity = velocity
         
         // moving up
         fallthroughTile = false
@@ -690,11 +694,11 @@ class GameScene: SKScene {
             position.y = CGFloat((ty << 5) + TILESIZE) + COLLISION_GIVE
             // fOld.y = f.y - 1.0 // Not sure what this is for
             
-            if velocity.y < 0.0 {
-                velocity.y = -velocity.y * BOUNCESTRENGTH
-            }
+//            if velocity.y < 0.0 {
+//                velocity.y = -velocity.y * BOUNCESTRENGTH
+//            }
             
-            return (position, velocity, true)
+            return (position, true)
         }
         
         //Player squeezed around the block
@@ -714,23 +718,23 @@ class GameScene: SKScene {
         
         inair = true
         
-        return (position, velocity, false)
+        return (position, false)
     }
     
 //    void CPlayer::mapcolldet_moveDownward(short txl, short txc, short txr,
 //    short alignedBlockX, short unAlignedBlockX, float unAlignedBlockFX)
     
     func mapcolldet_moveDownward(movePosition position: CGPoint,
-                                 velocity: CGPoint,
+//                                 velocity: CGPoint,
                                  txl: Int,
                                  txc: Int,
                                  txr: Int,
                                  alignedBlockX: Int,
                                  unAlignedBlockX: Int,
-                                 unAlignedBlockFX: CGFloat) -> (position: CGPoint, velocity: CGPoint, collide: Bool) {
+                                 unAlignedBlockFX: CGFloat) -> (position: CGPoint, collide: Bool) {
         
         var position = position
-        var velocity = velocity
+//        var velocity = velocity
         
         let ty = (Int(position.y) + PH) / TILESIZE
         
@@ -769,7 +773,7 @@ class GameScene: SKScene {
             if iVerticalPlatformCollision == 0 {
                 // Kill player
             }
-            return (position, velocity, !inair)
+            return (position, !inair)
         }
         
         if fSolidTileUnderPlayer {
@@ -790,7 +794,7 @@ class GameScene: SKScene {
         }
         
         
-         return (position, velocity, !inair)
+         return (position, !inair)
     }
     
     // ObjectBase.h
