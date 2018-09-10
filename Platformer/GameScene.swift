@@ -15,6 +15,12 @@ enum KeyCode: Int {
     case up = 126
     case z = 6
     case a = 0
+    
+    // Debug
+    case i = 34
+    case j = 38
+    case k = 40
+    case l = 37
 }
 
 public struct IntPoint {
@@ -61,7 +67,13 @@ var keysDown: [KeyCode: Bool] = [
     .z: false,
     .a: false,
     .up: false,
-    .down: false
+    .down: false,
+    
+    // Debug
+    .i: false,
+    .j: false,
+    .k: false,
+    .l: false
 ]
 
 struct TileTypeFlag: OptionSet {
@@ -105,9 +117,6 @@ let blocks = [
 
 func map(x: Int, y: Int) -> Int {
     
-//    let offset = blocks.count - 1
-//    let offsetY = offset - y
-    
     guard y >= 0 && y < blocks.count else {
         return -1
     }
@@ -135,9 +144,11 @@ func posToTile(_ position: CGPoint) -> Int {
 class GameScene: SKScene {
     
     private var player: SKShapeNode!
-    var vel: CGPoint = CGPoint.zero //velocity on x, y axis
-    var fOld: CGPoint = CGPoint.zero
-    var oldvel: CGPoint = CGPoint.zero
+    private var vel: CGPoint = CGPoint.zero //velocity on x, y axis
+    private var fOld: CGPoint = CGPoint.zero
+    private var oldvel: CGPoint = CGPoint.zero
+    
+    private let localCamera = SKCameraNode()
     
     private var _i = IntPoint.zero
     var i: IntPoint { //x, y coordinate (top left of the player rectangle)
@@ -187,23 +198,15 @@ class GameScene: SKScene {
         return node
     }()
     
-    // Because we want the origin at top-left we add this `masterNode` and use that instead of the scene.
-    // https://stackoverflow.com/a/38733108/667834
-    var masterNode:SKSpriteNode! = nil
-    override func addChild(_ node: SKNode)
-    {
-        if masterNode == nil
-        {
-            masterNode = SKSpriteNode()
-            masterNode.position    = CGPoint(x:0, y:size.height)
-            masterNode.anchorPoint = CGPoint.zero
-            masterNode.yScale      = -1
-            super.addChild(masterNode)
-        }
-        masterNode.addChild(node)
-    }
-    
     override func didMove(to view: SKView) {
+        super.didMove(to: view)
+        
+        localCamera.yScale = -1
+        localCamera.position = CGPoint(x: size.width/2, y: size.height/2)
+        
+        addChild(localCamera)
+        self.camera = localCamera
+        
         
         // Blocks
         for (y, xBlocks) in blocks.enumerated() {
@@ -239,6 +242,8 @@ class GameScene: SKScene {
         
         addChild(selectedBlockNode)
         addChild(collideBlockNode)
+        
+//        localCamera.position = player.position
     }
     
     @objc static override var supportsSecureCoding: Bool {
@@ -264,7 +269,8 @@ class GameScene: SKScene {
     }
     
     override func mouseDown(with event: NSEvent) {
-        let location = event.location(in: masterNode)
+//        let location = event.location(in: masterNode)
+        let location = event.location(in: self)
         let tile = posToTile(location)
         let tilePos = posToTilePos(location)
         
@@ -276,6 +282,25 @@ class GameScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
+        
+        // Debug
+        let cameraMoveAmount = CGFloat(10)
+        if keysDown[.j] == true {
+            localCamera.position.x -= cameraMoveAmount
+            print("camera position: \(localCamera.position)")
+        } else if keysDown[.l] == true {
+            localCamera.position.x += cameraMoveAmount
+            print("camera position: \(localCamera.position)")
+        }
+        if keysDown[.k] == true {
+            localCamera.position.y += cameraMoveAmount
+            print("camera position: \(localCamera.position)")
+        } else if keysDown[.i] == true {
+            localCamera.position.y -= cameraMoveAmount
+            print("camera position: \(localCamera.position)")
+        }
+        
+        
         // Called before each frame is rendered
         
         var movementDirectionX = CGFloat(0.0)
@@ -318,6 +343,8 @@ class GameScene: SKScene {
         fOld = f
         collision_detection_map()
         player.position = f
+        
+//        localCamera.position = player.position
     }
     
     // void CPlayer::accelerate(float direction)
