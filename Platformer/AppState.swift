@@ -16,5 +16,5 @@ class AppState {
     
     var VELJUMP = CGFloat(9.0)
     var VELSTOPJUMP = CGFloat(5.0)
-    
+    var GRAVITATION = CGFloat(0.40)
 }

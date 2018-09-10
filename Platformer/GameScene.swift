@@ -57,7 +57,7 @@ let COLLISION_GIVE = CGFloat(0.2) // Move back by this amount when colliding
 //let VELSTOPJUMP = CGFloat(5.0)
 //let VELJUMP = CGFloat(9.0)    //velocity for jumping
 let BOUNCESTRENGTH = CGFloat(0.5)
-let GRAVITATION = CGFloat(0.40)
+//let GRAVITATION = CGFloat(0.40)
 let MAXVELY = CGFloat(20.0)
 
 
@@ -436,7 +436,7 @@ class GameScene: SKScene {
     func collision_detection_map() {
 //        player.position.x += vel.x //setXf(fx + velx)
         
-        vel.y = cap(fallingVelocity: vel.y + GRAVITATION)
+        vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
         
         let targetPlayerPostition = CGPoint(x: f.x + vel.x, y: f.y + vel.y)
         

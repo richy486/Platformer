@@ -23,7 +23,7 @@ class ViewController: NSViewController {
         return view
     }()
     let speedSlider: NSSlider = {
-        let view = NSSlider(frame: NSRect(x: 10, y: 500, width: 300, height: 50))
+        let view = NSSlider(frame: NSRect(x: 10, y: 510, width: 300, height: 50))
         view.minValue = 0
         view.maxValue = 100
         view.doubleValue = Double(AppState.shared.VELMOVING)
@@ -38,7 +38,7 @@ class ViewController: NSViewController {
         return view
     }()
     let accelSlider: NSSlider = {
-        let view = NSSlider(frame: NSRect(x: 10, y: 450, width: 300, height: 50))
+        let view = NSSlider(frame: NSRect(x: 10, y: 460, width: 300, height: 50))
         view.minValue = 0
         view.maxValue = 100
         view.doubleValue = Double(AppState.shared.VELMOVINGADD)
@@ -55,7 +55,7 @@ class ViewController: NSViewController {
         return view
     }()
     let velJumpSlider: NSSlider = {
-        let view = NSSlider(frame: NSRect(x: 10, y: 400, width: 300, height: 50))
+        let view = NSSlider(frame: NSRect(x: 10, y: 410, width: 300, height: 50))
         view.minValue = 0
         view.maxValue = 100
         view.doubleValue = Double(AppState.shared.VELJUMP)
@@ -72,10 +72,27 @@ class ViewController: NSViewController {
         return view
     }()
     let velStopJumpSlider: NSSlider = {
-        let view = NSSlider(frame: NSRect(x: 10, y: 350, width: 300, height: 50))
+        let view = NSSlider(frame: NSRect(x: 10, y: 360, width: 300, height: 50))
         view.minValue = 0
         view.maxValue = 100
         view.doubleValue = Double(AppState.shared.VELSTOPJUMP)
+        view.trackFillColor = NSColor.green
+        return view
+    }()
+    
+    // GRAVITATION
+    let gravLabel: NSTextField = {
+        let view = NSTextField(frame: NSRect(x: 10, y: 320, width: 300, height: 50))
+        view.stringValue = "Gravitation"
+        view.textColor = NSColor.white
+        view.isEditable = false
+        return view
+    }()
+    let gravSlider: NSSlider = {
+        let view = NSSlider(frame: NSRect(x: 10, y: 310, width: 300, height: 50))
+        view.minValue = 0
+        view.maxValue = 5
+        view.doubleValue = Double(AppState.shared.GRAVITATION)
         view.trackFillColor = NSColor.green
         return view
     }()
@@ -135,6 +152,11 @@ class ViewController: NSViewController {
         view.addSubview(velStopJumpSlider)
         velStopJumpSlider.target = self
         velStopJumpSlider.action = #selector(updateVelStopJump)
+        
+        view.addSubview(gravLabel)
+        view.addSubview(gravSlider)
+        gravSlider.target = self
+        gravSlider.action = #selector(updateGrav)
     }
     
     @objc func updateSpeed(sender: NSSlider) {
@@ -156,6 +178,11 @@ class ViewController: NSViewController {
         let val = CGFloat(sender.doubleValue)
         print("new velocity stop jump: \(val)")
         AppState.shared.VELSTOPJUMP = val
+    }
+    @objc func updateGrav(sender: NSSlider) {
+        let val = CGFloat(sender.doubleValue)
+        print("new gravitation: \(val)")
+        AppState.shared.GRAVITATION = val
     }
 }
 
