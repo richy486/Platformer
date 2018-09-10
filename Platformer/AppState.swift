@@ -13,4 +13,8 @@ class AppState {
     
     var VELMOVINGADD = CGFloat(0.5)
     var VELMOVING = CGFloat(4.0)
+    
+    var VELJUMP = CGFloat(9.0)
+    var VELSTOPJUMP = CGFloat(5.0)
+    
 }
