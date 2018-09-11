@@ -21,6 +21,8 @@ enum KeyCode: Int {
     case j = 38
     case k = 40
     case l = 37
+    
+    case s = 1
 }
 
 public struct IntPoint {
@@ -73,7 +75,9 @@ var keysDown: [KeyCode: Bool] = [
     .i: false,
     .j: false,
     .k: false,
-    .l: false
+    .l: false,
+    
+    .s: false,
 ]
 
 struct TileTypeFlag: OptionSet {
@@ -88,39 +92,12 @@ struct TileTypeFlag: OptionSet {
 let S = TileTypeFlag.solid.rawValue
 let T = TileTypeFlag.solid_on_top.rawValue
 
-var blocks = [
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
-    [0,0,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,0,0,0,0,0,0,0,S],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S,0,0,0,0,0,S],
-    [0,0,S,0,0,0,S,S,S,0,S,0,S,0,S,S,S,S,0,S,0,S,0,S,0,S,0,0,0,0,0,S],
-    [0,0,S,S,0,0,0,0,0,S,S,S,S,0,S,0,0,0,S,0,S,T,T,S,0,S,0,0,0,0,0,S],
-    [0,0,0,S,S,S,0,S,0,0,0,0,0,S,0,0,0,0,0,0,0,0,0,0,T,0,0,0,0,0,0,S],
-    [0,0,0,0,0,0,S,0,0,S,S,S,S,0,0,0,0,0,0,T,T,0,T,0,T,0,T,0,T,0,T,S],
-    [0,0,0,0,0,0,0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
-    [0,0,0,0,S,S,S,S,0,0,0,0,0,0,0,0,0,0,0,T,T,0,0,0,0,0,0,0,S,0,S,S],
-    [0,0,S,0,0,0,0,0,0,0,0,0,0,0,S,S,S,0,T,T,T,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,S,0,0,0,0,0,0,0,0,0,0,0,0,0,S,0,0,0,0,0,0,0,0,0,0,0,S,S,S,0],
-    [S,S,S,S,S,S,0,0,0,0,0,0,0,0,0,0,S,0,0,0,0,0,0,0,0,0,0,0,T,T,0,0],
-    [S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S]
-]
-
 func map(x: Int, y: Int) -> Int {
     
-    guard y >= 0 && y < blocks.count else {
+    guard y >= 0 && y < AppState.shared.blocks.count else {
         return -1
     }
-    let xBlocks = blocks[y]
+    let xBlocks = AppState.shared.blocks[y]
     guard x >= 0 && x < xBlocks.count else {
         return -1
     }
@@ -130,15 +107,15 @@ func map(x: Int, y: Int) -> Int {
 
 func setMap(x: Int, y: Int, tileType: TileTypeFlag) {
     
-    guard y >= 0 && y < blocks.count else {
+    guard y >= 0 && y < AppState.shared.blocks.count else {
         return
     }
-    let xBlocks = blocks[y]
+    let xBlocks = AppState.shared.blocks[y]
     guard x >= 0 && x < xBlocks.count else {
         return
     }
     
-    blocks[y][x] = tileType.rawValue
+    AppState.shared.blocks[y][x] = tileType.rawValue
 }
 
 func posToTilePos(_ position: CGPoint) -> (x: Int, y: Int) {
@@ -218,6 +195,8 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         
+        load()
+        
         localCamera.yScale = -1
         localCamera.position = CGPoint(x: size.width/2, y: size.height/2)
         
@@ -227,7 +206,7 @@ class GameScene: SKScene {
         
         setupBlocks()
         
-        f = CGPoint(x: 10 * TILESIZE, y: (blocks.count - 2) * TILESIZE)
+        f = CGPoint(x: 10 * TILESIZE, y: (AppState.shared.blocks.count - 2) * TILESIZE)
         player = SKShapeNode(rect: CGRect(x: 0, y: 0, width: PW, height: PH))
         player.fillColor = .red
         player.position = f
@@ -307,6 +286,47 @@ class GameScene: SKScene {
             print("camera position: \(localCamera.position)")
         }
         
+        if keysDown[.s] == true {
+            keysDown[.s] = false
+            
+            
+            let jsonEncoder = JSONEncoder()
+            let jsonData: Data
+            do {
+                jsonData = try jsonEncoder.encode(AppState.shared)
+            } catch {
+                print("Error encoding: \(error)")
+                return
+            }
+            guard let jsonString = String(data: jsonData, encoding: .utf8) else {
+                print("Error json stat to string")
+                return
+            }
+            
+            print("json\n\(jsonString)")
+
+//            let appSupportURL: URL
+//            do {
+//                appSupportURL = try FileManager.default.url(for: .applicationSupportDirectory,
+//                                                                 in: .userDomainMask,
+//                                                                 appropriateFor: nil,
+//                                                                 create: true)
+//            } catch {
+//                print("Error: \(error)")
+//                return
+//            }
+            
+            let fileURL = URL(fileURLWithPath: "appState.json")
+            do {
+                try jsonString.write(to: fileURL, atomically: true, encoding: .utf8)
+            } catch {
+                print("Error writing: \(error)")
+                return
+            }
+            print("Saved!")
+
+        }
+        
         
         // Called before each frame is rendered
         
@@ -361,7 +381,7 @@ class GameScene: SKScene {
         blockNodes.removeAll()
         
         // Blocks
-        for (y, xBlocks) in blocks.enumerated() {
+        for (y, xBlocks) in AppState.shared.blocks.enumerated() {
             for (x, blockVal) in xBlocks.enumerated() {
                 
                 switch blockVal {
@@ -709,5 +729,33 @@ class GameScene: SKScene {
             return MAXVELY
         }
         return vel
+    }
+    
+    private func load() {
+        let jsonString: String
+        let fileURL = URL(fileURLWithPath: "appState.json")
+        do {
+            jsonString = try String(contentsOf: fileURL, encoding: .utf8)
+        } catch {
+            print("Error loading: \(error)")
+            return
+        }
+        
+        guard let jsonData = jsonString.data(using: .utf8) else {
+            print("Error string to data")
+            return
+        }
+        
+        let jsonDecoder = JSONDecoder()
+        let appState: AppState
+        do {
+            appState = try jsonDecoder.decode(AppState.self, from: jsonData)
+        } catch {
+            print("Error decoding: \(error)")
+            return
+        }
+        
+        AppState.shared = appState
+        print("Loaded!")
     }
 }

@@ -97,6 +97,8 @@ class ViewController: NSViewController {
         return view
     }()
     
+    var modeSwitchControl: NSSegmentedControl!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -150,8 +152,9 @@ class ViewController: NSViewController {
         modeSwitchControl.frame = CGRect(x: view.frame.width/2 - 100, y: view.frame.height - 60, width: 200, height: 50)
         modeSwitchControl.selectedSegment = AppState.shared.editMode.rawValue
         view.addSubview(modeSwitchControl)
+        self.modeSwitchControl = modeSwitchControl
         
-        
+        updateSliders()
     }
     
     @objc func updateSpeed(sender: NSSlider) {
@@ -185,6 +188,15 @@ class ViewController: NSViewController {
         }
         
         AppState.shared.editMode = mode
+    }
+    
+    private func updateSliders() {
+        speedSlider.doubleValue = Double(AppState.shared.VELMOVING)
+        accelSlider.doubleValue = Double(AppState.shared.VELMOVINGADD)
+        velJumpSlider.doubleValue = Double(AppState.shared.VELJUMP)
+        velStopJumpSlider.doubleValue = Double(AppState.shared.VELSTOPJUMP)
+        gravSlider.doubleValue = Double(AppState.shared.GRAVITATION)
+        modeSwitchControl.selectedSegment = AppState.shared.editMode.rawValue
     }
 }
 
