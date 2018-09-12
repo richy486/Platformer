@@ -16,6 +16,16 @@ enum KeyCode: Int {
     case z = 6
     case a = 0
     
+    // Modifiers
+    case capsLock = 1000
+    case shift = 1001
+    case control = 1002
+    case option = 1003
+    case command = 1004
+    case numericPad = 1005
+    case help = 1006
+    case function = 1007
+    
     // Debug
     case i = 34
     case j = 38
@@ -23,7 +33,9 @@ enum KeyCode: Int {
     case l = 37
     
     case s = 1
+    
 }
+
 
 public struct IntPoint {
     public var x: Int
@@ -71,6 +83,16 @@ var keysDown: [KeyCode: Bool] = [
     .up: false,
     .down: false,
     
+    // Modifiers
+    .capsLock: false,
+    .shift: false,
+    .control: false,
+    .option: false,
+    .command: false,
+    .numericPad: false,
+    .help: false,
+    .function: false,
+    
     // Debug
     .i: false,
     .j: false,
@@ -79,6 +101,19 @@ var keysDown: [KeyCode: Bool] = [
     
     .s: false,
 ]
+
+func setModifierKeysDown(_ modifierFlags: NSEvent.ModifierFlags) {
+    
+    keysDown[.capsLock] = modifierFlags.contains(.capsLock)
+    keysDown[.shift] = modifierFlags.contains(.shift)
+    keysDown[.control] = modifierFlags.contains(.control)
+    keysDown[.option] = modifierFlags.contains(.option)
+    keysDown[.command] = modifierFlags.contains(.command)
+    keysDown[.numericPad] = modifierFlags.contains(.numericPad)
+    keysDown[.help] = modifierFlags.contains(.help)
+    keysDown[.function] = modifierFlags.contains(.function)
+
+}
 
 struct TileTypeFlag: OptionSet {
     
@@ -195,7 +230,7 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         
-        load()
+        AppState.load()
         
         localCamera.yScale = -1
         localCamera.position = CGPoint(x: size.width/2, y: size.height/2)
@@ -230,17 +265,21 @@ class GameScene: SKScene {
     }
     
     override func keyDown(with event: NSEvent) {
+        
+        
         if let keyCode = KeyCode(rawValue: Int(event.keyCode)) {
             keysDown[keyCode] = true
         } else {
             print("unused key code: \(event.keyCode)")
         }
+        setModifierKeysDown(event.modifierFlags)
     }
     
     override func keyUp(with event: NSEvent) {
         if let keyCode = KeyCode(rawValue: Int(event.keyCode)) {
             keysDown[keyCode] = false
         }
+        setModifierKeysDown(event.modifierFlags)
     }
     
     override func mouseDown(with event: NSEvent) {
@@ -290,40 +329,7 @@ class GameScene: SKScene {
             keysDown[.s] = false
             
             
-            let jsonEncoder = JSONEncoder()
-            let jsonData: Data
-            do {
-                jsonData = try jsonEncoder.encode(AppState.shared)
-            } catch {
-                print("Error encoding: \(error)")
-                return
-            }
-            guard let jsonString = String(data: jsonData, encoding: .utf8) else {
-                print("Error json stat to string")
-                return
-            }
-            
-            print("json\n\(jsonString)")
-
-//            let appSupportURL: URL
-//            do {
-//                appSupportURL = try FileManager.default.url(for: .applicationSupportDirectory,
-//                                                                 in: .userDomainMask,
-//                                                                 appropriateFor: nil,
-//                                                                 create: true)
-//            } catch {
-//                print("Error: \(error)")
-//                return
-//            }
-            
-            let fileURL = URL(fileURLWithPath: "appState.json")
-            do {
-                try jsonString.write(to: fileURL, atomically: true, encoding: .utf8)
-            } catch {
-                print("Error writing: \(error)")
-                return
-            }
-            print("Saved!")
+            AppState.save()
 
         }
         
@@ -408,8 +414,17 @@ class GameScene: SKScene {
     
     // void CPlayer::accelerate(float direction)
     func accelerateX(_ direction: CGFloat) {
+        
+        
         vel.x += AppState.shared.VELMOVINGADD * direction
-        let maxVel = AppState.shared.VELMOVING
+        let maxVel: CGFloat
+        if keysDown[.shift] == true {
+            maxVel = AppState.shared.VELTURBOMOVING
+        } else {
+            maxVel = AppState.shared.VELMOVING
+        }
+            
+        
         
         if abs(vel.x) > maxVel {
             vel.x = maxVel * direction
@@ -417,14 +432,14 @@ class GameScene: SKScene {
     }
     
     // for testing
-    func accelerateY(_ direction: CGFloat) {
-        vel.y += AppState.shared.VELMOVINGADD * direction
-        let maxVel = AppState.shared.VELMOVING
-        
-        if abs(vel.y) > maxVel {
-            vel.y = maxVel * direction
-        }
-    }
+//    func accelerateY(_ direction: CGFloat) {
+//        vel.y += AppState.shared.VELMOVINGADD * direction
+//        let maxVel: CGFloat = AppState.shared.VELMOVING
+//
+//        if abs(vel.y) > maxVel {
+//            vel.y = maxVel * direction
+//        }
+//    }
     
     func decreaseVelocity() {
         if vel.x > 0.0 {
@@ -445,7 +460,15 @@ class GameScene: SKScene {
     func jump(inDirectionX movementDirectionX: CGFloat, jumpModifier: CGFloat) {
         lockjump = true
         
-        vel.y = -AppState.shared.VELJUMP * jumpModifier;
+//        vel.y = -AppState.shared.VELJUMP * jumpModifier;
+        
+        if abs(vel.x) > AppState.shared.VELMOVING && movementDirectionX != 0 && keysDown[.shift] == true {
+            vel.y = -AppState.shared.VELTURBOJUMP * jumpModifier
+        } else {
+            vel.y = -AppState.shared.VELJUMP * jumpModifier
+        }
+        
+        
         inair = true;
     }
     
@@ -731,31 +754,5 @@ class GameScene: SKScene {
         return vel
     }
     
-    private func load() {
-        let jsonString: String
-        let fileURL = URL(fileURLWithPath: "appState.json")
-        do {
-            jsonString = try String(contentsOf: fileURL, encoding: .utf8)
-        } catch {
-            print("Error loading: \(error)")
-            return
-        }
-        
-        guard let jsonData = jsonString.data(using: .utf8) else {
-            print("Error string to data")
-            return
-        }
-        
-        let jsonDecoder = JSONDecoder()
-        let appState: AppState
-        do {
-            appState = try jsonDecoder.decode(AppState.self, from: jsonData)
-        } catch {
-            print("Error decoding: \(error)")
-            return
-        }
-        
-        AppState.shared = appState
-        print("Loaded!")
-    }
+    
 }
