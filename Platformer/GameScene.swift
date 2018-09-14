@@ -166,8 +166,13 @@ func posToTile(_ position: CGPoint) -> Int {
     return map(x: tilePos.x, y: tilePos.y)
 }
 
+protocol GameSceneDelegate {
+    func keysUpdated(keysDown: [KeyCode: Bool])
+}
+
 class GameScene: SKScene {
     
+    var gameSceneDelegate: GameSceneDelegate? = nil
     private var player: SKShapeNode!
     private var vel: CGPoint = CGPoint.zero //velocity on x, y axis
     private var fOld: CGPoint = CGPoint.zero
@@ -266,6 +271,7 @@ class GameScene: SKScene {
     
     override func keyDown(with event: NSEvent) {
         
+        let oldHash = keysDown.hashValue
         
         if let keyCode = KeyCode(rawValue: Int(event.keyCode)) {
             keysDown[keyCode] = true
@@ -273,13 +279,24 @@ class GameScene: SKScene {
             print("unused key code: \(event.keyCode)")
         }
         setModifierKeysDown(event.modifierFlags)
+        
+        if keysDown.hashValue != oldHash {
+            gameSceneDelegate?.keysUpdated(keysDown: keysDown)
+        }
     }
     
     override func keyUp(with event: NSEvent) {
+        
+        let oldHash = keysDown.hashValue
+        
         if let keyCode = KeyCode(rawValue: Int(event.keyCode)) {
             keysDown[keyCode] = false
         }
         setModifierKeysDown(event.modifierFlags)
+        
+        if keysDown.hashValue != oldHash {
+            gameSceneDelegate?.keysUpdated(keysDown: keysDown)
+        }
     }
     
     override func mouseDown(with event: NSEvent) {

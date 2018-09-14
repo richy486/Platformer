@@ -97,27 +97,41 @@ class ViewController: NSViewController {
         return view
     }()
     
+    let controlsView: NSView = {
+        let view = NSView(frame: NSRect(x: 500, y: 500, width: 200, height: 200))
+        view.layer?.borderColor = NSColor.lightGray.cgColor
+        view.layer?.borderWidth = 1
+        return view
+    }()
+    
+    @IBOutlet weak var leftLabel: NSTextField!
+    @IBOutlet weak var rightLabel: NSTextField!
+    @IBOutlet weak var jumpLabel: NSTextField!
+    @IBOutlet weak var runLabel: NSTextField!
+    
     var modeSwitchControl: NSSegmentedControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let view = self.skView {
-            // Load the SKScene from 'GameScene.sks'
-            if let scene = SKScene(fileNamed: "GameScene") {
-                // Set the scale mode to scale to fit the window
-                scene.scaleMode = .aspectFill
-                
-                
-                // Present the scene
-                view.presentScene(scene)
-            }
-            
-            view.ignoresSiblingOrder = true
-            
-            view.showsFPS = true
-            view.showsNodeCount = true
+        guard let view = self.skView else {
+            fatalError("Could not load Sprite Kit view")
         }
+        // Load the SKScene from 'GameScene.sks'
+        guard let scene = SKScene(fileNamed: "GameScene") as? GameScene  else {
+            fatalError("Could not load Game Scene")
+        }
+        
+        // Set the scale mode to scale to fit the window
+        scene.scaleMode = .aspectFill
+        scene.gameSceneDelegate = self
+
+        // Present the scene
+        view.presentScene(scene)
+        view.ignoresSiblingOrder = true
+        view.showsFPS = true
+        view.showsNodeCount = true
+        
         
         
         view.addSubview(speedLabel)
@@ -200,3 +214,11 @@ class ViewController: NSViewController {
     }
 }
 
+extension ViewController: GameSceneDelegate {
+    func keysUpdated(keysDown: [KeyCode : Bool]) {
+        leftLabel.backgroundColor = keysDown[.left] == true ? .red : .lightGray
+        rightLabel.backgroundColor = keysDown[.right] == true ? .red : .lightGray
+        jumpLabel.backgroundColor = keysDown[.a] == true ? .red : .lightGray
+        runLabel.backgroundColor = keysDown[.shift] == true ? .red : .lightGray
+   }
+}
