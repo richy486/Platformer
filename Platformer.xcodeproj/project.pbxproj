@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B914DB66214C867300628D23 /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B914DB65214C867300628D23 /* SliderView.swift */; };
 		B95F0375212EFAA3003E84E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95F0374212EFAA3003E84E8 /* AppDelegate.swift */; };
 		B95F0377212EFAA3003E84E8 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = B95F0376212EFAA3003E84E8 /* GameScene.sks */; };
 		B95F0379212EFAA3003E84E8 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = B95F0378212EFAA3003E84E8 /* Actions.sks */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B914DB65214C867300628D23 /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
 		B95F0371212EFAA3003E84E8 /* Platformer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Platformer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B95F0374212EFAA3003E84E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B95F0376212EFAA3003E84E8 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -67,6 +69,7 @@
 				B95F037A212EFAA3003E84E8 /* GameScene.swift */,
 				B95F037C212EFAA3003E84E8 /* ViewController.swift */,
 				B95F038A212FB84C003E84E8 /* AppState.swift */,
+				B914DB65214C867300628D23 /* SliderView.swift */,
 				B95F037E212EFAA5003E84E8 /* Assets.xcassets */,
 				B95F0380212EFAA5003E84E8 /* Main.storyboard */,
 				B95F0383212EFAA5003E84E8 /* Info.plist */,
@@ -151,6 +154,7 @@
 				B95F037B212EFAA3003E84E8 /* GameScene.swift in Sources */,
 				B95F0375212EFAA3003E84E8 /* AppDelegate.swift in Sources */,
 				B95F038B212FB84C003E84E8 /* AppState.swift in Sources */,
+				B914DB66214C867300628D23 /* SliderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
