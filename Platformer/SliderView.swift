@@ -14,6 +14,7 @@ class SliderView: NSView {
         didSet {
             slider.target = self
             slider.action = #selector(update)
+            slider.isContinuous = true
         }
     }
     @IBOutlet var titleLabel: NSTextField!
@@ -29,5 +30,5 @@ class SliderView: NSView {
         print("new \(titleLabel.stringValue): \(val)")
         AppState.shared[keyPath: appStateKeyPath] = val
     }
-        
+    
 }

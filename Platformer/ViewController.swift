@@ -16,8 +16,10 @@ class ViewController: NSViewController {
     @IBOutlet var skView: SKView!
     
     @IBOutlet weak var speedSliderView: SliderView!
+    @IBOutlet weak var turboSpeedSliderView: SliderView!
     @IBOutlet weak var accelSliderView: SliderView!
     @IBOutlet weak var velJumpSliderView: SliderView!
+    @IBOutlet weak var velTurboJumpView: SliderView!
     @IBOutlet weak var velStopJumpSliderView: SliderView!
     @IBOutlet weak var gravSliderView: SliderView!
     
@@ -57,8 +59,10 @@ class ViewController: NSViewController {
         view.showsNodeCount = true
         
         speedSliderView.appStateKeyPath = \AppState.VELMOVING
+        turboSpeedSliderView.appStateKeyPath = \AppState.VELTURBOMOVING
         accelSliderView.appStateKeyPath = \AppState.VELMOVINGADD
         velJumpSliderView.appStateKeyPath = \AppState.VELJUMP
+        velTurboJumpView.appStateKeyPath = \AppState.VELTURBOJUMP
         velStopJumpSliderView.appStateKeyPath = \AppState.VELSTOPJUMP
         gravSliderView.appStateKeyPath = \AppState.GRAVITATION
         
@@ -84,8 +88,10 @@ class ViewController: NSViewController {
     
     private func updateSliders() {
         speedSliderView.slider.doubleValue = Double(AppState.shared.VELMOVING)
+        turboSpeedSliderView.slider.doubleValue = Double(AppState.shared.VELTURBOMOVING)
         accelSliderView.slider.doubleValue = Double(AppState.shared.VELMOVINGADD)
         velJumpSliderView.slider.doubleValue = Double(AppState.shared.VELJUMP)
+        velTurboJumpView.slider.doubleValue = Double(AppState.shared.VELTURBOJUMP)
         velStopJumpSliderView.slider.doubleValue = Double(AppState.shared.VELSTOPJUMP)
         gravSliderView.slider.doubleValue = Double(AppState.shared.GRAVITATION)
         modeSwitchControl.selectedSegment = AppState.shared.editMode.rawValue

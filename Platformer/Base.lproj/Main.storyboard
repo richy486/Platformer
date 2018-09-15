@@ -710,10 +710,10 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j2M-Wq-2Jc">
-                                <rect key="frame" x="0.0" y="338" width="310" height="262"/>
+                                <rect key="frame" x="0.0" y="230" width="310" height="370"/>
                                 <subviews>
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="e2t-eS-Hko" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="216" width="310" height="46"/>
+                                        <rect key="frame" x="0.0" y="324" width="310" height="46"/>
                                         <subviews>
                                             <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="IwX-4h-IfS">
                                                 <rect key="frame" x="0.0" y="0.0" width="310" height="46"/>
@@ -734,7 +734,7 @@
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="300" id="bb5-ZN-EEn"/>
                                                             </constraints>
-                                                            <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="DxF-UH-A9a"/>
+                                                            <sliderCell key="cell" continuous="YES" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="DxF-UH-A9a"/>
                                                         </slider>
                                                     </subviews>
                                                     <constraints>
@@ -761,8 +761,57 @@
                                             <outlet property="titleLabel" destination="mdP-Wu-Bdz" id="hlu-pK-ZIG"/>
                                         </connections>
                                     </customView>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="tXX-98-tff" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="270" width="310" height="46"/>
+                                        <subviews>
+                                            <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="eoE-Qb-SAk">
+                                                <rect key="frame" x="0.0" y="0.0" width="310" height="46"/>
+                                                <view key="contentView" id="IGC-bN-iYC">
+                                                    <rect key="frame" x="1" y="1" width="308" height="44"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Idn-Ik-503">
+                                                            <rect key="frame" x="4" y="23" width="300" height="17"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Turbo Speed" drawsBackground="YES" id="vVS-oL-iLu">
+                                                                <font key="font" usesAppearanceFont="YES"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aab-is-UB4">
+                                                            <rect key="frame" x="2" y="2" width="304" height="19"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="300" id="vNQ-pZ-vmE"/>
+                                                            </constraints>
+                                                            <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="g0O-Pc-BnA"/>
+                                                        </slider>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="aab-is-UB4" secondAttribute="trailing" constant="4" id="1fC-MY-uh1"/>
+                                                        <constraint firstItem="aab-is-UB4" firstAttribute="leading" secondItem="IGC-bN-iYC" secondAttribute="leading" constant="4" id="HJM-dy-SCx"/>
+                                                        <constraint firstAttribute="trailing" secondItem="Idn-Ik-503" secondAttribute="trailing" constant="4" id="Z4n-zZ-WOQ"/>
+                                                        <constraint firstItem="aab-is-UB4" firstAttribute="top" secondItem="Idn-Ik-503" secondAttribute="bottom" constant="4" id="eHB-rq-ldN"/>
+                                                        <constraint firstItem="Idn-Ik-503" firstAttribute="top" secondItem="IGC-bN-iYC" secondAttribute="top" constant="4" id="hZD-dj-ugP"/>
+                                                        <constraint firstAttribute="bottom" secondItem="aab-is-UB4" secondAttribute="bottom" constant="4" id="p31-ES-eZV"/>
+                                                        <constraint firstItem="Idn-Ik-503" firstAttribute="leading" secondItem="IGC-bN-iYC" secondAttribute="leading" constant="4" id="tza-zR-Zye"/>
+                                                    </constraints>
+                                                </view>
+                                                <color key="fillColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </box>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="eoE-Qb-SAk" secondAttribute="trailing" id="7Vb-NX-SsS"/>
+                                            <constraint firstAttribute="bottom" secondItem="eoE-Qb-SAk" secondAttribute="bottom" id="DsK-yY-HBO"/>
+                                            <constraint firstItem="eoE-Qb-SAk" firstAttribute="top" secondItem="tXX-98-tff" secondAttribute="top" id="yc0-aw-qoA"/>
+                                            <constraint firstItem="eoE-Qb-SAk" firstAttribute="leading" secondItem="tXX-98-tff" secondAttribute="leading" id="zKy-J4-Ad3"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="slider" destination="aab-is-UB4" id="ryf-QU-33Q"/>
+                                            <outlet property="titleLabel" destination="Idn-Ik-503" id="jxG-j0-l1l"/>
+                                        </connections>
+                                    </customView>
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="ZXz-PT-BPa" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="162" width="310" height="46"/>
+                                        <rect key="frame" x="0.0" y="216" width="310" height="46"/>
                                         <subviews>
                                             <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="d6a-oF-RkU">
                                                 <rect key="frame" x="0.0" y="0.0" width="310" height="46"/>
@@ -811,7 +860,7 @@
                                         </connections>
                                     </customView>
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="2rI-EL-6MU" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="108" width="310" height="46"/>
+                                        <rect key="frame" x="0.0" y="162" width="310" height="46"/>
                                         <subviews>
                                             <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="0dr-jl-0A0">
                                                 <rect key="frame" x="0.0" y="0.0" width="310" height="46"/>
@@ -857,6 +906,55 @@
                                         <connections>
                                             <outlet property="slider" destination="Epw-7c-ds6" id="sEF-mJ-hjC"/>
                                             <outlet property="titleLabel" destination="mxf-Dn-4zc" id="fk1-mt-Ean"/>
+                                        </connections>
+                                    </customView>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="e34-Tg-u1h" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="108" width="310" height="46"/>
+                                        <subviews>
+                                            <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="rnI-wn-vwh">
+                                                <rect key="frame" x="0.0" y="0.0" width="310" height="46"/>
+                                                <view key="contentView" id="PoT-O8-oFH">
+                                                    <rect key="frame" x="1" y="1" width="308" height="44"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PTU-LC-KFu">
+                                                            <rect key="frame" x="4" y="23" width="300" height="17"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Turbo Jump Velocity" drawsBackground="YES" id="i6j-Fm-V6K">
+                                                                <font key="font" usesAppearanceFont="YES"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XNd-OA-7al">
+                                                            <rect key="frame" x="2" y="2" width="304" height="19"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="300" id="aj5-Pq-fwA"/>
+                                                            </constraints>
+                                                            <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="dB5-98-1R8"/>
+                                                        </slider>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="XNd-OA-7al" secondAttribute="bottom" constant="4" id="CVB-sv-nr7"/>
+                                                        <constraint firstItem="XNd-OA-7al" firstAttribute="leading" secondItem="PoT-O8-oFH" secondAttribute="leading" constant="4" id="ITx-Vr-GGM"/>
+                                                        <constraint firstAttribute="trailing" secondItem="XNd-OA-7al" secondAttribute="trailing" constant="4" id="LH5-hu-S9X"/>
+                                                        <constraint firstItem="XNd-OA-7al" firstAttribute="top" secondItem="PTU-LC-KFu" secondAttribute="bottom" constant="4" id="cZl-Xk-zg7"/>
+                                                        <constraint firstItem="PTU-LC-KFu" firstAttribute="top" secondItem="PoT-O8-oFH" secondAttribute="top" constant="4" id="elG-DJ-8ko"/>
+                                                        <constraint firstAttribute="trailing" secondItem="PTU-LC-KFu" secondAttribute="trailing" constant="4" id="kbR-SM-lDE"/>
+                                                        <constraint firstItem="PTU-LC-KFu" firstAttribute="leading" secondItem="PoT-O8-oFH" secondAttribute="leading" constant="4" id="lqQ-5R-GpI"/>
+                                                    </constraints>
+                                                </view>
+                                                <color key="fillColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </box>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="rnI-wn-vwh" secondAttribute="trailing" id="0Jc-AW-z46"/>
+                                            <constraint firstAttribute="bottom" secondItem="rnI-wn-vwh" secondAttribute="bottom" id="F2b-wc-2Vc"/>
+                                            <constraint firstItem="rnI-wn-vwh" firstAttribute="leading" secondItem="e34-Tg-u1h" secondAttribute="leading" id="aGa-5U-uln"/>
+                                            <constraint firstItem="rnI-wn-vwh" firstAttribute="top" secondItem="e34-Tg-u1h" secondAttribute="top" id="pmI-4H-94a"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="slider" destination="XNd-OA-7al" id="k2h-8A-WCh"/>
+                                            <outlet property="titleLabel" destination="PTU-LC-KFu" id="Ijg-qJ-KzA"/>
                                         </connections>
                                     </customView>
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="Xys-6x-xVR" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
@@ -930,7 +1028,7 @@
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="300" id="IG2-rq-hnj"/>
                                                             </constraints>
-                                                            <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="zm8-JO-B7Q"/>
+                                                            <sliderCell key="cell" state="on" alignment="left" maxValue="5" doubleValue="2.5" tickMarkPosition="above" sliderType="linear" id="zm8-JO-B7Q"/>
                                                         </slider>
                                                     </subviews>
                                                     <constraints>
@@ -964,8 +1062,12 @@
                                     <integer value="1000"/>
                                     <integer value="1000"/>
                                     <integer value="1000"/>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
                                 </visibilityPriorities>
                                 <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
@@ -1046,8 +1148,10 @@
                         <outlet property="runLabel" destination="PGv-Tl-ZwP" id="llX-TK-DVD"/>
                         <outlet property="skView" destination="m2S-Jp-Qdl" id="qux-te-cT3"/>
                         <outlet property="speedSliderView" destination="e2t-eS-Hko" id="nKc-o9-47W"/>
+                        <outlet property="turboSpeedSliderView" destination="tXX-98-tff" id="UFn-k7-wSZ"/>
                         <outlet property="velJumpSliderView" destination="2rI-EL-6MU" id="Z0d-Ri-tPL"/>
                         <outlet property="velStopJumpSliderView" destination="Xys-6x-xVR" id="jZF-7W-HVq"/>
+                        <outlet property="velTurboJumpView" destination="e34-Tg-u1h" id="766-kg-vSr"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
