@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-enum KeyCode: Int {
+enum KeyCode: Int, CaseIterable {
     case left = 123
     case right = 124
     case down = 125
@@ -33,6 +33,7 @@ enum KeyCode: Int {
     case l = 37
     
     case s = 1
+    case tab = 48
     
 }
 
@@ -75,32 +76,13 @@ let COLLISION_GIVE = CGFloat(0.2) // Move back by this amount when colliding
 let BOUNCESTRENGTH = CGFloat(0.5)
 let MAXVELY = CGFloat(20.0)
 
-var keysDown: [KeyCode: Bool] = [
-    .left: false,
-    .right: false,
-    .z: false,
-    .a: false,
-    .up: false,
-    .down: false,
-    
-    // Modifiers
-    .capsLock: false,
-    .shift: false,
-    .control: false,
-    .option: false,
-    .command: false,
-    .numericPad: false,
-    .help: false,
-    .function: false,
-    
-    // Debug
-    .i: false,
-    .j: false,
-    .k: false,
-    .l: false,
-    
-    .s: false,
-]
+var keysDown: [KeyCode: Bool] = {
+    var keys: [KeyCode: Bool] = [:]
+    KeyCode.allCases.forEach { keyCode in
+        keys[keyCode] = false
+    }
+    return keys
+}()
 
 func setModifierKeysDown(_ modifierFlags: NSEvent.ModifierFlags) {
     
@@ -167,7 +149,7 @@ func posToTile(_ position: CGPoint) -> Int {
 }
 
 protocol GameSceneDelegate {
-    func keysUpdated(keysDown: [KeyCode: Bool])
+    func keysUpdated(keysDown: [KeyCode: Bool], oldKeysDown: [KeyCode: Bool])
 }
 
 class GameScene: SKScene {
@@ -235,6 +217,8 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         
+       
+        
         AppState.load()
         
         localCamera.yScale = -1
@@ -271,6 +255,7 @@ class GameScene: SKScene {
     
     override func keyDown(with event: NSEvent) {
         
+        let oldKeysDown = keysDown
         let oldHash = keysDown.hashValue
         
         if let keyCode = KeyCode(rawValue: Int(event.keyCode)) {
@@ -281,12 +266,13 @@ class GameScene: SKScene {
         setModifierKeysDown(event.modifierFlags)
         
         if keysDown.hashValue != oldHash {
-            gameSceneDelegate?.keysUpdated(keysDown: keysDown)
+            gameSceneDelegate?.keysUpdated(keysDown: keysDown, oldKeysDown: oldKeysDown)
         }
     }
     
     override func keyUp(with event: NSEvent) {
         
+        let oldKeysDown = keysDown
         let oldHash = keysDown.hashValue
         
         if let keyCode = KeyCode(rawValue: Int(event.keyCode)) {
@@ -295,7 +281,7 @@ class GameScene: SKScene {
         setModifierKeysDown(event.modifierFlags)
         
         if keysDown.hashValue != oldHash {
-            gameSceneDelegate?.keysUpdated(keysDown: keysDown)
+            gameSceneDelegate?.keysUpdated(keysDown: keysDown, oldKeysDown: oldKeysDown)
         }
     }
     

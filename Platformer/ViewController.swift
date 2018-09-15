@@ -15,6 +15,8 @@ class ViewController: NSViewController {
 
     @IBOutlet var skView: SKView!
     
+    @IBOutlet weak var debugView: NSView!
+    
     @IBOutlet weak var speedSliderView: SliderView!
     @IBOutlet weak var turboSpeedSliderView: SliderView!
     @IBOutlet weak var accelSliderView: SliderView!
@@ -23,19 +25,12 @@ class ViewController: NSViewController {
     @IBOutlet weak var velStopJumpSliderView: SliderView!
     @IBOutlet weak var gravSliderView: SliderView!
     
-    let controlsView: NSView = {
-        let view = NSView(frame: NSRect(x: 500, y: 500, width: 200, height: 200))
-        view.layer?.borderColor = NSColor.lightGray.cgColor
-        view.layer?.borderWidth = 1
-        return view
-    }()
-    
     @IBOutlet weak var leftLabel: NSTextField!
     @IBOutlet weak var rightLabel: NSTextField!
     @IBOutlet weak var jumpLabel: NSTextField!
     @IBOutlet weak var runLabel: NSTextField!
     
-    var modeSwitchControl: NSSegmentedControl!
+    @IBOutlet weak var modeSwitchControl: NSSegmentedControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,14 +61,13 @@ class ViewController: NSViewController {
         velStopJumpSliderView.appStateKeyPath = \AppState.VELSTOPJUMP
         gravSliderView.appStateKeyPath = \AppState.GRAVITATION
         
-        let modeSwitchControl = NSSegmentedControl(labels: EditMode.allCases.map { $0.name },
-                                      trackingMode: .selectOne,
-                                      target: self,
-                                      action: #selector(updateMode))
-        modeSwitchControl.frame = CGRect(x: view.frame.width/2 - 100, y: view.frame.height - 60, width: 200, height: 50)
+        modeSwitchControl.segmentCount = EditMode.allCases.count
+        EditMode.allCases.enumerated().forEach { (index, editMode) in
+            self.modeSwitchControl.setLabel(editMode.name, forSegment: index)
+        }
+        modeSwitchControl.target = self
+        modeSwitchControl.action = #selector(updateMode)
         modeSwitchControl.selectedSegment = AppState.shared.editMode.rawValue
-        view.addSubview(modeSwitchControl)
-        self.modeSwitchControl = modeSwitchControl
         
         updateSliders()
     }
@@ -99,10 +93,14 @@ class ViewController: NSViewController {
 }
 
 extension ViewController: GameSceneDelegate {
-    func keysUpdated(keysDown: [KeyCode : Bool]) {
+    func keysUpdated(keysDown: [KeyCode: Bool], oldKeysDown: [KeyCode: Bool]) {
         leftLabel.backgroundColor = keysDown[.left] == true ? .red : .lightGray
         rightLabel.backgroundColor = keysDown[.right] == true ? .red : .lightGray
         jumpLabel.backgroundColor = keysDown[.a] == true ? .red : .lightGray
         runLabel.backgroundColor = keysDown[.shift] == true ? .red : .lightGray
+        
+        if keysDown[.tab] == false && oldKeysDown[.tab] == true {
+            debugView.isHidden.toggle()
+        }
    }
 }
