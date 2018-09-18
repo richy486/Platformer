@@ -713,10 +713,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j2M-Wq-2Jc">
-                                        <rect key="frame" x="20" y="210" width="310" height="370"/>
+                                        <rect key="frame" x="20" y="156" width="310" height="424"/>
                                         <subviews>
                                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="e2t-eS-Hko" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="324" width="310" height="46"/>
+                                                <rect key="frame" x="0.0" y="378" width="310" height="46"/>
                                                 <subviews>
                                                     <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="IwX-4h-IfS">
                                                         <rect key="frame" x="0.0" y="0.0" width="310" height="46"/>
@@ -765,7 +765,7 @@
                                                 </connections>
                                             </customView>
                                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="tXX-98-tff" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="270" width="310" height="46"/>
+                                                <rect key="frame" x="0.0" y="324" width="310" height="46"/>
                                                 <subviews>
                                                     <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="eoE-Qb-SAk">
                                                         <rect key="frame" x="0.0" y="0.0" width="310" height="46"/>
@@ -814,7 +814,7 @@
                                                 </connections>
                                             </customView>
                                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="ZXz-PT-BPa" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="216" width="310" height="46"/>
+                                                <rect key="frame" x="0.0" y="270" width="310" height="46"/>
                                                 <subviews>
                                                     <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="d6a-oF-RkU">
                                                         <rect key="frame" x="0.0" y="0.0" width="310" height="46"/>
@@ -863,7 +863,7 @@
                                                 </connections>
                                             </customView>
                                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="2rI-EL-6MU" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="162" width="310" height="46"/>
+                                                <rect key="frame" x="0.0" y="216" width="310" height="46"/>
                                                 <subviews>
                                                     <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="0dr-jl-0A0">
                                                         <rect key="frame" x="0.0" y="0.0" width="310" height="46"/>
@@ -912,7 +912,7 @@
                                                 </connections>
                                             </customView>
                                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="e34-Tg-u1h" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="108" width="310" height="46"/>
+                                                <rect key="frame" x="0.0" y="162" width="310" height="46"/>
                                                 <subviews>
                                                     <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="rnI-wn-vwh">
                                                         <rect key="frame" x="0.0" y="0.0" width="310" height="46"/>
@@ -961,7 +961,7 @@
                                                 </connections>
                                             </customView>
                                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="Xys-6x-xVR" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="54" width="310" height="46"/>
+                                                <rect key="frame" x="0.0" y="108" width="310" height="46"/>
                                                 <subviews>
                                                     <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="FE5-ZP-0zL">
                                                         <rect key="frame" x="0.0" y="0.0" width="310" height="46"/>
@@ -1010,7 +1010,7 @@
                                                 </connections>
                                             </customView>
                                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="zrs-qP-7EE" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="310" height="46"/>
+                                                <rect key="frame" x="0.0" y="54" width="310" height="46"/>
                                                 <subviews>
                                                     <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="eLJ-ED-XIm">
                                                         <rect key="frame" x="0.0" y="0.0" width="310" height="46"/>
@@ -1058,6 +1058,55 @@
                                                     <outlet property="titleLabel" destination="p37-VZ-s4r" id="vi8-M3-yn3"/>
                                                 </connections>
                                             </customView>
+                                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="H0E-hj-q5Q" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="310" height="46"/>
+                                                <subviews>
+                                                    <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="vzp-yO-oDY">
+                                                        <rect key="frame" x="0.0" y="0.0" width="310" height="46"/>
+                                                        <view key="contentView" id="Qmo-k9-paf">
+                                                            <rect key="frame" x="1" y="1" width="308" height="44"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <subviews>
+                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="p3s-Za-5v4">
+                                                                    <rect key="frame" x="4" y="23" width="300" height="17"/>
+                                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Camera Speed" drawsBackground="YES" id="x62-a3-NRE">
+                                                                        <font key="font" usesAppearanceFont="YES"/>
+                                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    </textFieldCell>
+                                                                </textField>
+                                                                <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KWE-Y7-oda">
+                                                                    <rect key="frame" x="2" y="2" width="304" height="19"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" constant="300" id="9gx-hs-A0W"/>
+                                                                    </constraints>
+                                                                    <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="H7F-g1-UDJ"/>
+                                                                </slider>
+                                                            </subviews>
+                                                            <constraints>
+                                                                <constraint firstAttribute="bottom" secondItem="KWE-Y7-oda" secondAttribute="bottom" constant="4" id="5ni-dY-JWb"/>
+                                                                <constraint firstAttribute="trailing" secondItem="KWE-Y7-oda" secondAttribute="trailing" constant="4" id="Eo6-Sx-dRk"/>
+                                                                <constraint firstItem="p3s-Za-5v4" firstAttribute="leading" secondItem="Qmo-k9-paf" secondAttribute="leading" constant="4" id="ITR-wd-hzP"/>
+                                                                <constraint firstAttribute="trailing" secondItem="p3s-Za-5v4" secondAttribute="trailing" constant="4" id="TUS-kf-Wum"/>
+                                                                <constraint firstItem="p3s-Za-5v4" firstAttribute="top" secondItem="Qmo-k9-paf" secondAttribute="top" constant="4" id="W3t-lH-caC"/>
+                                                                <constraint firstItem="KWE-Y7-oda" firstAttribute="top" secondItem="p3s-Za-5v4" secondAttribute="bottom" constant="4" id="bWG-T3-Oul"/>
+                                                                <constraint firstItem="KWE-Y7-oda" firstAttribute="leading" secondItem="Qmo-k9-paf" secondAttribute="leading" constant="4" id="vf0-dl-Akb"/>
+                                                            </constraints>
+                                                        </view>
+                                                        <color key="fillColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </box>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="vzp-yO-oDY" firstAttribute="leading" secondItem="H0E-hj-q5Q" secondAttribute="leading" id="0sM-eO-Ove"/>
+                                                    <constraint firstItem="vzp-yO-oDY" firstAttribute="top" secondItem="H0E-hj-q5Q" secondAttribute="top" id="JRQ-We-kFf"/>
+                                                    <constraint firstAttribute="bottom" secondItem="vzp-yO-oDY" secondAttribute="bottom" id="MhN-Ud-vHk"/>
+                                                    <constraint firstAttribute="trailing" secondItem="vzp-yO-oDY" secondAttribute="trailing" id="mMe-Dd-ZZN"/>
+                                                </constraints>
+                                                <connections>
+                                                    <outlet property="slider" destination="KWE-Y7-oda" id="rgw-La-ayl"/>
+                                                    <outlet property="titleLabel" destination="p3s-Za-5v4" id="f6M-Y3-Mza"/>
+                                                </connections>
+                                            </customView>
                                         </subviews>
                                         <visibilityPriorities>
                                             <integer value="1000"/>
@@ -1067,8 +1116,10 @@
                                             <integer value="1000"/>
                                             <integer value="1000"/>
                                             <integer value="1000"/>
+                                            <integer value="1000"/>
                                         </visibilityPriorities>
                                         <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
@@ -1147,9 +1198,54 @@
                                             </segments>
                                         </segmentedCell>
                                     </segmentedControl>
+                                    <gridView xPlacement="leading" yPlacement="bottom" rowAlignment="none" translatesAutoresizingMaskIntoConstraints="NO" id="JQP-i8-wOi">
+                                        <rect key="frame" x="627" y="463" width="153" height="17"/>
+                                        <rows>
+                                            <gridRow id="Yjq-nu-Iig"/>
+                                        </rows>
+                                        <columns>
+                                            <gridColumn id="7dU-Sy-m9a"/>
+                                            <gridColumn id="Hau-fv-LJK"/>
+                                            <gridColumn id="4r2-o0-5bV"/>
+                                        </columns>
+                                        <gridCells>
+                                            <gridCell row="Yjq-nu-Iig" column="7dU-Sy-m9a" id="sAR-GI-gAG">
+                                                <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="f2n-WL-0KK">
+                                                    <rect key="frame" x="0.0" y="0.0" width="44" height="17"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Left of" drawsBackground="YES" id="tLE-la-69s">
+                                                        <font key="font" usesAppearanceFont="YES"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                            </gridCell>
+                                            <gridCell row="Yjq-nu-Iig" column="Hau-fv-LJK" id="38C-Oh-Xba">
+                                                <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="G2N-vd-hIR">
+                                                    <rect key="frame" x="50" y="0.0" width="45" height="17"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Center" drawsBackground="YES" id="knc-pS-Odb">
+                                                        <font key="font" usesAppearanceFont="YES"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                            </gridCell>
+                                            <gridCell row="Yjq-nu-Iig" column="4r2-o0-5bV" id="6bN-9M-ajv">
+                                                <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="K27-qN-ghW">
+                                                    <rect key="frame" x="101" y="0.0" width="52" height="17"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Right of" drawsBackground="YES" id="bTc-QL-LTE">
+                                                        <font key="font" usesAppearanceFont="YES"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                            </gridCell>
+                                        </gridCells>
+                                    </gridView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="JSe-fB-cPe" firstAttribute="leading" secondItem="j2M-Wq-2Jc" secondAttribute="trailing" constant="8" id="0ao-0D-1qA"/>
+                                    <constraint firstAttribute="trailing" secondItem="JQP-i8-wOi" secondAttribute="trailing" constant="20" id="APg-IQ-e42"/>
+                                    <constraint firstItem="JQP-i8-wOi" firstAttribute="top" secondItem="xGR-fz-RHi" secondAttribute="bottom" constant="40" id="Gsm-hK-31w"/>
                                     <constraint firstItem="j2M-Wq-2Jc" firstAttribute="leading" secondItem="Sch-LN-vJU" secondAttribute="leading" constant="20" id="ZCo-Zw-Udv"/>
                                     <constraint firstItem="j2M-Wq-2Jc" firstAttribute="top" secondItem="Sch-LN-vJU" secondAttribute="top" constant="20" id="fCJ-fs-eYG"/>
                                     <constraint firstAttribute="trailing" secondItem="xGR-fz-RHi" secondAttribute="trailing" constant="20" id="fnr-Vv-L6G"/>
@@ -1167,12 +1263,16 @@
                     </view>
                     <connections>
                         <outlet property="accelSliderView" destination="ZXz-PT-BPa" id="Rka-fB-LaM"/>
+                        <outlet property="cameraSpeedSlider" destination="H0E-hj-q5Q" id="GHc-cq-8Ry"/>
+                        <outlet property="centerLabel" destination="G2N-vd-hIR" id="n2x-ec-RK3"/>
                         <outlet property="debugView" destination="Sch-LN-vJU" id="1af-iO-SFf"/>
                         <outlet property="gravSliderView" destination="zrs-qP-7EE" id="fhH-vs-jgq"/>
                         <outlet property="jumpLabel" destination="xqf-7N-TUr" id="YH3-p0-OGs"/>
                         <outlet property="leftLabel" destination="XIG-Ap-nTs" id="3Cp-H6-7sb"/>
+                        <outlet property="leftOfLabel" destination="f2n-WL-0KK" id="6xd-Hc-49N"/>
                         <outlet property="modeSwitchControl" destination="JSe-fB-cPe" id="kpp-3c-SrG"/>
                         <outlet property="rightLabel" destination="J6i-rg-APa" id="eHO-iC-Zqs"/>
+                        <outlet property="rightOfLabel" destination="K27-qN-ghW" id="y0T-3P-yYQ"/>
                         <outlet property="runLabel" destination="PGv-Tl-ZwP" id="llX-TK-DVD"/>
                         <outlet property="skView" destination="m2S-Jp-Qdl" id="qux-te-cT3"/>
                         <outlet property="speedSliderView" destination="e2t-eS-Hko" id="nKc-o9-47W"/>

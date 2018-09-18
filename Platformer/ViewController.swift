@@ -24,11 +24,16 @@ class ViewController: NSViewController {
     @IBOutlet weak var velTurboJumpView: SliderView!
     @IBOutlet weak var velStopJumpSliderView: SliderView!
     @IBOutlet weak var gravSliderView: SliderView!
+    @IBOutlet weak var cameraSpeedSlider: SliderView!
     
     @IBOutlet weak var leftLabel: NSTextField!
     @IBOutlet weak var rightLabel: NSTextField!
     @IBOutlet weak var jumpLabel: NSTextField!
     @IBOutlet weak var runLabel: NSTextField!
+    
+    @IBOutlet weak var leftOfLabel: NSTextField!
+    @IBOutlet weak var centerLabel: NSTextField!
+    @IBOutlet weak var rightOfLabel: NSTextField!
     
     @IBOutlet weak var modeSwitchControl: NSSegmentedControl!
     
@@ -60,6 +65,7 @@ class ViewController: NSViewController {
         velTurboJumpView.appStateKeyPath = \AppState.VELTURBOJUMP
         velStopJumpSliderView.appStateKeyPath = \AppState.VELSTOPJUMP
         gravSliderView.appStateKeyPath = \AppState.GRAVITATION
+        cameraSpeedSlider.appStateKeyPath = \AppState.cameraMoveSpeed
         
         modeSwitchControl.segmentCount = EditMode.allCases.count
         EditMode.allCases.enumerated().forEach { (index, editMode) in
@@ -81,13 +87,14 @@ class ViewController: NSViewController {
     }
     
     private func updateSliders() {
-        speedSliderView.slider.doubleValue = Double(AppState.shared.VELMOVING)
-        turboSpeedSliderView.slider.doubleValue = Double(AppState.shared.VELTURBOMOVING)
-        accelSliderView.slider.doubleValue = Double(AppState.shared.VELMOVINGADD)
-        velJumpSliderView.slider.doubleValue = Double(AppState.shared.VELJUMP)
-        velTurboJumpView.slider.doubleValue = Double(AppState.shared.VELTURBOJUMP)
-        velStopJumpSliderView.slider.doubleValue = Double(AppState.shared.VELSTOPJUMP)
-        gravSliderView.slider.doubleValue = Double(AppState.shared.GRAVITATION)
+//        speedSliderView.value = AppState.shared.VELMOVING
+//        turboSpeedSliderView.value = AppState.shared.VELTURBOMOVING
+//        accelSliderView.value = AppState.shared.VELMOVINGADD
+//        velJumpSliderView.value = AppState.shared.VELJUMP
+//        velTurboJumpView.value = AppState.shared.VELTURBOJUMP
+//        velStopJumpSliderView.value = AppState.shared.VELSTOPJUMP
+//        gravSliderView.value = AppState.shared.GRAVITATION
+        
         modeSwitchControl.selectedSegment = AppState.shared.editMode.rawValue
     }
 }
@@ -102,5 +109,10 @@ extension ViewController: GameSceneDelegate {
         if keysDown[.tab] == false && oldKeysDown[.tab] == true {
             debugView.isHidden.toggle()
         }
-   }
+    }
+    func cameraModeUpdated(cameraMode: CameraMode) {
+        leftOfLabel.backgroundColor = cameraMode == .lockLeftOfPlayer ? .red : .lightGray
+        centerLabel.backgroundColor = cameraMode == .center ? .red : .lightGray
+        rightOfLabel.backgroundColor = cameraMode == .lockRightOfPlayer ? .red : .lightGray
+    }
 }

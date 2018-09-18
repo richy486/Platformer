@@ -15,6 +15,7 @@ enum KeyCode: Int, CaseIterable {
     case up = 126
     case z = 6
     case a = 0
+    case r = 15
     
     // Modifiers
     case capsLock = 1000
@@ -35,6 +36,12 @@ enum KeyCode: Int, CaseIterable {
     case s = 1
     case tab = 48
     
+}
+
+enum CameraMode {
+    case center
+    case lockLeftOfPlayer
+    case lockRightOfPlayer
 }
 
 
@@ -150,6 +157,7 @@ func posToTile(_ position: CGPoint) -> Int {
 
 protocol GameSceneDelegate {
     func keysUpdated(keysDown: [KeyCode: Bool], oldKeysDown: [KeyCode: Bool])
+    func cameraModeUpdated(cameraMode: CameraMode)
 }
 
 class GameScene: SKScene {
@@ -163,6 +171,8 @@ class GameScene: SKScene {
     private var blockNodes: [SKNode] = []
     
     private let localCamera = SKCameraNode()
+    private var localCameraTarget = CGPoint.zero
+    private var localCameraMode = CameraMode.center
     
     private var _i = IntPoint.zero
     var i: IntPoint { //x, y coordinate (top left of the player rectangle)
@@ -185,14 +195,17 @@ class GameScene: SKScene {
         }
     }
 
-    var iHorizontalPlatformCollision = Int(0)
-    var iVerticalPlatformCollision = Int(0)
-    var iPlatformCollisionPlayerId = Int(0)
+//    var iHorizontalPlatformCollision = Int(0)
+//    var iVerticalPlatformCollision = Int(0)
+//    var iPlatformCollisionPlayerId = Int(0)
     
     var lockjump = false
     var inair = false
     
     var fallthroughTile = false // bool fallthrough;
+    
+    var startingPlayerPosition = CGPoint.zero
+    var startingCameraPosition = CGPoint.zero
     
     let selectedBlockNode: SKShapeNode = {
         let node = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
@@ -212,17 +225,33 @@ class GameScene: SKScene {
         return node
     }()
     
+    let cameraMoveBox: SKShapeNode = {
+        let node = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE*2, height: TILESIZE*30))
+        node.fillColor = .clear
+        node.strokeColor = .orange
+        node.position = CGPoint(x: 0, y: 0)
+        return node
+    }()
     
+    let forwardFocusBox: SKShapeNode = {
+        let node = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE*6, height: TILESIZE*30))
+        node.fillColor = .clear
+        node.strokeColor = .blue
+        node.position = CGPoint(x: 0, y: 0)
+        return node
+    }()
     
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         
-       
+        startingPlayerPosition = CGPoint(x: size.width/2 - CGFloat(PW)/2, y: size.height - CGFloat(2 * TILESIZE))
+        startingCameraPosition = CGPoint(x: size.width/2, y: size.height/2)
         
         AppState.load()
         
+        localCameraTarget = startingCameraPosition
         localCamera.yScale = -1
-        localCamera.position = CGPoint(x: size.width/2, y: size.height/2)
+        localCamera.position = localCameraTarget
         
         addChild(localCamera)
         self.camera = localCamera
@@ -230,7 +259,7 @@ class GameScene: SKScene {
         
         setupBlocks()
         
-        f = CGPoint(x: 10 * TILESIZE, y: (AppState.shared.blocks.count - 2) * TILESIZE)
+        f = startingPlayerPosition
         player = SKShapeNode(rect: CGRect(x: 0, y: 0, width: PW, height: PH))
         player.fillColor = .red
         player.position = f
@@ -239,8 +268,15 @@ class GameScene: SKScene {
         
         fOld = f
         
+        restart()
+        
         addChild(selectedBlockNode)
         addChild(collideBlockNode)
+        
+        
+        addChild(cameraMoveBox)
+        addChild(forwardFocusBox)
+        
         
 //        localCamera.position = player.position
     }
@@ -328,6 +364,7 @@ class GameScene: SKScene {
             print("camera position: \(localCamera.position)")
         }
         
+        
         if keysDown[.s] == true {
             keysDown[.s] = false
             
@@ -350,6 +387,12 @@ class GameScene: SKScene {
         } else if keysDown[.z] == true {
             movementDirectionX = 1.0
             keysDown[.z] = false
+        }
+        
+        if keysDown[.r] == true {
+            keysDown[.r] = false
+            restart()
+            
         }
         
         //jump pressed?
@@ -380,7 +423,77 @@ class GameScene: SKScene {
         collision_detection_map()
         player.position = f
         
-//        localCamera.position = player.position
+        // Camera
+        // Update to the corrent mode
+        switch localCameraMode {
+        case .center:
+//            print("offset: \(f.x - localCamera.position.x)")
+            
+            if f.x - localCamera.position.x > CGFloat(3*TILESIZE) {
+                print("switch to lock left of player")
+                localCameraMode = .lockLeftOfPlayer
+            } else if f.x - localCamera.position.x < -CGFloat(3*TILESIZE) {
+                print("switch to lock right of player")
+                localCameraMode = .lockRightOfPlayer
+            }
+        case .lockLeftOfPlayer:
+//            direction right -> center
+            if movementDirectionX < 0.0 {
+                localCameraMode = .center
+            }
+        case .lockRightOfPlayer:
+            if movementDirectionX > 0.0 {
+                localCameraMode = .center
+            }
+        }
+        gameSceneDelegate?.cameraModeUpdated(cameraMode: localCameraMode)
+        
+        // Update the camera depending on the mode
+        switch localCameraMode {
+        case .center:
+            break
+        case .lockLeftOfPlayer:
+            localCameraTarget.x = f.x + CGFloat(PW)/2 + CGFloat(TILESIZE)
+        case .lockRightOfPlayer:
+            localCameraTarget.x = f.x + CGFloat(PW)/2 - CGFloat(TILESIZE)
+        }
+        
+        
+        if abs(localCamera.position.x - localCameraTarget.x) < 1.0 {
+            localCamera.position.x = localCameraTarget.x
+        } else {
+//            localCamera.position.x += (localCameraTarget.x - localCamera.position.x) * 0.1
+            let difference = localCameraTarget.x - localCamera.position.x
+            
+            localCamera.position.x += localCameraTarget.x - localCamera.position.x > 0
+                ? min(difference, AppState.shared.cameraMoveSpeed)
+                : max(difference, -AppState.shared.cameraMoveSpeed)
+        }
+        
+        
+        
+        //                []        *
+        
+        cameraMoveBox.position = CGPoint(x: localCamera.position.x - cameraMoveBox.frame.width/2,
+                                         y: localCamera.position.y - cameraMoveBox.frame.height/2)
+        forwardFocusBox.position = CGPoint(x: localCamera.position.x - forwardFocusBox.frame.width/2,
+                                           y: localCamera.position.y - forwardFocusBox.frame.height/2)
+    }
+    
+    private func restart() {
+        lockjump = false
+        inair = false
+        fallthroughTile = false
+        
+        f = startingPlayerPosition
+        fOld = f
+        
+        vel = CGPoint.zero
+        oldvel = CGPoint.zero
+        
+        localCameraTarget = startingCameraPosition
+        localCamera.position = localCameraTarget
+        localCameraMode = .center
     }
     
     private func setupBlocks() {

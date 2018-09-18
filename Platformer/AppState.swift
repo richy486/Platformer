@@ -36,9 +36,12 @@ struct AppState : Codable {
     
     var editMode: EditMode = .none
     
+    var cameraMoveSpeed = CGFloat(5)
+    
     // Stairs
     // new velocity jump: 14.901377688172044
     // new gravitation: 0.9783070116487457
+    // turbo jump 17.75
     
     var blocks = [
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
