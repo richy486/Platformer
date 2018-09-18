@@ -36,6 +36,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var rightOfLabel: NSTextField!
     
     @IBOutlet weak var velocityLabel: NSTextField!
+    @IBOutlet weak var offsetLabel: NSTextField!
+    @IBOutlet weak var cameraTrackingCheckbox: NSButton!
     
     @IBOutlet weak var modeSwitchControl: NSSegmentedControl!
     
@@ -87,6 +89,9 @@ class ViewController: NSViewController {
         
         AppState.shared.editMode = mode
     }
+    @IBAction func cameraTrackingChanged(_ checkBox: NSButton) {
+        AppState.shared.cameraTracking = checkBox.state == .on
+    }
     
     private func updateSliders() {
 //        speedSliderView.value = AppState.shared.VELMOVING
@@ -98,6 +103,7 @@ class ViewController: NSViewController {
 //        gravSliderView.value = AppState.shared.GRAVITATION
         
         modeSwitchControl.selectedSegment = AppState.shared.editMode.rawValue
+        cameraTrackingCheckbox.state = AppState.shared.cameraTracking ? .on : .off
     }
 }
 
@@ -118,7 +124,8 @@ extension ViewController: GameSceneDelegate {
         rightOfLabel.backgroundColor = cameraMode == .lockRightOfPlayer ? .red : .lightGray
     }
     
-    func playerVelocityUpdated(velocity: CGPoint) {
+    func playerVelocityUpdated(velocity: CGPoint, offset: CGFloat) {
         velocityLabel.stringValue = String(format: "Velocity: %.02f", velocity.x)
+        offsetLabel.stringValue = String(format: "Offset: %.02f", offset)
     }
 }

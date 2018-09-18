@@ -158,7 +158,7 @@ func posToTile(_ position: CGPoint) -> Int {
 protocol GameSceneDelegate {
     func keysUpdated(keysDown: [KeyCode: Bool], oldKeysDown: [KeyCode: Bool])
     func cameraModeUpdated(cameraMode: CameraMode)
-    func playerVelocityUpdated(velocity: CGPoint)
+    func playerVelocityUpdated(velocity: CGPoint, offset: CGFloat)
 }
 
 class GameScene: SKScene {
@@ -175,6 +175,7 @@ class GameScene: SKScene {
     
     private let localCamera = SKCameraNode()
     private var localCameraTarget = CGPoint.zero
+    private var localCameraPlayerOffsetTarget = CGPoint.zero
     private var localCameraMode = CameraMode.center
     
     private var _i = IntPoint.zero
@@ -434,59 +435,80 @@ class GameScene: SKScene {
         player.position = f
         
         // Camera
-        // Update to the corrent mode
-        switch localCameraMode {
-        case .center:
-//            print("offset: \(f.x - localCamera.position.x)")
+        if AppState.shared.cameraTracking {
+            // Update to the corrent mode
+            switch localCameraMode {
+            case .center:
+    //            print("offset: \(f.x - localCamera.position.x)")
+                
+                if f.x - localCamera.position.x > CGFloat(3*TILESIZE) {
+                    print("switch to lock left of player")
+                    localCameraMode = .lockLeftOfPlayer
+                } else if f.x - localCamera.position.x < -CGFloat(3*TILESIZE) {
+                    print("switch to lock right of player")
+                    localCameraMode = .lockRightOfPlayer
+                }
+            case .lockLeftOfPlayer:
+    //            direction right -> center
+                if movementDirectionX < 0.0 {
+                    localCameraMode = .center
+                }
+            case .lockRightOfPlayer:
+                if movementDirectionX > 0.0 {
+                    localCameraMode = .center
+                }
+            }
+            gameSceneDelegate?.cameraModeUpdated(cameraMode: localCameraMode)
             
-            if f.x - localCamera.position.x > CGFloat(3*TILESIZE) {
-                print("switch to lock left of player")
-                localCameraMode = .lockLeftOfPlayer
-            } else if f.x - localCamera.position.x < -CGFloat(3*TILESIZE) {
-                print("switch to lock right of player")
-                localCameraMode = .lockRightOfPlayer
-            }
-        case .lockLeftOfPlayer:
-//            direction right -> center
-            if movementDirectionX < 0.0 {
-                localCameraMode = .center
-            }
-        case .lockRightOfPlayer:
-            if movementDirectionX > 0.0 {
-                localCameraMode = .center
-            }
-        }
-        gameSceneDelegate?.cameraModeUpdated(cameraMode: localCameraMode)
-        
-        // Update the camera depending on the mode
-        switch localCameraMode {
-        case .center:
-            break
-        case .lockLeftOfPlayer:
-            localCameraTarget.x = f.x + CGFloat(PW)/2 + CGFloat(TILESIZE)
-        case .lockRightOfPlayer:
-            localCameraTarget.x = f.x + CGFloat(PW)/2 - CGFloat(TILESIZE)
-//        case .lockLeftOfPlayer, .lockRightOfPlayer:
-//            localCameraTarget.x = f.x + CGFloat(PW)/2
-        }
-        
-        
-        if abs(localCamera.position.x - localCameraTarget.x) < 1.0 {
-            localCamera.position.x = localCameraTarget.x
-        } else {
-//            let difference = localCameraTarget.x - localCamera.position.x
-//
-//            localCamera.position.x += localCameraTarget.x - localCamera.position.x > 0
-//                ? min(difference, AppState.shared.cameraMoveSpeed)
-//                : max(difference, -AppState.shared.cameraMoveSpeed)
+            // Update the camera depending on the mode
+            
+            let playerCenterX = f.x + CGFloat(PW)/2
+            let cameraOffsetX = playerCenterX - localCamera.position.x
             
             
-            let percent = (CGFloat(delta) * AppState.shared.cameraMoveSpeed)
-                .clamp(min: 0, max: 1)
-             let updatedPos = CGPoint(x: percent, y: percent)
-                .lerp(min: localCamera.position, max: localCameraTarget)
-            localCamera.position = updatedPos
+            switch localCameraMode {
+            case .center:
+                break
+            case .lockLeftOfPlayer:
+    //            localCameraTarget.x = f.x + CGFloat(PW)/2 + CGFloat(TILESIZE)
+                localCameraPlayerOffsetTarget.x = CGFloat(TILESIZE)
+                
+                
+                
+            case .lockRightOfPlayer:
+    //            localCameraTarget.x = f.x + CGFloat(PW)/2 - CGFloat(TILESIZE)
+                localCameraPlayerOffsetTarget.x = -CGFloat(TILESIZE)
+            }
+            
+            var updatedOffsetX = CGFloat(0)
+            if localCameraMode == .lockLeftOfPlayer || localCameraMode == .lockRightOfPlayer {
+                let percent = (CGFloat(delta) * AppState.shared.cameraMoveSpeed)
+                updatedOffsetX = percent
+                    .clamp(min: 0, max: 1)
+                    .lerp(min: cameraOffsetX, max: 0)
+                print(String(format: "playerCenterX: %.02f, localCamera.position.x: %.02f, cameraOffsetX: %.02f, updatedOffsetX: %.02f, percent: %.02f",
+                             playerCenterX, localCamera.position.x, cameraOffsetX, updatedOffsetX, percent))
+                localCamera.position.x = playerCenterX - updatedOffsetX
+            }
+            
+    //        if abs(localCamera.position.x - localCameraTarget.x) < 1.0 {
+    //            localCamera.position.x = localCameraTarget.x
+    //        } else {
+    ////            let difference = localCameraTarget.x - localCamera.position.x
+    ////
+    ////            localCamera.position.x += localCameraTarget.x - localCamera.position.x > 0
+    ////                ? min(difference, AppState.shared.cameraMoveSpeed)
+    ////                : max(difference, -AppState.shared.cameraMoveSpeed)
+    //            let percent = (CGFloat(delta) * AppState.shared.cameraMoveSpeed)
+    //                .clamp(min: 0, max: 1)
+    //             let updatedPos = CGPoint(x: percent, y: percent)
+    //                .lerp(min: localCamera.position, max: localCameraTarget)
+    //            localCamera.position = updatedPos
+    //        }
+            gameSceneDelegate?.playerVelocityUpdated(velocity: vel, offset: updatedOffsetX)
         }
+        
+        
         
         
         
@@ -497,7 +519,7 @@ class GameScene: SKScene {
         forwardFocusBox.position = CGPoint(x: localCamera.position.x - forwardFocusBox.frame.width/2,
                                            y: localCamera.position.y - forwardFocusBox.frame.height/2)
         
-        gameSceneDelegate?.playerVelocityUpdated(velocity: vel)
+        
         lastUpdateTimeInterval = currentTime
     }
     
