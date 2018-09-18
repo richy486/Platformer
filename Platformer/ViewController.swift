@@ -35,6 +35,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var centerLabel: NSTextField!
     @IBOutlet weak var rightOfLabel: NSTextField!
     
+    @IBOutlet weak var velocityLabel: NSTextField!
+    
     @IBOutlet weak var modeSwitchControl: NSSegmentedControl!
     
     override func viewDidLoad() {
@@ -114,5 +116,9 @@ extension ViewController: GameSceneDelegate {
         leftOfLabel.backgroundColor = cameraMode == .lockLeftOfPlayer ? .red : .lightGray
         centerLabel.backgroundColor = cameraMode == .center ? .red : .lightGray
         rightOfLabel.backgroundColor = cameraMode == .lockRightOfPlayer ? .red : .lightGray
+    }
+    
+    func playerVelocityUpdated(velocity: CGPoint) {
+        velocityLabel.stringValue = String(format: "Velocity: %.02f", velocity.x)
     }
 }

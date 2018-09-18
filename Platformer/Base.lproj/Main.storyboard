@@ -1185,19 +1185,6 @@
                                             </gridCell>
                                         </gridCells>
                                     </gridView>
-                                    <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JSe-fB-cPe">
-                                        <rect key="frame" x="336" y="557" width="234" height="24"/>
-                                        <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="UBR-rP-IbO">
-                                            <font key="font" metaFont="system"/>
-                                            <segments>
-                                                <segment width="76"/>
-                                                <segment width="75" selected="YES" tag="1"/>
-                                                <segment width="75">
-                                                    <nil key="label"/>
-                                                </segment>
-                                            </segments>
-                                        </segmentedCell>
-                                    </segmentedControl>
                                     <gridView xPlacement="leading" yPlacement="bottom" rowAlignment="none" translatesAutoresizingMaskIntoConstraints="NO" id="JQP-i8-wOi">
                                         <rect key="frame" x="627" y="463" width="153" height="17"/>
                                         <rows>
@@ -1241,6 +1228,40 @@
                                             </gridCell>
                                         </gridCells>
                                     </gridView>
+                                    <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JSe-fB-cPe">
+                                        <rect key="frame" x="336" y="557" width="234" height="24"/>
+                                        <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="UBR-rP-IbO">
+                                            <font key="font" metaFont="system"/>
+                                            <segments>
+                                                <segment width="76"/>
+                                                <segment width="75" selected="YES" tag="1"/>
+                                                <segment width="75">
+                                                    <nil key="label"/>
+                                                </segment>
+                                            </segments>
+                                        </segmentedCell>
+                                    </segmentedControl>
+                                    <gridView xPlacement="leading" yPlacement="bottom" rowAlignment="none" translatesAutoresizingMaskIntoConstraints="NO" id="2yM-I4-4eO">
+                                        <rect key="frame" x="727" y="416" width="53" height="17"/>
+                                        <rows>
+                                            <gridRow id="4Dy-0d-CZ7"/>
+                                        </rows>
+                                        <columns>
+                                            <gridColumn id="40v-Qy-V7O"/>
+                                        </columns>
+                                        <gridCells>
+                                            <gridCell row="4Dy-0d-CZ7" column="40v-Qy-V7O" id="jMW-Fm-KXU">
+                                                <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="S1f-bV-Xde">
+                                                    <rect key="frame" x="0.0" y="0.0" width="53" height="17"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Velocity" drawsBackground="YES" id="udQ-vJ-Txk">
+                                                        <font key="font" usesAppearanceFont="YES"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                            </gridCell>
+                                        </gridCells>
+                                    </gridView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="JSe-fB-cPe" firstAttribute="leading" secondItem="j2M-Wq-2Jc" secondAttribute="trailing" constant="8" id="0ao-0D-1qA"/>
@@ -1249,6 +1270,8 @@
                                     <constraint firstItem="j2M-Wq-2Jc" firstAttribute="leading" secondItem="Sch-LN-vJU" secondAttribute="leading" constant="20" id="ZCo-Zw-Udv"/>
                                     <constraint firstItem="j2M-Wq-2Jc" firstAttribute="top" secondItem="Sch-LN-vJU" secondAttribute="top" constant="20" id="fCJ-fs-eYG"/>
                                     <constraint firstAttribute="trailing" secondItem="xGR-fz-RHi" secondAttribute="trailing" constant="20" id="fnr-Vv-L6G"/>
+                                    <constraint firstItem="2yM-I4-4eO" firstAttribute="top" secondItem="JQP-i8-wOi" secondAttribute="bottom" constant="30" id="gXf-pY-FUV"/>
+                                    <constraint firstAttribute="trailing" secondItem="2yM-I4-4eO" secondAttribute="trailing" constant="20" id="oiQ-6t-1TB"/>
                                     <constraint firstItem="xGR-fz-RHi" firstAttribute="top" secondItem="Sch-LN-vJU" secondAttribute="top" constant="40" id="u3i-Hr-myd"/>
                                     <constraint firstItem="JSe-fB-cPe" firstAttribute="top" secondItem="Sch-LN-vJU" secondAttribute="top" constant="20" id="vTZ-h3-4SB"/>
                                 </constraints>
@@ -1280,6 +1303,7 @@
                         <outlet property="velJumpSliderView" destination="2rI-EL-6MU" id="Z0d-Ri-tPL"/>
                         <outlet property="velStopJumpSliderView" destination="Xys-6x-xVR" id="jZF-7W-HVq"/>
                         <outlet property="velTurboJumpView" destination="e34-Tg-u1h" id="766-kg-vSr"/>
+                        <outlet property="velocityLabel" destination="S1f-bV-Xde" id="Xrr-mw-ogR"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

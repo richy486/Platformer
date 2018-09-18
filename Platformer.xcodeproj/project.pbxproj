@@ -16,6 +16,7 @@
 		B95F037F212EFAA5003E84E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B95F037E212EFAA5003E84E8 /* Assets.xcassets */; };
 		B95F0382212EFAA5003E84E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B95F0380212EFAA5003E84E8 /* Main.storyboard */; };
 		B95F038B212FB84C003E84E8 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95F038A212FB84C003E84E8 /* AppState.swift */; };
+		B9C905F121508E5B007BCF00 /* CGHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C905F021508E5B007BCF00 /* CGHelpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		B95F0383212EFAA5003E84E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B95F0384212EFAA5003E84E8 /* Platformer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Platformer.entitlements; sourceTree = "<group>"; };
 		B95F038A212FB84C003E84E8 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		B9C905F021508E5B007BCF00 /* CGHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGHelpers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				B95F037C212EFAA3003E84E8 /* ViewController.swift */,
 				B95F038A212FB84C003E84E8 /* AppState.swift */,
 				B914DB65214C867300628D23 /* SliderView.swift */,
+				B9C905F021508E5B007BCF00 /* CGHelpers.swift */,
 				B95F037E212EFAA5003E84E8 /* Assets.xcassets */,
 				B95F0380212EFAA5003E84E8 /* Main.storyboard */,
 				B95F0383212EFAA5003E84E8 /* Info.plist */,
@@ -154,6 +157,7 @@
 				B95F037B212EFAA3003E84E8 /* GameScene.swift in Sources */,
 				B95F0375212EFAA3003E84E8 /* AppDelegate.swift in Sources */,
 				B95F038B212FB84C003E84E8 /* AppState.swift in Sources */,
+				B9C905F121508E5B007BCF00 /* CGHelpers.swift in Sources */,
 				B914DB66214C867300628D23 /* SliderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

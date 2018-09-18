@@ -158,11 +158,14 @@ func posToTile(_ position: CGPoint) -> Int {
 protocol GameSceneDelegate {
     func keysUpdated(keysDown: [KeyCode: Bool], oldKeysDown: [KeyCode: Bool])
     func cameraModeUpdated(cameraMode: CameraMode)
+    func playerVelocityUpdated(velocity: CGPoint)
 }
 
 class GameScene: SKScene {
     
     var gameSceneDelegate: GameSceneDelegate? = nil
+    var lastUpdateTimeInterval: CFTimeInterval = 0
+    
     private var player: SKShapeNode!
     private var vel: CGPoint = CGPoint.zero //velocity on x, y axis
     private var fOld: CGPoint = CGPoint.zero
@@ -279,6 +282,8 @@ class GameScene: SKScene {
         
         
 //        localCamera.position = player.position
+        
+        
     }
     
     @objc static override var supportsSecureCoding: Bool {
@@ -346,6 +351,11 @@ class GameScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
+        
+        if lastUpdateTimeInterval == 0 {
+            lastUpdateTimeInterval = currentTime
+        }
+        let delta = currentTime - lastUpdateTimeInterval
         
         // Debug
         let cameraMoveAmount = CGFloat(10)
@@ -456,18 +466,26 @@ class GameScene: SKScene {
             localCameraTarget.x = f.x + CGFloat(PW)/2 + CGFloat(TILESIZE)
         case .lockRightOfPlayer:
             localCameraTarget.x = f.x + CGFloat(PW)/2 - CGFloat(TILESIZE)
+//        case .lockLeftOfPlayer, .lockRightOfPlayer:
+//            localCameraTarget.x = f.x + CGFloat(PW)/2
         }
         
         
         if abs(localCamera.position.x - localCameraTarget.x) < 1.0 {
             localCamera.position.x = localCameraTarget.x
         } else {
-//            localCamera.position.x += (localCameraTarget.x - localCamera.position.x) * 0.1
-            let difference = localCameraTarget.x - localCamera.position.x
+//            let difference = localCameraTarget.x - localCamera.position.x
+//
+//            localCamera.position.x += localCameraTarget.x - localCamera.position.x > 0
+//                ? min(difference, AppState.shared.cameraMoveSpeed)
+//                : max(difference, -AppState.shared.cameraMoveSpeed)
             
-            localCamera.position.x += localCameraTarget.x - localCamera.position.x > 0
-                ? min(difference, AppState.shared.cameraMoveSpeed)
-                : max(difference, -AppState.shared.cameraMoveSpeed)
+            
+            let percent = (CGFloat(delta) * AppState.shared.cameraMoveSpeed)
+                .clamp(min: 0, max: 1)
+             let updatedPos = CGPoint(x: percent, y: percent)
+                .lerp(min: localCamera.position, max: localCameraTarget)
+            localCamera.position = updatedPos
         }
         
         
@@ -478,6 +496,9 @@ class GameScene: SKScene {
                                          y: localCamera.position.y - cameraMoveBox.frame.height/2)
         forwardFocusBox.position = CGPoint(x: localCamera.position.x - forwardFocusBox.frame.width/2,
                                            y: localCamera.position.y - forwardFocusBox.frame.height/2)
+        
+        gameSceneDelegate?.playerVelocityUpdated(velocity: vel)
+        lastUpdateTimeInterval = currentTime
     }
     
     private func restart() {
