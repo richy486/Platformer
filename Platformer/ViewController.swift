@@ -114,9 +114,9 @@ extension ViewController: GameSceneDelegate {
         jumpLabel.backgroundColor = keysDown[.a] == true ? .red : .lightGray
         runLabel.backgroundColor = keysDown[.shift] == true ? .red : .lightGray
         
-        if keysDown[.tab] == false && oldKeysDown[.tab] == true {
-            debugView.isHidden.toggle()
-        }
+//        if keysDown[.tab] == false && oldKeysDown[.tab] == true {
+//            debugView.isHidden.toggle()
+//        }
     }
     func cameraModeUpdated(cameraMode: CameraMode) {
         leftOfLabel.backgroundColor = cameraMode == .lockLeftOfPlayer ? .red : .lightGray
@@ -127,5 +127,8 @@ extension ViewController: GameSceneDelegate {
     func playerVelocityUpdated(velocity: CGPoint, offset: CGFloat) {
         velocityLabel.stringValue = String(format: "Velocity: %.02f", velocity.x)
         offsetLabel.stringValue = String(format: "Offset: %.02f", offset)
+    }
+    func setDebugModeUI(_ debugUI: Bool) {
+        debugView.isHidden = !debugUI
     }
 }

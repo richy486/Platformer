@@ -159,6 +159,7 @@ protocol GameSceneDelegate {
     func keysUpdated(keysDown: [KeyCode: Bool], oldKeysDown: [KeyCode: Bool])
     func cameraModeUpdated(cameraMode: CameraMode)
     func playerVelocityUpdated(velocity: CGPoint, offset: CGFloat)
+    func setDebugModeUI(_ debugUI: Bool)
 }
 
 class GameScene: SKScene {
@@ -177,6 +178,7 @@ class GameScene: SKScene {
     private var localCameraTarget = CGPoint.zero
 //    private var localCameraPlayerOffsetTarget = CGPoint.zero
     private var localCameraMode = CameraMode.center
+    private var showDebugUI = true
     
     private var _i = IntPoint.zero
     var i: IntPoint { //x, y coordinate (top left of the player rectangle)
@@ -406,6 +408,15 @@ class GameScene: SKScene {
             
         }
         
+        if keysDown[.tab] == true {
+            keysDown[.tab] = false
+            showDebugUI.toggle()
+            gameSceneDelegate?.setDebugModeUI(showDebugUI)
+            
+            cameraMoveBox.isHidden = !showDebugUI
+            forwardFocusBox.isHidden = !showDebugUI
+        }
+        
         //jump pressed?
         if keysDown[.a] == true {
             // Jump!
@@ -462,16 +473,11 @@ class GameScene: SKScene {
             
             // Update the camera depending on the mode
             
-            let playerCenterX = f.x + CGFloat(PW)/2
-            
             switch localCameraMode {
             case .center:
                 break
             case .lockLeftOfPlayer:
                 localCameraTarget.x = f.x + CGFloat(PW)/2 + CGFloat(TILESIZE)
-                
-                
-                
             case .lockRightOfPlayer:
                 localCameraTarget.x = f.x + CGFloat(PW)/2 - CGFloat(TILESIZE)
             }
