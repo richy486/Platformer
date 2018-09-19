@@ -175,7 +175,7 @@ class GameScene: SKScene {
     
     private let localCamera = SKCameraNode()
     private var localCameraTarget = CGPoint.zero
-    private var localCameraPlayerOffsetTarget = CGPoint.zero
+//    private var localCameraPlayerOffsetTarget = CGPoint.zero
     private var localCameraMode = CameraMode.center
     
     private var _i = IntPoint.zero
@@ -463,55 +463,32 @@ class GameScene: SKScene {
             // Update the camera depending on the mode
             
             let playerCenterX = f.x + CGFloat(PW)/2
-            let cameraOffsetX = playerCenterX - localCamera.position.x
-            
             
             switch localCameraMode {
             case .center:
                 break
             case .lockLeftOfPlayer:
-    //            localCameraTarget.x = f.x + CGFloat(PW)/2 + CGFloat(TILESIZE)
-                localCameraPlayerOffsetTarget.x = CGFloat(TILESIZE)
+                localCameraTarget.x = f.x + CGFloat(PW)/2 + CGFloat(TILESIZE)
                 
                 
                 
             case .lockRightOfPlayer:
-    //            localCameraTarget.x = f.x + CGFloat(PW)/2 - CGFloat(TILESIZE)
-                localCameraPlayerOffsetTarget.x = -CGFloat(TILESIZE)
+                localCameraTarget.x = f.x + CGFloat(PW)/2 - CGFloat(TILESIZE)
             }
             
-            var updatedOffsetX = CGFloat(0)
             if localCameraMode == .lockLeftOfPlayer || localCameraMode == .lockRightOfPlayer {
-                let percent = (CGFloat(delta) * AppState.shared.cameraMoveSpeed)
-                updatedOffsetX = percent
+                
+                let distance = abs(localCamera.position.x - localCameraTarget.x)
+                let percent = (AppState.shared.cameraMoveSpeed / distance) * CGFloat(delta)
+                let posX = percent
                     .clamp(min: 0, max: 1)
-                    .lerp(min: cameraOffsetX, max: 0)
-                print(String(format: "playerCenterX: %.02f, localCamera.position.x: %.02f, cameraOffsetX: %.02f, updatedOffsetX: %.02f, percent: %.02f",
-                             playerCenterX, localCamera.position.x, cameraOffsetX, updatedOffsetX, percent))
-                localCamera.position.x = playerCenterX - updatedOffsetX
+                    .lerp(min: localCamera.position.x, max: localCameraTarget.x)
+                localCamera.position.x = posX
+
             }
-            
-    //        if abs(localCamera.position.x - localCameraTarget.x) < 1.0 {
-    //            localCamera.position.x = localCameraTarget.x
-    //        } else {
-    ////            let difference = localCameraTarget.x - localCamera.position.x
-    ////
-    ////            localCamera.position.x += localCameraTarget.x - localCamera.position.x > 0
-    ////                ? min(difference, AppState.shared.cameraMoveSpeed)
-    ////                : max(difference, -AppState.shared.cameraMoveSpeed)
-    //            let percent = (CGFloat(delta) * AppState.shared.cameraMoveSpeed)
-    //                .clamp(min: 0, max: 1)
-    //             let updatedPos = CGPoint(x: percent, y: percent)
-    //                .lerp(min: localCamera.position, max: localCameraTarget)
-    //            localCamera.position = updatedPos
-    //        }
-            gameSceneDelegate?.playerVelocityUpdated(velocity: vel, offset: updatedOffsetX)
+
+            gameSceneDelegate?.playerVelocityUpdated(velocity: vel, offset: 0)
         }
-        
-        
-        
-        
-        
         //                []        *
         
         cameraMoveBox.position = CGPoint(x: localCamera.position.x - cameraMoveBox.frame.width/2,

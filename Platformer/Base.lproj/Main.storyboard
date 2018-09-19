@@ -1080,7 +1080,7 @@
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="300" id="9gx-hs-A0W"/>
                                                                     </constraints>
-                                                                    <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="H7F-g1-UDJ"/>
+                                                                    <sliderCell key="cell" state="on" alignment="left" maxValue="5000" doubleValue="500" tickMarkPosition="above" sliderType="linear" id="H7F-g1-UDJ"/>
                                                                 </slider>
                                                             </subviews>
                                                             <constraints>

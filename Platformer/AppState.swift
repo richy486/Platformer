@@ -36,7 +36,7 @@ struct AppState : Codable {
     
     var editMode: EditMode = .none
     
-    var cameraMoveSpeed = CGFloat(5)
+    var cameraMoveSpeed = CGFloat(500)
     
     var cameraTracking = true
     
