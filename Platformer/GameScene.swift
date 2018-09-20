@@ -104,56 +104,7 @@ func setModifierKeysDown(_ modifierFlags: NSEvent.ModifierFlags) {
 
 }
 
-struct TileTypeFlag: OptionSet {
-    
-    let rawValue: Int
-    
-    static let nonsolid = TileTypeFlag(rawValue: 1 << 0)
-    static let solid = TileTypeFlag(rawValue: 1 << 1)
-    static let solid_on_top = TileTypeFlag(rawValue: 1 << 2)
-}
 
-let S = TileTypeFlag.solid.rawValue
-let T = TileTypeFlag.solid_on_top.rawValue
-
-func map(x: Int, y: Int) -> Int {
-    
-    guard y >= 0 && y < AppState.shared.blocks.count else {
-        return -1
-    }
-    let xBlocks = AppState.shared.blocks[y]
-    guard x >= 0 && x < xBlocks.count else {
-        return -1
-    }
-    
-    return xBlocks[x]
-}
-
-func setMap(x: Int, y: Int, tileType: TileTypeFlag) {
-    
-    guard y >= 0 && y < AppState.shared.blocks.count else {
-        return
-    }
-    let xBlocks = AppState.shared.blocks[y]
-    guard x >= 0 && x < xBlocks.count else {
-        return
-    }
-    
-    AppState.shared.blocks[y][x] = tileType.rawValue
-}
-
-func posToTilePos(_ position: CGPoint) -> (x: Int, y: Int) {
-    let x = Int(position.x + 0.5) / TILESIZE
-    let y = (Int(position.y + 0.5) / TILESIZE) //+ 1
-    
-    return (x, y)
-}
-
-func posToTile(_ position: CGPoint) -> Int {
-    let tilePos = posToTilePos(position)
-    
-    return map(x: tilePos.x, y: tilePos.y)
-}
 
 protocol GameSceneDelegate {
     func keysUpdated(keysDown: [KeyCode: Bool], oldKeysDown: [KeyCode: Bool])
@@ -172,11 +123,12 @@ class GameScene: SKScene {
     private var fOld: CGPoint = CGPoint.zero
     private var oldvel: CGPoint = CGPoint.zero
     
+    private var lastGroundPosition: Int = Int.max
+    
     private var blockNodes: [SKNode] = []
     
     private let localCamera = SKCameraNode()
     private var localCameraTarget = CGPoint.zero
-//    private var localCameraPlayerOffsetTarget = CGPoint.zero
     private var localCameraMode = CameraMode.center
     private var showDebugUI = true
     
@@ -208,8 +160,6 @@ class GameScene: SKScene {
     var lockjump = false
     var inair = false
     
-    var fallthroughTile = false // bool fallthrough;
-    
     var startingPlayerPosition = CGPoint.zero
     var startingCameraPosition = CGPoint.zero
     
@@ -222,7 +172,7 @@ class GameScene: SKScene {
         return node
     }()
     
-    let collideBlockNode: SKShapeNode = {
+    let collideXBlockNode: SKShapeNode = {
         let node = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
         node.fillColor = .clear
         node.strokeColor = .orange
@@ -231,27 +181,60 @@ class GameScene: SKScene {
         return node
     }()
     
-    let cameraMoveBox: SKShapeNode = {
-        let node = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE*2, height: TILESIZE*30))
+    let collideYLeftBlockNode: SKShapeNode = {
+        let node = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
+        node.fillColor = .clear
+        node.strokeColor = .blue
+        node.position = CGPoint(x: 0, y: 0)
+        node.isHidden = true
+        return node
+    }()
+    
+    let collideYRightBlockNode: SKShapeNode = {
+        let node = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
+        node.fillColor = .clear
+        node.strokeColor = .red
+        node.position = CGPoint(x: 0, y: 0)
+        node.isHidden = true
+        return node
+    }()
+    
+    // Camera Guides
+    
+    lazy var cameraMoveBox: SKShapeNode = {
+        let height = Int(self.size.height / CGFloat(TILESIZE) - 3) * TILESIZE
+        let node = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE*2, height: height))
         node.fillColor = .clear
         node.strokeColor = .orange
         node.position = CGPoint(x: 0, y: 0)
         return node
     }()
     
-    let forwardFocusBox: SKShapeNode = {
-        let node = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE*6, height: TILESIZE*30))
+    lazy var forwardFocusBox: SKShapeNode = {
+        let height = Int(self.size.height / CGFloat(TILESIZE) - 1) * TILESIZE
+        let node = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE*6, height: height))
         node.fillColor = .clear
         node.strokeColor = .blue
         node.position = CGPoint(x: 0, y: 0)
         return node
     }()
     
+    lazy var cameraCenter: SKShapeNode = {
+        let node = SKShapeNode(circleOfRadius: 10)
+        node.fillColor = .clear
+        node.strokeColor = .green
+        node.position = CGPoint(x: 0, y: 0)
+        return node
+    }()
+    
+    
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         
-        startingPlayerPosition = CGPoint(x: size.width/2 - CGFloat(PW)/2, y: size.height - CGFloat(2 * TILESIZE))
-        startingCameraPosition = CGPoint(x: size.width/2, y: size.height/2)
+        startingPlayerPosition = CGPoint(x: size.width/2 - CGFloat(PW)/2,
+                                         y: size.height - CGFloat(2 * TILESIZE))
+        startingCameraPosition = CGPoint(x: size.width/2,
+                                         y: ((size.height / CGFloat(TILESIZE)) / 2) * CGFloat(TILESIZE))
         
         AppState.load()
         
@@ -277,16 +260,13 @@ class GameScene: SKScene {
         restart()
         
         addChild(selectedBlockNode)
-        addChild(collideBlockNode)
-        
+        addChild(collideXBlockNode)
+        addChild(collideYLeftBlockNode)
+        addChild(collideYRightBlockNode)
         
         addChild(cameraMoveBox)
         addChild(forwardFocusBox)
-        
-        
-//        localCamera.position = player.position
-        
-        
+        addChild(cameraCenter)
     }
     
     @objc static override var supportsSecureCoding: Bool {
@@ -445,12 +425,16 @@ class GameScene: SKScene {
         collision_detection_map()
         player.position = f
         
+        gameSceneDelegate?.playerVelocityUpdated(velocity: vel, offset: 0)
+        
         // Camera
         if AppState.shared.cameraTracking {
+            
+            // Camera X
+            
             // Update to the corrent mode
             switch localCameraMode {
             case .center:
-    //            print("offset: \(f.x - localCamera.position.x)")
                 
                 if f.x - localCamera.position.x > CGFloat(3*TILESIZE) {
                     print("switch to lock left of player")
@@ -460,7 +444,7 @@ class GameScene: SKScene {
                     localCameraMode = .lockRightOfPlayer
                 }
             case .lockLeftOfPlayer:
-    //            direction right -> center
+                // direction right -> center
                 if movementDirectionX < 0.0 {
                     localCameraMode = .center
                 }
@@ -492,15 +476,31 @@ class GameScene: SKScene {
                 localCamera.position.x = posX
 
             }
-
-            gameSceneDelegate?.playerVelocityUpdated(velocity: vel, offset: 0)
+            
+            // Camera Y
+            if lastGroundPosition >= 0 && lastGroundPosition < AppState.shared.blocks.count {
+                localCameraTarget.y = CGFloat(lastGroundPosition * TILESIZE)
+                let distance = abs(localCamera.position.y - localCameraTarget.y)
+                let percent = (AppState.shared.cameraMoveSpeed / distance) * CGFloat(delta)
+                let posY = percent
+                    .clamp(min: 0, max: 1)
+                    .lerp(min: localCamera.position.y, max: localCameraTarget.y)
+                localCamera.position.y = posY
+            }
+            
+            
+            
         }
         //                []        *
+        
+        
         
         cameraMoveBox.position = CGPoint(x: localCamera.position.x - cameraMoveBox.frame.width/2,
                                          y: localCamera.position.y - cameraMoveBox.frame.height/2)
         forwardFocusBox.position = CGPoint(x: localCamera.position.x - forwardFocusBox.frame.width/2,
                                            y: localCamera.position.y - forwardFocusBox.frame.height/2)
+        cameraCenter.position = CGPoint(x: localCamera.position.x,
+                                        y: localCamera.position.y)
         
         
         lastUpdateTimeInterval = currentTime
@@ -509,7 +509,6 @@ class GameScene: SKScene {
     private func restart() {
         lockjump = false
         inair = false
-        fallthroughTile = false
         
         f = startingPlayerPosition
         fOld = f
@@ -713,6 +712,8 @@ class GameScene: SKScene {
             //moving down / on ground
             var collide = false
             var potentialPosition = f
+            var inAir = inair
+            var groundPosition: Int = lastGroundPosition
             while f.y < targetPlayerPostition.y - COLLISION_GIVE && !collide {
                 f.y = min(f.y + CGFloat(TILESIZE), targetPlayerPostition.y)
                 let result = mapcolldet_moveDownward(movePosition: f,
@@ -724,10 +725,16 @@ class GameScene: SKScene {
                                                      unAlignedBlockFX: unAlignedBlockFX)
                 collide = result.collide
                 potentialPosition = result.position
+                inAir = result.inAir
+                groundPosition = result.groundPosition
             }
             f = potentialPosition
+            inair = inAir
+            
+            if collide && abs(lastGroundPosition - groundPosition) > 1 {
+                lastGroundPosition = groundPosition
+            }
         }
-        fallthroughTile = false
         
         // Reset gravity if on the ground
         if !inair {
@@ -765,16 +772,16 @@ class GameScene: SKScene {
             collide = true
             // Debug
             if TileTypeFlag(rawValue: toptile).contains(.solid) {
-                collideBlockNode.isHidden = false
+                collideXBlockNode.isHidden = showDebugUI ? false : true
                 let collideBlockPosition = CGPoint(x: tx * TILESIZE, y: ty * TILESIZE)
-                if collideBlockPosition != collideBlockNode.position {
-                    collideBlockNode.position = collideBlockPosition
+                if collideBlockPosition != collideXBlockNode.position {
+                    collideXBlockNode.position = collideBlockPosition
                 }
             } else if TileTypeFlag(rawValue: bottomtile).contains(.solid) {
-                collideBlockNode.isHidden = false
+                collideXBlockNode.isHidden = showDebugUI ? false : true
                 let collideBlockPosition = CGPoint(x: tx * TILESIZE, y: ty2 * TILESIZE)
-                if collideBlockPosition != collideBlockNode.position {
-                    collideBlockNode.position = collideBlockPosition
+                if collideBlockPosition != collideXBlockNode.position {
+                    collideXBlockNode.position = collideBlockPosition
                 }
             }
             
@@ -807,8 +814,6 @@ class GameScene: SKScene {
         var position = position
         
         // moving up
-        fallthroughTile = false
-        
         let ty = Int(position.y) / TILESIZE
         
         //Player hit a solid
@@ -839,7 +844,7 @@ class GameScene: SKScene {
                                  txr: Int,
                                  alignedBlockX: Int,
                                  unAlignedBlockX: Int,
-                                 unAlignedBlockFX: CGFloat) -> (position: CGPoint, collide: Bool) {
+                                 unAlignedBlockFX: CGFloat) -> (position: CGPoint, collide: Bool, inAir: Bool, groundPosition: Int) {
         
         var position = position
         
@@ -850,42 +855,58 @@ class GameScene: SKScene {
         
         let fGapSupport = false // VELTURBOMOVING
         
-        let fSolidTileUnderPlayer = TileTypeFlag(rawValue: lefttile).contains(.solid) ||
-                                    TileTypeFlag(rawValue: righttile).contains(.solid)
-
-        if (TileTypeFlag(rawValue: lefttile).contains(.solid_on_top) ||
-                TileTypeFlag(rawValue: righttile).contains(.solid_on_top) ||
-                fGapSupport) &&
-            fOld.y + CGFloat(PH) <= CGFloat(ty << 5) {
+        let fSolidTileUnderPlayerLeft = TileTypeFlag(rawValue: lefttile).contains(.solid)
+        let fSolidTileUnderPlayerRight = TileTypeFlag(rawValue: righttile).contains(.solid)
+        let fSolidTileUnderPlayer = fSolidTileUnderPlayerLeft || fSolidTileUnderPlayerRight
+        
+        let fSolidOnTopUnderPlayerLeft = TileTypeFlag(rawValue: lefttile).contains(.solid_on_top)
+        let fSolidOnTopUnderPlayerRight = TileTypeFlag(rawValue: righttile).contains(.solid_on_top)
+        let fSolidOnTopUnderPlayer = fSolidOnTopUnderPlayerLeft || fSolidOnTopUnderPlayerRight
+        
+        if fSolidTileUnderPlayerLeft || fSolidOnTopUnderPlayerLeft {
+            collideYLeftBlockNode.isHidden = showDebugUI ? false : true
+            collideYLeftBlockNode.position = CGPoint(x: txl * TILESIZE, y: ty * TILESIZE)
+        } else {
+            collideYLeftBlockNode.isHidden = true
+        }
+        
+        if fSolidTileUnderPlayerRight || fSolidOnTopUnderPlayerRight {
+            collideYRightBlockNode.isHidden = showDebugUI ? false : true
+            collideYRightBlockNode.position = CGPoint(x: txr * TILESIZE, y: ty * TILESIZE)
+        } else {
+            collideYRightBlockNode.isHidden = true
+        }
+        
+        let inAir: Bool
+        if (fSolidOnTopUnderPlayer || fGapSupport) && fOld.y + CGFloat(PH) <= CGFloat(ty << 5) {
             
             // on ground
             // Deal with player down jumping through solid on top tiles
             
-            if fallthroughTile && !fSolidTileUnderPlayer {
-                position.y = CGFloat((ty << 5) - PH) + COLLISION_GIVE
-                inair = true
-                
-            } else {
-                // we were above the tile in the previous frame
-                position.y = CGFloat((ty << 5) - PH) - COLLISION_GIVE
-                
-                inair = false
-            }
+            // we were above the tile in the previous frame
+            position.y = CGFloat((ty << 5) - PH) - COLLISION_GIVE
             
-            return (position, !inair)
-        }
-        
-        if fSolidTileUnderPlayer {
+//            inair = false
+            inAir = false
+            
+//            return (position, !inair)
+        } else if fSolidTileUnderPlayer {
             // on ground
             
             position.y = CGFloat((ty << 5) - PH) - COLLISION_GIVE
-            inair = false
+//            inair = false
+            inAir = false
         } else {
             // falling (in air)
-            inair = true
+//            inair = true
+            inAir = true
         }
         
-         return (position, !inair)
+//        if (fSolidTileUnderPlayer || fSolidOnTopUnderPlayer) &&  {
+//            lastGroundPosition
+//        }
+        
+        return (position, !inAir, inAir, ty)
     }
     
     // ObjectBase.h
