@@ -34,6 +34,7 @@ enum KeyCode: Int, CaseIterable {
     case l = 37
     
     case s = 1
+    case d = 2
     case tab = 48
     
 }
@@ -312,8 +313,8 @@ class GameScene: SKScene {
     override func mouseDown(with event: NSEvent) {
 
         let location = event.location(in: self)
-        let tile = posToTile(location)
-        let tilePos = posToTilePos(location)
+        let tile = Map.posToTile(location)
+        let tilePos = Map.posToTilePos(location)
         
         print("location: \(location) tile: \(tile) - (\(tilePos.x), \(tilePos.y))")
         
@@ -321,11 +322,12 @@ class GameScene: SKScene {
         selectedBlockNode.position = CGPoint(x: tilePos.x * TILESIZE, y: tilePos.y * TILESIZE)
         
         switch AppState.shared.editMode {
-        case .paint:
-            setMap(x: tilePos.x, y: tilePos.y, tileType: .solid)
+        case .paint(let tileType):
+            print("type type: \(tileType)")
+            Map.setMap(x: tilePos.x, y: tilePos.y, tileType: tileType)
             setupBlocks()
         case .erase:
-            setMap(x: tilePos.x, y: tilePos.y, tileType: .nonsolid)
+            Map.setMap(x: tilePos.x, y: tilePos.y, tileType: .nonsolid)
             setupBlocks()
         default:
             break
@@ -360,10 +362,12 @@ class GameScene: SKScene {
         
         if keysDown[.s] == true {
             keysDown[.s] = false
-            
-            
             AppState.save()
-
+        }
+        if keysDown[.d] == true {
+            keysDown[.d] = false
+            AppState.load()
+            
         }
         
         
@@ -532,6 +536,8 @@ class GameScene: SKScene {
             for (x, blockVal) in xBlocks.enumerated() {
                 
                 switch blockVal {
+                case 0, TileTypeFlag.nonsolid.rawValue:
+                    continue
                 case S:
                     let blockNode = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
                     blockNode.fillColor = .yellow
@@ -547,7 +553,12 @@ class GameScene: SKScene {
                     addChild(blockNode)
                     blockNodes.append(blockNode)
                 default:
-                    continue
+                    let blockNode = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
+                    blockNode.fillColor = .green
+                    blockNode.strokeColor = .white
+                    blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
+                    addChild(blockNode)
+                    blockNodes.append(blockNode)
                 }
             }
         }
@@ -762,8 +773,8 @@ class GameScene: SKScene {
         
         
         
-        let toptile = map(x: tx, y: ty)
-        let bottomtile = map(x: tx, y: ty2)
+        let toptile = Map.map(x: tx, y: ty)
+        let bottomtile = Map.map(x: tx, y: ty2)
         
         //collide with solid
         var collide = false
@@ -817,7 +828,7 @@ class GameScene: SKScene {
         let ty = Int(position.y) / TILESIZE
         
         //Player hit a solid
-        let alignedTileType = map(x: alignedBlockX, y: ty)
+        let alignedTileType = Map.map(x: alignedBlockX, y: ty)
         
         if TileTypeFlag(rawValue: alignedTileType).contains(.solid) {
             print("collided top")
@@ -827,7 +838,7 @@ class GameScene: SKScene {
         }
         
         //Player squeezed around the block
-        let unalignedTileType = map(x: unAlignedBlockX, y: ty)
+        let unalignedTileType = Map.map(x: unAlignedBlockX, y: ty)
         if TileTypeFlag(rawValue: unalignedTileType).contains(.solid) {
             print("squeezed")
             position.x = unAlignedBlockFX
@@ -850,8 +861,8 @@ class GameScene: SKScene {
         
         let ty = (Int(position.y) + PH) / TILESIZE
         
-        let lefttile = map(x: txl, y: ty)
-        let righttile = map(x: txr, y: ty)
+        let lefttile = Map.map(x: txl, y: ty)
+        let righttile = Map.map(x: txr, y: ty)
         
         let fGapSupport = false // VELTURBOMOVING
         

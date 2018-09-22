@@ -39,10 +39,14 @@ class ViewController: NSViewController {
     @IBOutlet weak var offsetLabel: NSTextField!
     @IBOutlet weak var cameraTrackingCheckbox: NSButton!
     
-    @IBOutlet weak var modeSwitchControl: NSSegmentedControl!
+    @IBOutlet weak var tileCollectionView: UnselectorCollectionView!
+    
+    weak var gameScene: SKScene!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tileCollectionView.register(TileItem.self, forItemWithIdentifier: .tileItem)
 
         guard let view = self.skView else {
             fatalError("Could not load Sprite Kit view")
@@ -61,6 +65,8 @@ class ViewController: NSViewController {
         view.ignoresSiblingOrder = true
         view.showsFPS = true
         view.showsNodeCount = true
+        gameScene = scene
+        tileCollectionView.gameScene = scene
         
         speedSliderView.appStateKeyPath = \AppState.VELMOVING
         turboSpeedSliderView.appStateKeyPath = \AppState.VELTURBOMOVING
@@ -71,39 +77,34 @@ class ViewController: NSViewController {
         gravSliderView.appStateKeyPath = \AppState.GRAVITATION
         cameraSpeedSlider.appStateKeyPath = \AppState.cameraMoveSpeed
         
-        modeSwitchControl.segmentCount = EditMode.allCases.count
-        EditMode.allCases.enumerated().forEach { (index, editMode) in
-            self.modeSwitchControl.setLabel(editMode.name, forSegment: index)
-        }
-        modeSwitchControl.target = self
-        modeSwitchControl.action = #selector(updateMode)
-        modeSwitchControl.selectedSegment = AppState.shared.editMode.rawValue
-        
-        updateSliders()
+        updateUI()
     }
     
-    @objc func updateMode(sender: NSSegmentedControl) {
-        guard let mode = EditMode(rawValue: sender.selectedSegment) else {
-            return
-        }
-        
-        AppState.shared.editMode = mode
+    override func viewDidLayout() {
+        super.viewDidLayout()
+        self.view.window?.makeFirstResponder(gameScene.view)
     }
+    
     @IBAction func cameraTrackingChanged(_ checkBox: NSButton) {
         AppState.shared.cameraTracking = checkBox.state == .on
     }
     
-    private func updateSliders() {
-//        speedSliderView.value = AppState.shared.VELMOVING
-//        turboSpeedSliderView.value = AppState.shared.VELTURBOMOVING
-//        accelSliderView.value = AppState.shared.VELMOVINGADD
-//        velJumpSliderView.value = AppState.shared.VELJUMP
-//        velTurboJumpView.value = AppState.shared.VELTURBOJUMP
-//        velStopJumpSliderView.value = AppState.shared.VELSTOPJUMP
-//        gravSliderView.value = AppState.shared.GRAVITATION
-        
-        modeSwitchControl.selectedSegment = AppState.shared.editMode.rawValue
+    private func updateUI() {
         cameraTrackingCheckbox.state = AppState.shared.cameraTracking ? .on : .off
+        
+        switch AppState.shared.editMode {
+        case .paint(let tileType):
+            guard let index = Map.basicTileTypes.firstIndex(of: tileType) else {
+                fallthrough
+            }
+            let indexPath = IndexPath(item: index, section: 0)
+            tileCollectionView.selectItems(at: [indexPath], scrollPosition: .top)
+            collectionView(tileCollectionView, didSelectItemsAt: [indexPath])
+            
+        default:
+            tileCollectionView.selectItems(at: [], scrollPosition: .top)
+            
+        }
     }
 }
 
@@ -113,10 +114,6 @@ extension ViewController: GameSceneDelegate {
         rightLabel.backgroundColor = keysDown[.right] == true ? .red : .lightGray
         jumpLabel.backgroundColor = keysDown[.a] == true ? .red : .lightGray
         runLabel.backgroundColor = keysDown[.shift] == true ? .red : .lightGray
-        
-//        if keysDown[.tab] == false && oldKeysDown[.tab] == true {
-//            debugView.isHidden.toggle()
-//        }
     }
     func cameraModeUpdated(cameraMode: CameraMode) {
         leftOfLabel.backgroundColor = cameraMode == .lockLeftOfPlayer ? .red : .lightGray
@@ -131,4 +128,54 @@ extension ViewController: GameSceneDelegate {
     func setDebugModeUI(_ debugUI: Bool) {
         debugView.isHidden = !debugUI
     }
+}
+
+extension ViewController: NSCollectionViewDelegate {
+    func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
+        print("selected: \(indexPaths)")
+        guard let indexPath = indexPaths.first else {
+            return
+        }
+        let tileType = Map.basicTileTypes[indexPath.item]
+        AppState.shared.editMode = .paint(tileType: tileType)
+    }
+    func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
+        print("deselected: \(indexPaths)")
+        AppState.shared.editMode = .none
+    }
+    
+    func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
+        print("should")
+        return indexPaths
+    }
+    func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
+        print("should deselect")
+        return indexPaths
+    }
+    
+    func collectionView(_ collectionView: NSCollectionView, willDisplay item: NSCollectionViewItem, forRepresentedObjectAt indexPath: IndexPath) {
+        item.isSelected = collectionView.selectionIndexPaths.contains(indexPath)
+    }
+}
+extension ViewController: NSCollectionViewDataSource {
+    func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
+        return Map.basicTileTypes.count
+    }
+    
+    func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
+        let item = collectionView.makeItem(withIdentifier: .tileItem, for: indexPath)
+        guard let tileItem = item as? TileItem else {return item}
+        
+        tileItem.setup(withTileType: Map.basicTileTypes[indexPath.item])
+        
+        return tileItem
+    }
+    
+    
+    
+    
+    
+    
+    
+    
 }

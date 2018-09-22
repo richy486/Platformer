@@ -20,41 +20,51 @@ struct TileTypeFlag: OptionSet {
 let S = TileTypeFlag.solid.rawValue
 let T = TileTypeFlag.solid_on_top.rawValue
 
-func map(x: Int, y: Int) -> Int {
-    
-    guard y >= 0 && y < AppState.shared.blocks.count else {
-        return -1
-    }
-    let xBlocks = AppState.shared.blocks[y]
-    guard x >= 0 && x < xBlocks.count else {
-        return -1
-    }
-    
-    return xBlocks[x]
-}
+class Map {
 
-func setMap(x: Int, y: Int, tileType: TileTypeFlag) {
-    
-    guard y >= 0 && y < AppState.shared.blocks.count else {
-        return
-    }
-    let xBlocks = AppState.shared.blocks[y]
-    guard x >= 0 && x < xBlocks.count else {
-        return
-    }
-    
-    AppState.shared.blocks[y][x] = tileType.rawValue
-}
+    static var basicTileTypes: [TileTypeFlag] = [
+        .nonsolid,
+        .solid,
+        .solid_on_top,
+    ]
 
-func posToTilePos(_ position: CGPoint) -> (x: Int, y: Int) {
-    let x = Int(position.x + 0.5) / TILESIZE
-    let y = (Int(position.y + 0.5) / TILESIZE) //+ 1
-    
-    return (x, y)
-}
+    // Probably should rename this to tile(x:y:)
+    class func map(x: Int, y: Int) -> Int {
+        
+        guard y >= 0 && y < AppState.shared.blocks.count else {
+            return -1
+        }
+        let xBlocks = AppState.shared.blocks[y]
+        guard x >= 0 && x < xBlocks.count else {
+            return -1
+        }
+        
+        return xBlocks[x]
+    }
 
-func posToTile(_ position: CGPoint) -> Int {
-    let tilePos = posToTilePos(position)
-    
-    return map(x: tilePos.x, y: tilePos.y)
+    class func setMap(x: Int, y: Int, tileType: TileTypeFlag) {
+        
+        guard y >= 0 && y < AppState.shared.blocks.count else {
+            return
+        }
+        let xBlocks = AppState.shared.blocks[y]
+        guard x >= 0 && x < xBlocks.count else {
+            return
+        }
+        
+        AppState.shared.blocks[y][x] = tileType.rawValue
+    }
+
+    class func posToTilePos(_ position: CGPoint) -> (x: Int, y: Int) {
+        let x = Int(position.x + 0.5) / TILESIZE
+        let y = (Int(position.y + 0.5) / TILESIZE) //+ 1
+        
+        return (x, y)
+    }
+
+    class func posToTile(_ position: CGPoint) -> Int {
+        let tilePos = posToTilePos(position)
+        
+        return map(x: tilePos.x, y: tilePos.y)
+    }
 }
