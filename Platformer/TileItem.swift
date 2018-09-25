@@ -36,6 +36,10 @@ class TileItem: NSCollectionViewItem {
             tileLabel.isHidden = true
             tileImageView.image = #imageLiteral(resourceName: "solid_on_top")
             tileImageView.isHidden = false
+        case [.breakable]:
+            tileLabel.isHidden = true
+            tileImageView.image = #imageLiteral(resourceName: "breakable")
+            tileImageView.isHidden = false
         default:
             break
         }

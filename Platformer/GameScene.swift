@@ -45,6 +45,13 @@ enum CameraMode {
     case lockRightOfPlayer
 }
 
+enum Direction {
+    case up
+    case down
+    case left
+    case right
+}
+
 
 public struct IntPoint {
     public var x: Int
@@ -268,6 +275,11 @@ class GameScene: SKScene {
         addChild(cameraMoveBox)
         addChild(forwardFocusBox)
         addChild(cameraCenter)
+        
+        Map.listenForMapChanges { [weak self] point in
+            print("point: \(point)")
+            self?.setupBlocks()
+        }
     }
     
     @objc static override var supportsSecureCoding: Bool {
@@ -325,10 +337,10 @@ class GameScene: SKScene {
         case .paint(let tileType):
             print("type type: \(tileType)")
             Map.setMap(x: tilePos.x, y: tilePos.y, tileType: tileType)
-            setupBlocks()
+//            setupBlocks()
         case .erase:
             Map.setMap(x: tilePos.x, y: tilePos.y, tileType: .nonsolid)
-            setupBlocks()
+//            setupBlocks()
         default:
             break
         }
@@ -539,20 +551,28 @@ class GameScene: SKScene {
                 case 0, TileTypeFlag.nonsolid.rawValue:
                     continue
                 case S:
-                    let blockNode = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
-                    blockNode.fillColor = .yellow
-                    blockNode.strokeColor = .white
+                    let blockNode = SKSpriteNode(imageNamed: "solid")
+                    blockNode.anchorPoint = CGPoint(x: 0, y: 1)
+                    blockNode.yScale = -1
                     blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
                     addChild(blockNode)
                     blockNodes.append(blockNode)
                 case T:
-                    let blockNode = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: 5))
-                    blockNode.fillColor = .yellow
-                    blockNode.strokeColor = .white
+                    let blockNode = SKSpriteNode(imageNamed: "solid_on_top")
+                    blockNode.anchorPoint = CGPoint(x: 0, y: 1)
+                    blockNode.yScale = -1
+                    blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
+                    addChild(blockNode)
+                    blockNodes.append(blockNode)
+                case B:
+                    let blockNode = SKSpriteNode(imageNamed: "breakable")
+                    blockNode.anchorPoint = CGPoint(x: 0, y: 1)
+                    blockNode.yScale = -1
                     blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
                     addChild(blockNode)
                     blockNodes.append(blockNode)
                 default:
+                    // Unhandled blocks
                     let blockNode = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
                     blockNode.fillColor = .green
                     blockNode.strokeColor = .white
@@ -773,30 +793,65 @@ class GameScene: SKScene {
         
         
         
-        let toptile = Map.map(x: tx, y: ty)
-        let bottomtile = Map.map(x: tx, y: ty2)
+//        let toptile = Map.map(x: tx, y: ty)
+//        let bottomtile = Map.map(x: tx, y: ty2)
+//
+//        //collide with solid
+//        var collide = false
+//        if TileTypeFlag(rawValue: toptile).contains(.solid) || TileTypeFlag(rawValue: bottomtile).contains(.solid) {
+//
+//            collide = true
+//            // Debug
+//            if TileTypeFlag(rawValue: toptile).contains(.solid) {
+//                collideXBlockNode.isHidden = showDebugUI ? false : true
+//                let collideBlockPosition = CGPoint(x: tx * TILESIZE, y: ty * TILESIZE)
+//                if collideBlockPosition != collideXBlockNode.position {
+//                    collideXBlockNode.position = collideBlockPosition
+//                }
+//            } else if TileTypeFlag(rawValue: bottomtile).contains(.solid) {
+//                collideXBlockNode.isHidden = showDebugUI ? false : true
+//                let collideBlockPosition = CGPoint(x: tx * TILESIZE, y: ty2 * TILESIZE)
+//                if collideBlockPosition != collideXBlockNode.position {
+//                    collideXBlockNode.position = collideBlockPosition
+//                }
+//            }
+//
+//
+//            if direction == 1 {
+//                // move to the edge of the tile
+//                position.x = CGFloat((tx << 5) + TILESIZE) + COLLISION_GIVE
+//            } else {
+//                // move to the edge of the tile (tile on the right -> mind the player width)
+//                position.x = CGFloat((tx << 5) - PW) - COLLISION_GIVE
+//            }
+//
+//            if abs(vel.x) > 0.0 {
+//                vel.x = 0.0
+//            }
+//            if abs(oldvel.x) > 0.0 {
+//                oldvel.x = 0.0
+//            }
+//        }
         
-        //collide with solid
+        // Top tile
         var collide = false
-        if TileTypeFlag(rawValue: toptile).contains(.solid) || TileTypeFlag(rawValue: bottomtile).contains(.solid) {
-            
+        if Map.collide(atPoint: IntPoint(x: tx, y: ty), tileType: [.solid, .breakable], direction: direction == 1 ? .left : .right) {
             collide = true
-            // Debug
-            if TileTypeFlag(rawValue: toptile).contains(.solid) {
-                collideXBlockNode.isHidden = showDebugUI ? false : true
-                let collideBlockPosition = CGPoint(x: tx * TILESIZE, y: ty * TILESIZE)
-                if collideBlockPosition != collideXBlockNode.position {
-                    collideXBlockNode.position = collideBlockPosition
-                }
-            } else if TileTypeFlag(rawValue: bottomtile).contains(.solid) {
-                collideXBlockNode.isHidden = showDebugUI ? false : true
-                let collideBlockPosition = CGPoint(x: tx * TILESIZE, y: ty2 * TILESIZE)
-                if collideBlockPosition != collideXBlockNode.position {
-                    collideXBlockNode.position = collideBlockPosition
-                }
+            collideXBlockNode.isHidden = showDebugUI ? false : true
+            let collideBlockPosition = CGPoint(x: tx * TILESIZE, y: ty * TILESIZE)
+            if collideBlockPosition != collideXBlockNode.position {
+                collideXBlockNode.position = collideBlockPosition
             }
-            
-            
+        } else if Map.collide(atPoint: IntPoint(x: tx, y: ty2), tileType: [.solid, .breakable], direction: direction == 1 ? .left : .right) {
+            collide = true
+            collideXBlockNode.isHidden = showDebugUI ? false : true
+            let collideBlockPosition = CGPoint(x: tx * TILESIZE, y: ty2 * TILESIZE)
+            if collideBlockPosition != collideXBlockNode.position {
+                collideXBlockNode.position = collideBlockPosition
+            }
+        }
+        
+        if collide {
             if direction == 1 {
                 // move to the edge of the tile
                 position.x = CGFloat((tx << 5) + TILESIZE) + COLLISION_GIVE
@@ -804,6 +859,7 @@ class GameScene: SKScene {
                 // move to the edge of the tile (tile on the right -> mind the player width)
                 position.x = CGFloat((tx << 5) - PW) - COLLISION_GIVE
             }
+            
             if abs(vel.x) > 0.0 {
                 vel.x = 0.0
             }
@@ -811,6 +867,8 @@ class GameScene: SKScene {
                 oldvel.x = 0.0
             }
         }
+        
+        
         return (position, collide)
     }
     
@@ -828,25 +886,28 @@ class GameScene: SKScene {
         let ty = Int(position.y) / TILESIZE
         
         //Player hit a solid
-        let alignedTileType = Map.map(x: alignedBlockX, y: ty)
+//        let alignedTileType = Map.map(x: alignedBlockX, y: ty)
+//        if TileTypeFlag(rawValue: alignedTileType).contains(.solid) {
         
-        if TileTypeFlag(rawValue: alignedTileType).contains(.solid) {
+        // TODO: use this function everywhere
+        if Map.collide(atPoint: IntPoint(x: alignedBlockX, y: ty), tileType: [.solid, .breakable], direction: .up) {
             print("collided top")
             position.y = CGFloat((ty << 5) + TILESIZE) + COLLISION_GIVE
             
-            return (position, true)
+            return (position: position, collide: true)
         }
         
         //Player squeezed around the block
-        let unalignedTileType = Map.map(x: unAlignedBlockX, y: ty)
-        if TileTypeFlag(rawValue: unalignedTileType).contains(.solid) {
+//        let unalignedTileType = Map.map(x: unAlignedBlockX, y: ty)
+//        if TileTypeFlag(rawValue: unalignedTileType).contains(.solid) {
+        if Map.collide(atPoint: IntPoint(x: unAlignedBlockX, y: ty), tileType: [.solid, .breakable], direction: .up, noTrigger: true) {
             print("squeezed")
             position.x = unAlignedBlockFX
         }
         
         inair = true
         
-        return (position, false)
+        return (position: position, collide: false)
     }
     
     func mapcolldet_moveDownward(movePosition position: CGPoint,
@@ -861,17 +922,19 @@ class GameScene: SKScene {
         
         let ty = (Int(position.y) + PH) / TILESIZE
         
-        let lefttile = Map.map(x: txl, y: ty)
-        let righttile = Map.map(x: txr, y: ty)
-        
+        // TODO: support running over gaps
         let fGapSupport = false // VELTURBOMOVING
         
-        let fSolidTileUnderPlayerLeft = TileTypeFlag(rawValue: lefttile).contains(.solid)
-        let fSolidTileUnderPlayerRight = TileTypeFlag(rawValue: righttile).contains(.solid)
-        let fSolidTileUnderPlayer = fSolidTileUnderPlayerLeft || fSolidTileUnderPlayerRight
+        let collideTiles: TileTypeFlag = [.solid, .breakable]
+        let leftTilePos = IntPoint(x: txl, y: ty)
+        let rightTilePos = IntPoint(x: txr, y: ty)
         
-        let fSolidOnTopUnderPlayerLeft = TileTypeFlag(rawValue: lefttile).contains(.solid_on_top)
-        let fSolidOnTopUnderPlayerRight = TileTypeFlag(rawValue: righttile).contains(.solid_on_top)
+        let fSolidTileUnderPlayerLeft = Map.collide(atPoint: leftTilePos, tileType: collideTiles, direction: .down)
+        let fSolidTileUnderPlayerRight = Map.collide(atPoint: rightTilePos, tileType: collideTiles, direction: .down)
+        let fSolidTileUnderPlayer = fSolidTileUnderPlayerLeft || fSolidTileUnderPlayerRight
+
+        let fSolidOnTopUnderPlayerLeft = Map.collide(atPoint: leftTilePos, tileType: [.solid_on_top], direction: .down)
+        let fSolidOnTopUnderPlayerRight = Map.collide(atPoint: rightTilePos, tileType: [.solid_on_top], direction: .down)
         let fSolidOnTopUnderPlayer = fSolidOnTopUnderPlayerLeft || fSolidOnTopUnderPlayerRight
         
         if fSolidTileUnderPlayerLeft || fSolidOnTopUnderPlayerLeft {
@@ -896,27 +959,17 @@ class GameScene: SKScene {
             
             // we were above the tile in the previous frame
             position.y = CGFloat((ty << 5) - PH) - COLLISION_GIVE
-            
-//            inair = false
             inAir = false
             
-//            return (position, !inair)
         } else if fSolidTileUnderPlayer {
             // on ground
-            
             position.y = CGFloat((ty << 5) - PH) - COLLISION_GIVE
-//            inair = false
             inAir = false
         } else {
             // falling (in air)
-//            inair = true
             inAir = true
         }
-        
-//        if (fSolidTileUnderPlayer || fSolidOnTopUnderPlayer) &&  {
-//            lastGroundPosition
-//        }
-        
+
         return (position, !inAir, inAir, ty)
     }
     
