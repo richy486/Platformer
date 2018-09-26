@@ -16,6 +16,7 @@ struct TileTypeFlag: OptionSet {
     static let solid = TileTypeFlag(rawValue: 1 << 1)
     static let solid_on_top = TileTypeFlag(rawValue: 1 << 2)
     static let breakable = TileTypeFlag(rawValue: 1 << 3)
+    static let used = TileTypeFlag(rawValue: 1 << 4)
     
     // 0000
     // 1010
@@ -83,11 +84,19 @@ class Map {
     class func collide(atPoint point: IntPoint, tileType: TileTypeFlag, direction: Direction, noTrigger: Bool = false) -> Bool {
         let tile = map(point: point)
         let mapTileType = TileTypeFlag(rawValue: tile)
-        let collide = mapTileType.intersection(tileType).rawValue != 0
+        
+        let used = mapTileType.intersection(.used) == .used
+        let collisionTile = mapTileType.intersection(tileType).rawValue != 0
+        
+        let collide = collisionTile && !used
+        
+        if collide && direction == .up {
+            print("stop")
+        }
         
         if !noTrigger {
             if collide && mapTileType.contains(.breakable) && direction == .up {
-                setMap(x: point.x, y: point.y, tileType: .nonsolid)
+                setMap(x: point.x, y: point.y, tileType: mapTileType.union(.used))
             }
         }
         

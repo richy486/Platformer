@@ -120,10 +120,29 @@ struct AppState : Codable {
     ]
     
     static func save() {
+        
+        var appState = AppState.shared
+        
+        // Reset any run time changes
+        for (y, xBlocks) in appState.blocks.enumerated() {
+            for (x, blockVal) in xBlocks.enumerated() {
+                
+                let tileType = TileTypeFlag(rawValue: blockVal)
+                
+                if tileType.intersection(.breakable) == .breakable &&
+                    tileType.intersection(.used) == .used {
+                    
+                    appState.blocks[y][x] = TileTypeFlag.breakable.rawValue
+                }
+            }
+        }
+        
+        
+        
         let jsonEncoder = JSONEncoder()
         let jsonData: Data
         do {
-            jsonData = try jsonEncoder.encode(AppState.shared)
+            jsonData = try jsonEncoder.encode(appState)
         } catch {
             print("Error encoding: \(error)")
             return
@@ -146,6 +165,7 @@ struct AppState : Codable {
     static func load() {
         let jsonString: String
         let fileURL = URL(fileURLWithPath: "appState.json")
+        print("loading from: \(fileURL)")
         do {
             jsonString = try String(contentsOf: fileURL, encoding: .utf8)
         } catch {

@@ -547,31 +547,39 @@ class GameScene: SKScene {
         for (y, xBlocks) in AppState.shared.blocks.enumerated() {
             for (x, blockVal) in xBlocks.enumerated() {
                 
-                switch blockVal {
-                case 0, TileTypeFlag.nonsolid.rawValue:
+                let tileType = TileTypeFlag(rawValue: blockVal)
+                
+                if tileType.rawValue == 0 || tileType.intersection(.nonsolid).rawValue != 0  {
                     continue
-                case S:
+                } else if tileType.intersection(.solid).rawValue != 0 {
                     let blockNode = SKSpriteNode(imageNamed: "solid")
                     blockNode.anchorPoint = CGPoint(x: 0, y: 1)
                     blockNode.yScale = -1
                     blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
                     addChild(blockNode)
                     blockNodes.append(blockNode)
-                case T:
+                    
+                } else if tileType.intersection(.solid_on_top).rawValue != 0 {
                     let blockNode = SKSpriteNode(imageNamed: "solid_on_top")
                     blockNode.anchorPoint = CGPoint(x: 0, y: 1)
                     blockNode.yScale = -1
                     blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
                     addChild(blockNode)
                     blockNodes.append(blockNode)
-                case B:
+                    
+                } else if tileType.intersection(.breakable).rawValue != 0 {
+                    
+                    guard tileType.intersection(.used).rawValue == 0 else {
+                        continue
+                    }
+                    
                     let blockNode = SKSpriteNode(imageNamed: "breakable")
                     blockNode.anchorPoint = CGPoint(x: 0, y: 1)
                     blockNode.yScale = -1
                     blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
                     addChild(blockNode)
                     blockNodes.append(blockNode)
-                default:
+                } else {
                     // Unhandled blocks
                     let blockNode = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
                     blockNode.fillColor = .green
@@ -580,6 +588,40 @@ class GameScene: SKScene {
                     addChild(blockNode)
                     blockNodes.append(blockNode)
                 }
+                
+//                switch blockVal {
+//                case 0, TileTypeFlag.nonsolid.rawValue:
+//                    continue
+//                case S:
+//                    let blockNode = SKSpriteNode(imageNamed: "solid")
+//                    blockNode.anchorPoint = CGPoint(x: 0, y: 1)
+//                    blockNode.yScale = -1
+//                    blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
+//                    addChild(blockNode)
+//                    blockNodes.append(blockNode)
+//                case T:
+//                    let blockNode = SKSpriteNode(imageNamed: "solid_on_top")
+//                    blockNode.anchorPoint = CGPoint(x: 0, y: 1)
+//                    blockNode.yScale = -1
+//                    blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
+//                    addChild(blockNode)
+//                    blockNodes.append(blockNode)
+//                case B:
+//                    let blockNode = SKSpriteNode(imageNamed: "breakable")
+//                    blockNode.anchorPoint = CGPoint(x: 0, y: 1)
+//                    blockNode.yScale = -1
+//                    blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
+//                    addChild(blockNode)
+//                    blockNodes.append(blockNode)
+//                default:
+//                    // Unhandled blocks
+//                    let blockNode = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
+//                    blockNode.fillColor = .green
+//                    blockNode.strokeColor = .white
+//                    blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
+//                    addChild(blockNode)
+//                    blockNodes.append(blockNode)
+//                }
             }
         }
     }
@@ -833,16 +875,19 @@ class GameScene: SKScene {
 //            }
 //        }
         
+        let topTilePoint = IntPoint(x: tx, y: ty)
+        let bottomTilePoint = IntPoint(x: tx, y: ty2)
+        
         // Top tile
         var collide = false
-        if Map.collide(atPoint: IntPoint(x: tx, y: ty), tileType: [.solid, .breakable], direction: direction == 1 ? .left : .right) {
+        if Map.collide(atPoint: topTilePoint, tileType: [.solid, .breakable], direction: direction == 1 ? .left : .right) {
             collide = true
             collideXBlockNode.isHidden = showDebugUI ? false : true
             let collideBlockPosition = CGPoint(x: tx * TILESIZE, y: ty * TILESIZE)
             if collideBlockPosition != collideXBlockNode.position {
                 collideXBlockNode.position = collideBlockPosition
             }
-        } else if Map.collide(atPoint: IntPoint(x: tx, y: ty2), tileType: [.solid, .breakable], direction: direction == 1 ? .left : .right) {
+        } else if Map.collide(atPoint: bottomTilePoint, tileType: [.solid, .breakable], direction: direction == 1 ? .left : .right) {
             collide = true
             collideXBlockNode.isHidden = showDebugUI ? false : true
             let collideBlockPosition = CGPoint(x: tx * TILESIZE, y: ty2 * TILESIZE)
