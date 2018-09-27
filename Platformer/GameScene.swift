@@ -278,15 +278,43 @@ class GameScene: SKScene {
         addChild(cameraCenter)
         
         Map.listenForMapChanges { [weak self] (point, tileType) in
-            if let currentBlockNode = self?.blockNodes[point] {
-                currentBlockNode.removeFromParent()
-            }
             
-            if let blockNode = BlockFactory.blockNode(forTileType: tileType) {
+            // Replace the block graphic
+            let replaceBlock = {
+                if let currentBlockNode = self?.blockNodes[point] {
+                    currentBlockNode.removeFromParent()
+                }
+                
+                guard let blockNode = BlockFactory.blockNode(forTileType: tileType) else {
+                    return
+                }
                 
                 blockNode.position = CGPoint(x: point.x * TILESIZE, y: point.y * TILESIZE)
                 self?.addChild(blockNode)
                 self?.blockNodes[point] = blockNode
+            }
+            
+            // If there is no current block then just add the graphic
+            guard let currentBLockNode = self?.blockNodes[point] else {
+                replaceBlock()
+                return
+            }
+            
+            // Check the tile type and do an appropriate graphic effect before
+            // replacing the graphic
+            if tileType.contains(.powerup) {
+                let moveUp = SKAction.moveBy(x: 0.0,
+                                             y: -10.0,
+                                             duration: 0.1)
+                let moveDown = SKAction.moveBy(x: 0.0,
+                                               y: 10.0,
+                                               duration: 0.1)
+                let runBlock = SKAction.run(replaceBlock)
+                
+                let sequence = SKAction.sequence([moveUp, moveDown, runBlock])
+                currentBLockNode.run(sequence)
+            } else {
+                replaceBlock()
             }
             
         }
