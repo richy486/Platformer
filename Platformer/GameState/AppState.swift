@@ -132,10 +132,16 @@ struct AppState : Codable {
                 let tileType = TileTypeFlag(rawValue: blockVal)
                 
                 if tileType.intersection(.used) == .used {
-                    // 0100
-                    // 0111
                     
-                    appState.blocks[y][x] = tileType.symmetricDifference(.used).rawValue
+                    // Remove used
+                    var updatedTile = tileType.symmetricDifference(.used)
+                    
+                    // Re add solid if breakable
+                    if tileType.contains(.breakable) {
+                        updatedTile = updatedTile.union(.solid)
+                    }
+                    
+                    appState.blocks[y][x] = updatedTile.rawValue
                 }
             }
         }

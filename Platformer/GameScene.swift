@@ -416,7 +416,7 @@ class GameScene: SKScene {
         if keysDown[.d] == true {
             keysDown[.d] = false
             AppState.load()
-            
+            setupBlocks()
         }
         
         
@@ -812,14 +812,14 @@ class GameScene: SKScene {
         
         // Top tile
         var collide = false
-        if Map.collide(atPoint: topTilePoint, tileType: [.solid, .breakable, .powerup], direction: direction == 1 ? .left : .right) {
+        if Map.collide(atPoint: topTilePoint, tileType: [.solid], direction: direction == 1 ? .left : .right) {
             collide = true
             collideXBlockNode.isHidden = showDebugUI ? false : true
             let collideBlockPosition = CGPoint(x: tx * TILESIZE, y: ty * TILESIZE)
             if collideBlockPosition != collideXBlockNode.position {
                 collideXBlockNode.position = collideBlockPosition
             }
-        } else if Map.collide(atPoint: bottomTilePoint, tileType: [.solid, .breakable, .powerup], direction: direction == 1 ? .left : .right) {
+        } else if Map.collide(atPoint: bottomTilePoint, tileType: [.solid], direction: direction == 1 ? .left : .right) {
             collide = true
             collideXBlockNode.isHidden = showDebugUI ? false : true
             let collideBlockPosition = CGPoint(x: tx * TILESIZE, y: ty2 * TILESIZE)
@@ -867,7 +867,7 @@ class GameScene: SKScene {
 //        if TileTypeFlag(rawValue: alignedTileType).contains(.solid) {
         
         // TODO: use this function everywhere
-        if Map.collide(atPoint: IntPoint(x: alignedBlockX, y: ty), tileType: [.solid, .breakable, .powerup], direction: .up) {
+        if Map.collide(atPoint: IntPoint(x: alignedBlockX, y: ty), tileType: [.solid], direction: .up) {
             print("collided top")
             position.y = CGFloat((ty << 5) + TILESIZE) + COLLISION_GIVE
             
@@ -877,7 +877,7 @@ class GameScene: SKScene {
         //Player squeezed around the block
 //        let unalignedTileType = Map.map(x: unAlignedBlockX, y: ty)
 //        if TileTypeFlag(rawValue: unalignedTileType).contains(.solid) {
-        if Map.collide(atPoint: IntPoint(x: unAlignedBlockX, y: ty), tileType: [.solid, .breakable, .powerup], direction: .up, noTrigger: true) {
+        if Map.collide(atPoint: IntPoint(x: unAlignedBlockX, y: ty), tileType: [.solid], direction: .up, noTrigger: true) {
             print("squeezed")
             position.x = unAlignedBlockFX
         }
@@ -902,7 +902,7 @@ class GameScene: SKScene {
         // TODO: support running over gaps
         let fGapSupport = false // VELTURBOMOVING
         
-        let collideTiles: TileTypeFlag = [.solid, .breakable, .powerup]
+        let collideTiles: TileTypeFlag = [.solid]
         let leftTilePos = IntPoint(x: txl, y: ty)
         let rightTilePos = IntPoint(x: txr, y: ty)
         

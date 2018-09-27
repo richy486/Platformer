@@ -24,25 +24,25 @@ class TileItem: NSCollectionViewItem {
     
     func setup(withTileType tileType: TileTypeFlag) {
         switch tileType {
-        case [.nonsolid]:
+        case .nonsolid:
             tileLabel.isHidden = false
             tileLabel.stringValue = "🗑"
             tileImageView.isHidden = true
-        case [.solid]:
-            tileLabel.isHidden = true
-            tileImageView.image = #imageLiteral(resourceName: "solid")
-            tileImageView.isHidden = false
-        case [.solid_on_top]:
-            tileLabel.isHidden = true
-            tileImageView.image = #imageLiteral(resourceName: "solid_on_top")
-            tileImageView.isHidden = false
-        case [.breakable]:
+        case [.breakable, .solid]:
             tileLabel.isHidden = true
             tileImageView.image = #imageLiteral(resourceName: "breakable")
             tileImageView.isHidden = false
-        case [.powerup]:
+        case [.powerup, .solid]:
             tileLabel.isHidden = true
             tileImageView.image = #imageLiteral(resourceName: "powerup")
+            tileImageView.isHidden = false
+        case .solid:
+            tileLabel.isHidden = true
+            tileImageView.image = #imageLiteral(resourceName: "solid")
+            tileImageView.isHidden = false
+        case .solid_on_top:
+            tileLabel.isHidden = true
+            tileImageView.image = #imageLiteral(resourceName: "solid_on_top")
             tileImageView.isHidden = false
         default:
             break

@@ -34,8 +34,8 @@ class Map {
         .nonsolid,
         .solid,
         .solid_on_top,
-        .breakable,
-        .powerup
+        [.breakable, .solid],
+        [.powerup, .solid]
     ]
 
     // Probably should rename this to tile(x:y:)
@@ -53,6 +53,10 @@ class Map {
         }
         
         return xBlocks[x]
+    }
+    class func isGap(point: IntPoint) -> Bool {
+//        if (fLeftSolid && !fCenterSolid && fRightSolid && !fTopLeftSolid && !fTopCenterSolid && !fTopRightSolid) {
+        return false
     }
 
     class func setMap(x: Int, y: Int, tileType: TileTypeFlag) {
@@ -98,7 +102,8 @@ class Map {
         
         if !noTrigger && mapTileType.intersection(.used) != .used {
             if collide && mapTileType.contains(.breakable) && direction == .up {
-                setMap(x: point.x, y: point.y, tileType: mapTileType.union(.used))
+                let updatedTile = mapTileType.symmetricDifference(.solid).union(.used)
+                setMap(x: point.x, y: point.y, tileType: updatedTile)
             }
             
             if collide && mapTileType.contains(.powerup) && direction == .up {
