@@ -40,6 +40,10 @@ class TileItem: NSCollectionViewItem {
             tileLabel.isHidden = true
             tileImageView.image = #imageLiteral(resourceName: "breakable")
             tileImageView.isHidden = false
+        case [.powerup]:
+            tileLabel.isHidden = true
+            tileImageView.image = #imageLiteral(resourceName: "powerup")
+            tileImageView.isHidden = false
         default:
             break
         }

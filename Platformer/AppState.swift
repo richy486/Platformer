@@ -70,6 +70,8 @@ struct AppState : Codable {
     var VELTURBOJUMP = CGFloat(10.2)    //velocity for turbo jumping
     var GRAVITATION = CGFloat(0.40)
     
+    var BLOCKSOFFCENTER = Int(-8)
+    
     var editMode: EditMode = .none {
         didSet {
             switch editMode {
@@ -129,10 +131,11 @@ struct AppState : Codable {
                 
                 let tileType = TileTypeFlag(rawValue: blockVal)
                 
-                if tileType.intersection(.breakable) == .breakable &&
-                    tileType.intersection(.used) == .used {
+                if tileType.intersection(.used) == .used {
+                    // 0100
+                    // 0111
                     
-                    appState.blocks[y][x] = TileTypeFlag.breakable.rawValue
+                    appState.blocks[y][x] = tileType.symmetricDifference(.used).rawValue
                 }
             }
         }

@@ -17,6 +17,7 @@ struct TileTypeFlag: OptionSet {
     static let solid_on_top = TileTypeFlag(rawValue: 1 << 2)
     static let breakable = TileTypeFlag(rawValue: 1 << 3)
     static let used = TileTypeFlag(rawValue: 1 << 4)
+    static let powerup = TileTypeFlag(rawValue: 1 << 5)
     
     // 0000
     // 1010
@@ -34,6 +35,7 @@ class Map {
         .solid,
         .solid_on_top,
         .breakable,
+        .powerup
     ]
 
     // Probably should rename this to tile(x:y:)
@@ -65,7 +67,7 @@ class Map {
         
         AppState.shared.blocks[y][x] = tileType.rawValue
         
-        callMapChange(forPoint: IntPoint(x: x, y: y))
+        callMapChange(forPoint: IntPoint(x: x, y: y), tileType: tileType)
     }
 
     class func posToTilePos(_ position: CGPoint) -> (x: Int, y: Int) {
@@ -85,32 +87,37 @@ class Map {
         let tile = map(point: point)
         let mapTileType = TileTypeFlag(rawValue: tile)
         
-        let used = mapTileType.intersection(.used) == .used
+        let usedBreakable = mapTileType.intersection(.used) == .used && mapTileType.intersection(.breakable) == .breakable
         let collisionTile = mapTileType.intersection(tileType).rawValue != 0
         
-        let collide = collisionTile && !used
+        let collide = collisionTile && !usedBreakable
         
         if collide && direction == .up {
             print("stop")
         }
         
-        if !noTrigger {
+        if !noTrigger && mapTileType.intersection(.used) != .used {
             if collide && mapTileType.contains(.breakable) && direction == .up {
                 setMap(x: point.x, y: point.y, tileType: mapTileType.union(.used))
             }
+            
+            if collide && mapTileType.contains(.powerup) && direction == .up {
+                setMap(x: point.x, y: point.y, tileType: mapTileType.union(.used))
+            }
+            
         }
         
         return collide
     }
     
-    typealias MapChangeCallback = (_ point: IntPoint) -> Void
+    typealias MapChangeCallback = (_ point: IntPoint, _ tileType: TileTypeFlag) -> Void
     static var mapChangeCallbacks: [MapChangeCallback] = []
     class func listenForMapChanges(_ update: @escaping MapChangeCallback) {
         mapChangeCallbacks.append(update)
     }
-    private class func callMapChange(forPoint point: IntPoint) {
+    private class func callMapChange(forPoint point: IntPoint, tileType: TileTypeFlag) {
         for update in mapChangeCallbacks {
-            update(point)
+            update(point, tileType)
         }
     }
 }

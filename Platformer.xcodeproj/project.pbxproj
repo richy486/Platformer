@@ -21,6 +21,7 @@
 		B9B6469621553D5500AE3A1A /* TileItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = B9B6469421553D5500AE3A1A /* TileItem.xib */; };
 		B9B6469A2156EA1C00AE3A1A /* FirstResponderWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B646992156EA1C00AE3A1A /* FirstResponderWindow.swift */; };
 		B9B6469C2156ED1A00AE3A1A /* UnselectorCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B6469B2156ED1A00AE3A1A /* UnselectorCollectionView.swift */; };
+		B9B6469E215D211F00AE3A1A /* BlockFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B6469D215D211F00AE3A1A /* BlockFactory.swift */; };
 		B9C905F121508E5B007BCF00 /* CGHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C905F021508E5B007BCF00 /* CGHelpers.swift */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 		B9B6469421553D5500AE3A1A /* TileItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TileItem.xib; sourceTree = "<group>"; };
 		B9B646992156EA1C00AE3A1A /* FirstResponderWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstResponderWindow.swift; sourceTree = "<group>"; };
 		B9B6469B2156ED1A00AE3A1A /* UnselectorCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnselectorCollectionView.swift; sourceTree = "<group>"; };
+		B9B6469D215D211F00AE3A1A /* BlockFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockFactory.swift; sourceTree = "<group>"; };
 		B9C905F021508E5B007BCF00 /* CGHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGHelpers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -81,6 +83,7 @@
 				B95F0378212EFAA3003E84E8 /* Actions.sks */,
 				B95F037A212EFAA3003E84E8 /* GameScene.swift */,
 				B9B646912152920600AE3A1A /* Map.swift */,
+				B9B6469D215D211F00AE3A1A /* BlockFactory.swift */,
 				B95F037C212EFAA3003E84E8 /* ViewController.swift */,
 				B9B6469321553D5500AE3A1A /* TileItem.swift */,
 				B9B6469421553D5500AE3A1A /* TileItem.xib */,
@@ -172,6 +175,7 @@
 				B95F037D212EFAA3003E84E8 /* ViewController.swift in Sources */,
 				B95F037B212EFAA3003E84E8 /* GameScene.swift in Sources */,
 				B9B6469C2156ED1A00AE3A1A /* UnselectorCollectionView.swift in Sources */,
+				B9B6469E215D211F00AE3A1A /* BlockFactory.swift in Sources */,
 				B95F0375212EFAA3003E84E8 /* AppDelegate.swift in Sources */,
 				B9B646922152920600AE3A1A /* Map.swift in Sources */,
 				B95F038B212FB84C003E84E8 /* AppState.swift in Sources */,
