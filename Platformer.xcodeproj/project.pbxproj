@@ -77,26 +77,58 @@
 		B95F0373212EFAA3003E84E8 /* Platformer */ = {
 			isa = PBXGroup;
 			children = (
+				B9B6469F215D23FF00AE3A1A /* Scenes */,
+				B9B646A0215D242100AE3A1A /* SystemUI */,
+				B9B646A1215D246700AE3A1A /* Graphics */,
+				B9B646A2215D24CA00AE3A1A /* GameState */,
 				B95F0374212EFAA3003E84E8 /* AppDelegate.swift */,
-				B95F038A212FB84C003E84E8 /* AppState.swift */,
-				B95F0376212EFAA3003E84E8 /* GameScene.sks */,
-				B95F0378212EFAA3003E84E8 /* Actions.sks */,
 				B95F037A212EFAA3003E84E8 /* GameScene.swift */,
-				B9B646912152920600AE3A1A /* Map.swift */,
-				B9B6469D215D211F00AE3A1A /* BlockFactory.swift */,
-				B95F037C212EFAA3003E84E8 /* ViewController.swift */,
-				B9B6469321553D5500AE3A1A /* TileItem.swift */,
-				B9B6469421553D5500AE3A1A /* TileItem.xib */,
-				B914DB65214C867300628D23 /* SliderView.swift */,
-				B9C905F021508E5B007BCF00 /* CGHelpers.swift */,
-				B9B646992156EA1C00AE3A1A /* FirstResponderWindow.swift */,
-				B9B6469B2156ED1A00AE3A1A /* UnselectorCollectionView.swift */,
 				B95F037E212EFAA5003E84E8 /* Assets.xcassets */,
 				B95F0380212EFAA5003E84E8 /* Main.storyboard */,
 				B95F0383212EFAA5003E84E8 /* Info.plist */,
 				B95F0384212EFAA5003E84E8 /* Platformer.entitlements */,
 			);
 			path = Platformer;
+			sourceTree = "<group>";
+		};
+		B9B6469F215D23FF00AE3A1A /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				B95F0376212EFAA3003E84E8 /* GameScene.sks */,
+				B95F0378212EFAA3003E84E8 /* Actions.sks */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		B9B646A0215D242100AE3A1A /* SystemUI */ = {
+			isa = PBXGroup;
+			children = (
+				B95F037C212EFAA3003E84E8 /* ViewController.swift */,
+				B9B6469321553D5500AE3A1A /* TileItem.swift */,
+				B9B6469421553D5500AE3A1A /* TileItem.xib */,
+				B914DB65214C867300628D23 /* SliderView.swift */,
+				B9B646992156EA1C00AE3A1A /* FirstResponderWindow.swift */,
+				B9B6469B2156ED1A00AE3A1A /* UnselectorCollectionView.swift */,
+			);
+			path = SystemUI;
+			sourceTree = "<group>";
+		};
+		B9B646A1215D246700AE3A1A /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				B9B6469D215D211F00AE3A1A /* BlockFactory.swift */,
+				B9C905F021508E5B007BCF00 /* CGHelpers.swift */,
+			);
+			path = Graphics;
+			sourceTree = "<group>";
+		};
+		B9B646A2215D24CA00AE3A1A /* GameState */ = {
+			isa = PBXGroup;
+			children = (
+				B95F038A212FB84C003E84E8 /* AppState.swift */,
+				B9B646912152920600AE3A1A /* Map.swift */,
+			);
+			path = GameState;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
