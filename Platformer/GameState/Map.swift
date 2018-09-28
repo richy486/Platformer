@@ -38,7 +38,11 @@ class Map {
         [.powerup, .solid]
     ]
 
-    // Probably should rename this to tile(x:y:)
+    class func tile(point: IntPoint) -> TileTypeFlag {
+        let mapValue = map(point: point)
+        let tileType = TileTypeFlag(rawValue: mapValue)
+        return tileType
+    }
     class func map(point: IntPoint) -> Int {
         return map(x: point.x, y: point.y)
     }
@@ -54,9 +58,20 @@ class Map {
         
         return xBlocks[x]
     }
+    
     class func isGap(point: IntPoint) -> Bool {
 //        if (fLeftSolid && !fCenterSolid && fRightSolid && !fTopLeftSolid && !fTopCenterSolid && !fTopRightSolid) {
-        return false
+        
+        let pointSolid = tile(point: point).contains(.solid)
+        let leftSolid = tile(point: IntPoint(x: point.x-1, y: point.y) ).contains(.solid)
+        let rightSolid = tile(point: IntPoint(x: point.x+1, y: point.y) ).contains(.solid)
+        let topLeftSolid = tile(point: IntPoint(x: point.x-1, y: point.y-1) ).contains(.solid)
+        let topSolid = tile(point: IntPoint(x: point.x, y: point.y-1) ).contains(.solid)
+        let topRightSolid = tile(point: IntPoint(x: point.x+1, y: point.y-1) ).contains(.solid)
+        
+        let isGap = leftSolid && !pointSolid && rightSolid && !topLeftSolid && !topSolid && !topRightSolid
+        
+        return isGap
     }
 
     class func setMap(x: Int, y: Int, tileType: TileTypeFlag) {

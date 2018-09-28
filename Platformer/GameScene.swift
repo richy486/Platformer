@@ -899,12 +899,14 @@ class GameScene: SKScene {
         
         let ty = (Int(position.y) + PH) / TILESIZE
         
-        // TODO: support running over gaps
-        let fGapSupport = false // VELTURBOMOVING
         
         let collideTiles: TileTypeFlag = [.solid]
         let leftTilePos = IntPoint(x: txl, y: ty)
         let rightTilePos = IntPoint(x: txr, y: ty)
+
+        // Can run over gaps
+        let fGapSupport = (vel.x >= AppState.shared.VELTURBOMOVING || vel.x <= -AppState.shared.VELTURBOMOVING)
+            && (Map.isGap(point: leftTilePos) || Map.isGap(point: rightTilePos))
         
         let fSolidTileUnderPlayerLeft = Map.collide(atPoint: leftTilePos, tileType: collideTiles, direction: .down)
         let fSolidTileUnderPlayerRight = Map.collide(atPoint: rightTilePos, tileType: collideTiles, direction: .down)
