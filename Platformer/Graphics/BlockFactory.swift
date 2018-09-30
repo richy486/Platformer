@@ -23,6 +23,7 @@ class BlockFactory {
             let blockNode = SKSpriteNode(imageNamed: "breakable")
             blockNode.anchorPoint = CGPoint(x: 0, y: 1)
             blockNode.yScale = -1
+            blockNode.zPosition = Constants.Layer.background.rawValue
             return blockNode
         } else if tileType.intersection(.powerup).rawValue != 0 {
             
@@ -30,11 +31,13 @@ class BlockFactory {
                 let blockNode = SKSpriteNode(imageNamed: "powerup")
                 blockNode.anchorPoint = CGPoint(x: 0, y: 1)
                 blockNode.yScale = -1
+                blockNode.zPosition = Constants.Layer.background.rawValue
                 return blockNode
             } else {
                 let blockNode = SKSpriteNode(imageNamed: "empty")
                 blockNode.anchorPoint = CGPoint(x: 0, y: 1)
                 blockNode.yScale = -1
+                blockNode.zPosition = Constants.Layer.background.rawValue
                 return blockNode
             }
         } else if tileType.intersection(.solid).rawValue != 0 {
@@ -42,12 +45,14 @@ class BlockFactory {
             let blockNode = SKSpriteNode(imageNamed: "solid")
             blockNode.anchorPoint = CGPoint(x: 0, y: 1)
             blockNode.yScale = -1
+            blockNode.zPosition = Constants.Layer.background.rawValue
             return blockNode
             
         } else if tileType.intersection(.solid_on_top).rawValue != 0 {
             let blockNode = SKSpriteNode(imageNamed: "solid_on_top")
             blockNode.anchorPoint = CGPoint(x: 0, y: 1)
             blockNode.yScale = -1
+            blockNode.zPosition = Constants.Layer.background.rawValue
             return blockNode
             
         } else {
@@ -56,6 +61,7 @@ class BlockFactory {
             let blockNode = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
             blockNode.fillColor = .green
             blockNode.strokeColor = .white
+            blockNode.zPosition = Constants.Layer.background.rawValue
             return blockNode
         }
     }
