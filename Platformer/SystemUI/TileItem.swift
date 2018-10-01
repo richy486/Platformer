@@ -44,6 +44,14 @@ class TileItem: NSCollectionViewItem {
             tileLabel.isHidden = true
             tileImageView.image = #imageLiteral(resourceName: "solid_on_top")
             tileImageView.isHidden = false
+        case .slope_left: // left ◿
+            tileLabel.isHidden = true
+            tileImageView.image = #imageLiteral(resourceName: "slope_left")
+            tileImageView.isHidden = false
+        case .slope_right: // right ◺
+            tileLabel.isHidden = true
+            tileImageView.image = #imageLiteral(resourceName: "slope_right")
+            tileImageView.isHidden = false
         default:
             break
         }

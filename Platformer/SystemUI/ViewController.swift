@@ -77,6 +77,12 @@ class ViewController: NSViewController {
         gravSliderView.appStateKeyPath = \AppState.GRAVITATION
         cameraSpeedSlider.appStateKeyPath = \AppState.cameraMoveSpeed
         
+        if #available(OSX 10.13, *) {
+            if let contentSize = tileCollectionView.collectionViewLayout?.collectionViewContentSize {
+                tileCollectionView.setFrameSize(contentSize)
+            }
+        }
+        
         updateUI()
     }
     
@@ -159,7 +165,8 @@ extension ViewController: NSCollectionViewDelegate {
 }
 extension ViewController: NSCollectionViewDataSource {
     func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
-        return Map.basicTileTypes.count
+        let count = Map.basicTileTypes.count
+        return count
     }
     
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {

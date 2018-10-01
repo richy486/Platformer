@@ -1289,19 +1289,19 @@
                                             <rect key="frame" x="-100" y="-100" width="312" height="15"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="1y8-bC-ITo">
+                                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="0.99126637554585151" horizontal="NO" id="1y8-bC-ITo">
                                             <rect key="frame" x="313" y="1" width="15" height="195"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
-                                    <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vXP-fv-PjW">
-                                        <rect key="frame" x="748" y="30" width="52" height="198"/>
+                                    <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vXP-fv-PjW">
+                                        <rect key="frame" x="748" y="30" width="52" height="100"/>
                                         <clipView key="contentView" id="iZd-DD-i8j">
-                                            <rect key="frame" x="1" y="1" width="50" height="196"/>
+                                            <rect key="frame" x="1" y="1" width="50" height="98"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <collectionView selectable="YES" id="DFh-oj-NtQ" customClass="UnselectorCollectionView" customModule="Platformer" customModuleProvider="target">
-                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="158"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="98"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                                     <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="syV-Mh-bOj">
                                                         <size key="itemSize" width="32" height="32"/>
@@ -1316,10 +1316,10 @@
                                         </clipView>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="52" id="Ahd-CO-99A"/>
-                                            <constraint firstAttribute="height" constant="198" id="yu2-8O-gfS"/>
+                                            <constraint firstAttribute="height" constant="100" id="yu2-8O-gfS"/>
                                         </constraints>
                                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="94p-7C-Dhz">
-                                            <rect key="frame" x="1" y="144" width="233" height="15"/>
+                                            <rect key="frame" x="-100" y="-100" width="233" height="15"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Jr8-np-Yt0">

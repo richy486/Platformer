@@ -40,6 +40,20 @@ class BlockFactory {
                 blockNode.zPosition = Constants.Layer.background.rawValue
                 return blockNode
             }
+        } else if tileType.intersection(.slope_left).rawValue != 0 {
+            // ◿
+            let blockNode = SKSpriteNode(imageNamed: "slope_left")
+            blockNode.anchorPoint = CGPoint(x: 0, y: 1)
+            blockNode.yScale = -1
+            blockNode.zPosition = Constants.Layer.background.rawValue
+            return blockNode
+        } else if tileType.intersection(.slope_right).rawValue != 0 {
+            // ◺
+            let blockNode = SKSpriteNode(imageNamed: "slope_right")
+            blockNode.anchorPoint = CGPoint(x: 0, y: 1)
+            blockNode.yScale = -1
+            blockNode.zPosition = Constants.Layer.background.rawValue
+            return blockNode
         } else if tileType.intersection(.solid).rawValue != 0 {
             // Solid comes last because blocks can be sold and breakable etc.
             let blockNode = SKSpriteNode(imageNamed: "solid")

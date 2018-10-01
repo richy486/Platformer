@@ -19,6 +19,9 @@ struct TileTypeFlag: OptionSet {
     static let used = TileTypeFlag(rawValue: 1 << 4)
     static let powerup = TileTypeFlag(rawValue: 1 << 5)
     
+    static let slope_left = TileTypeFlag(rawValue: 1 << 6)  // ◿
+    static let slope_right = TileTypeFlag(rawValue: 1 << 7) // ◺
+    
     // 0000
     // 1010
     // 8421
@@ -35,7 +38,9 @@ class Map {
         .solid,
         .solid_on_top,
         [.breakable, .solid],
-        [.powerup, .solid]
+        [.powerup, .solid],
+        .slope_left, // ◿
+        .slope_right // ◺
     ]
 
     class func tile(point: IntPoint) -> TileTypeFlag {

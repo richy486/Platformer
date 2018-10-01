@@ -38,6 +38,7 @@ class Player {
     private var oldvel: CGPoint = CGPoint.zero
     
     private(set) var lastGroundPosition: Int = Int.max
+    private var slope_prevtile = IntPoint.zero
     
     
     private var lockjump = false
@@ -169,12 +170,90 @@ class Player {
     }
     
     // MARK: Collisions
-    
+    // Can change f in this function
     func collision_detection_map() {
         
         // Lets add gravity here
         vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
         let targetPlayerPostition = CGPoint(x: f.x + vel.x, y: f.y + vel.y)
+        
+        // slopes ( ◿ ◺ )
+        // check for slopes (only if moving down)
+        if vel.y > 0.0 {
+//            int tsx, tsy;            //slope tile coordinates
+//            let sx = i.x + (PW>>1) + Int(vel.x)    //slope chechpoint x coordinate
+            
+//            slope_prevtile = IntPoint(x: (i.x + (PW>>1)) / TILESIZE,
+//                                      y: (i.y + PH) / TILESIZE)
+            let s = IntPoint(x: i.x + (PW>>1) + Int(vel.x),
+                             y: i.y + PH)
+            // we entered a slope (y is set by collision_slope)
+            // if collision_slope(sx, (y + h), tsx, tsy) {
+            let result = collision_slope(movePosition: f, intPosion: s)
+            if result.collide {
+                // We entered a slope (y is set by result)
+                f.x += vel.x    //move on
+                f.y = result.position.y
+                
+                // y has been set by collision_slope
+                // unlockjump()
+                inair = false
+                
+                vel.y = CGFloat(1)
+                slope_prevtile = result.collideTile
+                
+                // Don't check other tile because we are in slope land
+                return
+            } else {
+                // We're not on a slope this frame - check if we left a slope
+                
+                enum SlopeMove: Int {
+                    case notIn = -1     // -1 ... we didn't move from slope to slope
+                    case exitDown = 0   //  0 ... we left a slope after moving down
+                    case exitUp = 1     //  1 ... we left a slope after moving up
+                }
+                
+                var what: SlopeMove = .notIn
+                
+//                if map.map(slope_prevtilex, slope_prevtiley) == t_sloperight {
+                if Map.tile(point: slope_prevtile).contains(.slope_right) {
+                    //sloperight + velx > 0  = we left a slope after moving up the slope
+                    what = vel.x > 0
+                        ? .exitDown
+                        : .exitUp
+                } else if Map.tile(point: slope_prevtile).contains(.slope_left) {
+                    what = vel.x < 0
+                        ? .exitDown
+                        : .exitUp
+                }
+                
+                if what != .notIn {
+                    // If we left a slope and now are on a slope
+                    var sy = Int(0)
+                    
+                    if what == .exitUp {
+                        f.y = CGFloat(result.collideTile.y * TILESIZE - PH - 1)
+                        sy = i.y + PH // i is IntPoint(f)
+                    } else {
+                        f.y =  CGFloat((result.collideTile.y + 1) * TILESIZE - PH - 1)
+                        sy = i.y + PH + TILESIZE
+                    }
+                    
+                    let secondResult = collision_slope(movePosition: f, intPosion: IntPoint(x: s.y, y: sy))
+                    if secondResult.collide {
+                        f.x += vel.x
+                        f.y = secondResult.position.y
+                        
+                        inair = false
+                        vel.y = 1
+                        slope_prevtile = secondResult.collideTile
+                        return
+                    }
+                }
+                
+            }
+            
+        }
         
         //  x axis (--)
         
@@ -185,7 +264,7 @@ class Player {
                 var collide = false
                 while f.x < targetPlayerPostition.x - COLLISION_GIVE && !collide {
                     f.x = min(f.x + CGFloat(TILESIZE), targetPlayerPostition.x)
-                    let result = mapcolldet_move(movePosition: f, horizontallyInDirection: 3)
+                    let result = mapcolldet_moveHorizontal(movePosition: f, horizontallyInDirection: 3)
                     f = result.position
                     collide = result.collide
                 }
@@ -195,7 +274,7 @@ class Player {
                 var collide = false
                 while f.x > targetPlayerPostition.x + COLLISION_GIVE && !collide {
                     f.x = max(f.x - CGFloat(TILESIZE), targetPlayerPostition.x)
-                    let result = mapcolldet_move(movePosition: f, horizontallyInDirection: 1)
+                    let result = mapcolldet_moveHorizontal(movePosition: f, horizontallyInDirection: 1)
                     f = result.position
                     collide = result.collide
                 }
@@ -281,9 +360,55 @@ class Player {
         if !inair {
             vel.y = AppState.shared.GRAVITATION
         }
+        
+//        slope_prevtilex = (x + (w>>1)) / TILESIZE;
+//        slope_prevtiley = (y + h) / TILESIZE;
+        slope_prevtile = IntPoint(x: (i.x + (PW>>1)) / TILESIZE,
+                                  y: (i.y + PH) / TILESIZE)
     }
     
-    func mapcolldet_move(movePosition position: CGPoint, horizontallyInDirection direction: Int) -> (position: CGPoint, collide: Bool) {
+    // bool CPlayer::collision_slope(int sx, int sy, int &tsx;, int &tsy;)
+    // https://web.archive.org/web/20100526071550/http://jnrdev.72dpiarmy.com:80/en/jnrdev2/
+    // Shouldn't change f in this function, TODO: put into protocol extension
+    func collision_slope(movePosition position: CGPoint, intPosion: IntPoint) -> (position: CGPoint, collide: Bool, collideTile: IntPoint) {
+        
+        var position = position
+        var collide = false
+        //map coordinates of the tile we check against
+        
+        let s = intPosion
+        let ts = IntPoint(x: s.x / TILESIZE, y: s.y / TILESIZE)
+        
+        let t = Map.tile(point: ts)
+        
+        //if we found a slope we set align y to the slope.
+        if t.contains(.slope_right) {
+            // ◺
+//            print("◺: \(ts)")
+            let yGround = (ts.y+1) * TILESIZE       // y pixel coordinate of the ground of the tile
+            let inside = TILESIZE - (s.x%TILESIZE)  // minus how far sx is inside the tile (16 pixels in the exapmle)
+            
+            // PH: minus the height (sx is located at the bottom of the player, but y is at the top)
+            // -1: we don't want to stick in a tile, this would cause complications in the next frame
+            position.y = CGFloat(yGround - inside - PH - 1)
+            
+            
+            collide = true
+        } else if t.contains(.slope_left) {
+            // ◿
+//            print("◿: \(ts)")
+            position.y = CGFloat((ts.y+1)*TILESIZE - s.x%TILESIZE - PH - 1)
+            collide = true
+        } else {
+//            print("no slope: \(ts)")
+        }
+        
+        return (position, collide, ts)
+    }
+    
+    
+    // Shouldn't change f in this function, TODO: put into protocol extension
+    func mapcolldet_moveHorizontal(movePosition position: CGPoint, horizontallyInDirection direction: Int) -> (position: CGPoint, collide: Bool) {
         // left 1
         // right 3
         var position = position
@@ -337,7 +462,7 @@ class Player {
         return (position, collide)
     }
     
-    
+    // Shouldn't change f in this function, TODO: put into protocol extension
     func mapcolldet_moveUpward(movePosition position: CGPoint,
                                txl: Int,
                                txc: Int,
@@ -369,6 +494,7 @@ class Player {
         return (position: position, collide: false)
     }
     
+    // Shouldn't change f in this function, TODO: put into protocol extension
     func mapcolldet_moveDownward(movePosition position: CGPoint,
                                  txl: Int,
                                  txc: Int,
