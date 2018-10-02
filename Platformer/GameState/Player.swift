@@ -239,7 +239,7 @@ class Player {
                         sy = i.y + PH + TILESIZE
                     }
                     
-                    let secondResult = collision_slope(movePosition: f, intPosion: IntPoint(x: s.y, y: sy))
+                    let secondResult = collision_slope(movePosition: f, intPosion: IntPoint(x: s.x, y: sy))
                     if secondResult.collide {
                         f.x += vel.x
                         f.y = secondResult.position.y
