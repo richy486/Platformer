@@ -88,6 +88,7 @@ struct AppState : Codable {
     var cameraMoveSpeed = CGFloat(500)
     
     var cameraTracking = true
+    var printCollisions = false
     
     // Stairs
     // new velocity jump: 14.901377688172044

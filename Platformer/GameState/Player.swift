@@ -173,6 +173,13 @@ class Player {
     // Can change f in this function
     func collision_detection_map() {
         
+        if AppState.shared.printCollisions {
+            print("--- frame ---")
+        }
+        
+        var skipVerticalForSlope = false
+        var skipHorizontalForSlope = false
+        
         // Lets add gravity here
         vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
         let targetPlayerPostition = CGPoint(x: f.x + vel.x, y: f.y + vel.y)
@@ -180,11 +187,6 @@ class Player {
         // slopes ( ◿ ◺ )
         // check for slopes (only if moving down)
         if vel.y > 0.0 {
-//            int tsx, tsy;            //slope tile coordinates
-//            let sx = i.x + (PW>>1) + Int(vel.x)    //slope chechpoint x coordinate
-            
-//            slope_prevtile = IntPoint(x: (i.x + (PW>>1)) / TILESIZE,
-//                                      y: (i.y + PH) / TILESIZE)
             let s = IntPoint(x: i.x + (PW>>1) + Int(vel.x),
                              y: i.y + PH)
             // we entered a slope (y is set by collision_slope)
@@ -192,72 +194,76 @@ class Player {
             let result = collision_slope(movePosition: f, intPosion: s)
             if result.collide {
                 // We entered a slope (y is set by result)
+                
                 f.x += vel.x    //move on
+                slope_prevtile = result.collideTile
+                guard f.y + vel.y >= result.position.y else {
+                    f.y += vel.y
+                    return
+                }
                 f.y = result.position.y
                 
-                // y has been set by collision_slope
-                // unlockjump()
                 inair = false
                 
                 vel.y = CGFloat(1)
-                slope_prevtile = result.collideTile
                 
                 // Don't check other tile because we are in slope land
                 return
             } else {
-                // We're not on a slope this frame - check if we left a slope
+                // Did not collide with slope but check if we should if we moved down
+                // Are there any slopes below us, if so, ignore squares below us
                 
-                enum SlopeMove: Int {
-                    case notIn = -1     // -1 ... we didn't move from slope to slope
-                    case exitDown = 0   //  0 ... we left a slope after moving down
-                    case exitUp = 1     //  1 ... we left a slope after moving up
-                }
-                
-                var what: SlopeMove = .notIn
-                
-//                if map.map(slope_prevtilex, slope_prevtiley) == t_sloperight {
-                if Map.tile(point: slope_prevtile).contains(.slope_right) {
-                    //sloperight + velx > 0  = we left a slope after moving up the slope
-                    what = vel.x > 0
-                        ? .exitDown
-                        : .exitUp
-                } else if Map.tile(point: slope_prevtile).contains(.slope_left) {
-                    what = vel.x < 0
-                        ? .exitDown
-                        : .exitUp
-                }
-                
-                if what != .notIn {
-                    // If we left a slope and now are on a slope
-                    var sy = Int(0)
-                    
-                    if what == .exitUp {
-                        f.y = CGFloat(result.collideTile.y * TILESIZE - PH - 1)
-                        sy = i.y + PH // i is IntPoint(f)
-                    } else {
-                        f.y =  CGFloat((result.collideTile.y + 1) * TILESIZE - PH - 1)
-                        sy = i.y + PH + TILESIZE
+                var slopeDownCheck = result.collideTile
+                slopeDownCheck.y += 1
+                if Map.tile(point: slopeDownCheck).intersection([.slope_right, .slope_left]).rawValue != 0 {
+                    if AppState.shared.printCollisions {
+                        print("skipHorizontalForSlope: \(slopeDownCheck)")
                     }
-                    
-                    let secondResult = collision_slope(movePosition: f, intPosion: IntPoint(x: s.x, y: sy))
-                    if secondResult.collide {
-                        f.x += vel.x
-                        f.y = secondResult.position.y
+                    skipVerticalForSlope = true
+                    inair = true
+                }
+                
+                if vel.x > 0.01 {
+                    // Moving right
+                    var slopeHorizontalCheck = IntPoint(x: i.x / TILESIZE,
+                                                        y: (i.y + PH) / TILESIZE)
+                    while slopeHorizontalCheck.x < AppState.shared.blocks[slopeHorizontalCheck.y].count {
+                        guard Map.tile(point: slopeHorizontalCheck).intersection(.solid).rawValue == 0 else {
+                            break
+                        }
                         
-                        inair = false
-                        vel.y = 1
-                        slope_prevtile = secondResult.collideTile
-                        return
+                        if Map.tile(point: slopeHorizontalCheck).intersection([.slope_right, .slope_left]).rawValue != 0 {
+                            if AppState.shared.printCollisions {
+                                print("slopeHorizontalCheck right: \(slopeDownCheck)")
+                            }
+                            skipHorizontalForSlope = true
+                        }
+                        slopeHorizontalCheck.x += 1
+                    }
+                    
+                } else if vel.x < -0.01 {
+                    // Moving left
+                    var slopeHorizontalCheck = IntPoint(x: (i.x + PW) / TILESIZE,
+                                                        y: (i.y + PH) / TILESIZE)
+                    while slopeHorizontalCheck.x >= 0 {
+                        guard Map.tile(point: slopeHorizontalCheck).intersection(.solid).rawValue == 0 else {
+                            break
+                        }
+                        
+                        if Map.tile(point: slopeHorizontalCheck).intersection([.slope_right, .slope_left]).rawValue != 0 {
+                            if AppState.shared.printCollisions {
+                                print("slopeHorizontalCheck left: \(slopeDownCheck)")
+                            }
+                            skipHorizontalForSlope = true
+                        }
+                        slopeHorizontalCheck.x -= 1
                     }
                 }
-                
             }
-            
         }
         
-        //  x axis (--)
-        
-        if f.y + CGFloat(PH) >= 0.0 {
+        //  x axis (<-->) Horizontal
+        if !skipHorizontalForSlope {// && f.y + CGFloat(PH) >= 0.0 {
             if vel.x > 0.01 {
                 // Moving right
                 
@@ -279,83 +285,89 @@ class Player {
                     collide = result.collide
                 }
             }
-        }
-        
-        //  then y axis (|)
-        let iPlayerL = i.x
-        let iPlayerC = i.x + HALFPW
-        let iPlayerR = i.x + PW
-        
-        let txl = iPlayerL / TILESIZE
-        let txc = iPlayerC / TILESIZE
-        let txr = iPlayerR / TILESIZE
-        
-        var alignedBlockX = 0
-        var unAlignedBlockX = 0
-        var unAlignedBlockFX = CGFloat(0)
-        
-        let overlaptxl = (txl << 5) + TILESIZE + 1
-        
-        if i.x + HALFPW < overlaptxl {
-            alignedBlockX = txl
-            unAlignedBlockX = txr
-            unAlignedBlockFX = CGFloat((txr << 5) - PW) - COLLISION_GIVE
         } else {
-            alignedBlockX = txr
-            unAlignedBlockX = txl
-            unAlignedBlockFX = CGFloat((txl << 5) + TILESIZE) + COLLISION_GIVE
+            f.x = targetPlayerPostition.x
         }
         
-        if vel.y < -0.01 {
+        //  then y axis (|) Vertical
+        if !skipVerticalForSlope {
+            let iPlayerL = i.x
+            let iPlayerC = i.x + HALFPW
+            let iPlayerR = i.x + PW
             
-            //moving up
-            var collide = false
-            var potentialPosition = f
-            while f.y > targetPlayerPostition.y + COLLISION_GIVE && !collide {
-                f.y = max(f.y - CGFloat(TILESIZE), targetPlayerPostition.y)
-                let result = mapcolldet_moveUpward(movePosition: f,
-                    txl: txl,
-                    txc: txc,
-                    txr: txr,
-                    alignedBlockX: alignedBlockX,
-                    unAlignedBlockX: unAlignedBlockX,
-                    unAlignedBlockFX: unAlignedBlockFX)
-                collide = result.collide
-                potentialPosition = result.position
+            let txl = iPlayerL / TILESIZE
+            let txc = iPlayerC / TILESIZE
+            let txr = iPlayerR / TILESIZE
+            
+            var alignedBlockX = 0
+            var unAlignedBlockX = 0
+            var unAlignedBlockFX = CGFloat(0)
+            
+            let overlaptxl = (txl << 5) + TILESIZE + 1
+            
+            if i.x + HALFPW < overlaptxl {
+                alignedBlockX = txl
+                unAlignedBlockX = txr
+                unAlignedBlockFX = CGFloat((txr << 5) - PW) - COLLISION_GIVE
+            } else {
+                alignedBlockX = txr
+                unAlignedBlockX = txl
+                unAlignedBlockFX = CGFloat((txl << 5) + TILESIZE) + COLLISION_GIVE
             }
-            if collide && vel.y < 0.0 {
-                print("bounce")
-                vel.y = -vel.y * BOUNCESTRENGTH
+            
+            if vel.y < -0.01 {
+                
+                //moving up
+                var collide = false
+                var potentialPosition = f
+                while f.y > targetPlayerPostition.y + COLLISION_GIVE && !collide {
+                    f.y = max(f.y - CGFloat(TILESIZE), targetPlayerPostition.y)
+                    let result = mapcolldet_moveUpward(movePosition: f,
+                        txl: txl,
+                        txc: txc,
+                        txr: txr,
+                        alignedBlockX: alignedBlockX,
+                        unAlignedBlockX: unAlignedBlockX,
+                        unAlignedBlockFX: unAlignedBlockFX)
+                    collide = result.collide
+                    potentialPosition = result.position
+                }
+                if collide && vel.y < 0.0 {
+                    print("bounce")
+                    vel.y = -vel.y * BOUNCESTRENGTH
+                }
+                f = potentialPosition
+            } else {
+                //moving down / on ground
+                var collide = false
+                var potentialPosition = f
+                var inAir = inair
+                var groundPosition: Int = lastGroundPosition
+                while f.y < targetPlayerPostition.y - COLLISION_GIVE && !collide {
+                    f.y = min(f.y + CGFloat(TILESIZE), targetPlayerPostition.y)
+                    let result = mapcolldet_moveDownward(movePosition: f,
+                                                         txl: txl,
+                                                         txc: txc,
+                                                         txr: txr,
+                                                         alignedBlockX: alignedBlockX,
+                                                         unAlignedBlockX: unAlignedBlockX,
+                                                         unAlignedBlockFX: unAlignedBlockFX)
+                    collide = result.collide
+                    potentialPosition = result.position
+                    inAir = result.inAir
+                    groundPosition = result.groundPosition
+                }
+                f = potentialPosition
+                inair = inAir
+                
+                if collide && abs(lastGroundPosition - groundPosition) > 1 {
+                    lastGroundPosition = groundPosition
+                }
             }
-            f = potentialPosition
         } else {
-            //moving down / on ground
-            var collide = false
-            var potentialPosition = f
-            var inAir = inair
-            var groundPosition: Int = lastGroundPosition
-            while f.y < targetPlayerPostition.y - COLLISION_GIVE && !collide {
-                f.y = min(f.y + CGFloat(TILESIZE), targetPlayerPostition.y)
-                let result = mapcolldet_moveDownward(movePosition: f,
-                                                     txl: txl,
-                                                     txc: txc,
-                                                     txr: txr,
-                                                     alignedBlockX: alignedBlockX,
-                                                     unAlignedBlockX: unAlignedBlockX,
-                                                     unAlignedBlockFX: unAlignedBlockFX)
-                collide = result.collide
-                potentialPosition = result.position
-                inAir = result.inAir
-                groundPosition = result.groundPosition
-            }
-            f = potentialPosition
-            inair = inAir
-            
-            if collide && abs(lastGroundPosition - groundPosition) > 1 {
-                lastGroundPosition = groundPosition
-            }
+            f.y = targetPlayerPostition.y
         }
-        
+    
         // Reset gravity if on the ground
         if !inair {
             vel.y = AppState.shared.GRAVITATION
@@ -384,7 +396,9 @@ class Player {
         //if we found a slope we set align y to the slope.
         if t.contains(.slope_right) {
             // ◺
-//            print("◺: \(ts)")
+            if AppState.shared.printCollisions {
+                print("◺: \(ts)")
+            }
             let yGround = (ts.y+1) * TILESIZE       // y pixel coordinate of the ground of the tile
             let inside = TILESIZE - (s.x%TILESIZE)  // minus how far sx is inside the tile (16 pixels in the exapmle)
             
@@ -396,11 +410,15 @@ class Player {
             collide = true
         } else if t.contains(.slope_left) {
             // ◿
-//            print("◿: \(ts)")
+            if AppState.shared.printCollisions {
+                print("◿: \(ts)")
+            }
             position.y = CGFloat((ts.y+1)*TILESIZE - s.x%TILESIZE - PH - 1)
             collide = true
         } else {
-//            print("no slope: \(ts)")
+            if AppState.shared.printCollisions {
+                print("no slope: \(ts)")
+            }
         }
         
         return (position, collide, ts)
@@ -433,11 +451,18 @@ class Player {
         var collide = false
         if Map.collide(atPoint: topTilePoint, tileType: [.solid], direction: direction == 1 ? .left : .right) {
             collide = true
+            if AppState.shared.printCollisions {
+                print("--: \(IntPoint(x: tx, y: ty))")
+            }
             NotificationCenter.default.post(name: Constants.kNotificationCollide,
                                             object: self,
                                             userInfo: [Constants.kCollideXPosition: CGPoint(x: tx * TILESIZE, y: ty * TILESIZE)])
+            
         } else if Map.collide(atPoint: bottomTilePoint, tileType: [.solid], direction: direction == 1 ? .left : .right) {
             collide = true
+            if AppState.shared.printCollisions {
+                print("--: \(IntPoint(x: tx, y: ty2))")
+            }
             NotificationCenter.default.post(name: Constants.kNotificationCollide,
                                             object: self,
                                             userInfo: [Constants.kCollideXPosition: CGPoint(x: tx * TILESIZE, y: ty2 * TILESIZE)])
@@ -477,7 +502,10 @@ class Player {
         
         //Player hit a solid
         if Map.collide(atPoint: IntPoint(x: alignedBlockX, y: ty), tileType: [.solid], direction: .up) {
-            print("collided top")
+//            print("collided top")
+            if AppState.shared.printCollisions {
+                print(" | top: \(IntPoint(x: txr, y: ty))")
+            }
             position.y = CGFloat((ty << 5) + TILESIZE) + COLLISION_GIVE
             
             return (position: position, collide: true)
@@ -525,12 +553,18 @@ class Player {
         let fSolidOnTopUnderPlayer = fSolidOnTopUnderPlayerLeft || fSolidOnTopUnderPlayerRight
         
         if fSolidTileUnderPlayerLeft || fSolidOnTopUnderPlayerLeft {
+            if AppState.shared.printCollisions {
+                print(" | d: \(IntPoint(x: txl, y: ty))")
+            }
             NotificationCenter.default.post(name: Constants.kNotificationCollide,
                                             object: self,
                                             userInfo: [Constants.kCollideYLeftPosition: CGPoint(x: txl * TILESIZE, y: ty * TILESIZE)])
         }
 
         if fSolidTileUnderPlayerRight || fSolidOnTopUnderPlayerRight {
+            if AppState.shared.printCollisions {
+                print(" | d: \(IntPoint(x: txr, y: ty))")
+            }
             NotificationCenter.default.post(name: Constants.kNotificationCollide,
                                             object: self,
                                             userInfo: [Constants.kCollideYRightPosition: CGPoint(x: txr * TILESIZE, y: ty * TILESIZE)])

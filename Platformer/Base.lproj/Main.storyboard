@@ -769,10 +769,11 @@
                                         </gridCells>
                                     </gridView>
                                     <gridView xPlacement="leading" yPlacement="bottom" rowAlignment="none" translatesAutoresizingMaskIntoConstraints="NO" id="JQP-i8-wOi">
-                                        <rect key="frame" x="609" y="443" width="171" height="37"/>
+                                        <rect key="frame" x="574" y="423" width="206" height="57"/>
                                         <rows>
                                             <gridRow id="Yjq-nu-Iig"/>
                                             <gridRow id="3Ke-Wj-i2J"/>
+                                            <gridRow id="gAI-EV-5G7"/>
                                         </rows>
                                         <columns>
                                             <gridColumn id="7dU-Sy-m9a"/>
@@ -782,7 +783,7 @@
                                         <gridCells>
                                             <gridCell row="Yjq-nu-Iig" column="7dU-Sy-m9a" id="sAR-GI-gAG">
                                                 <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="f2n-WL-0KK">
-                                                    <rect key="frame" x="0.0" y="20" width="44" height="17"/>
+                                                    <rect key="frame" x="0.0" y="40" width="44" height="17"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Left of" drawsBackground="YES" id="tLE-la-69s">
                                                         <font key="font" usesAppearanceFont="YES"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -792,7 +793,7 @@
                                             </gridCell>
                                             <gridCell row="Yjq-nu-Iig" column="Hau-fv-LJK" id="38C-Oh-Xba">
                                                 <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="G2N-vd-hIR">
-                                                    <rect key="frame" x="50" y="20" width="45" height="17"/>
+                                                    <rect key="frame" x="50" y="40" width="45" height="17"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Center" drawsBackground="YES" id="knc-pS-Odb">
                                                         <font key="font" usesAppearanceFont="YES"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -802,7 +803,7 @@
                                             </gridCell>
                                             <gridCell row="Yjq-nu-Iig" column="4r2-o0-5bV" id="6bN-9M-ajv">
                                                 <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="K27-qN-ghW">
-                                                    <rect key="frame" x="101" y="20" width="52" height="17"/>
+                                                    <rect key="frame" x="101" y="40" width="52" height="17"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Right of" drawsBackground="YES" id="bTc-QL-LTE">
                                                         <font key="font" usesAppearanceFont="YES"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -814,7 +815,7 @@
                                             <gridCell row="3Ke-Wj-i2J" column="Hau-fv-LJK" id="OLH-y3-ydr"/>
                                             <gridCell row="3Ke-Wj-i2J" column="4r2-o0-5bV" id="jpW-af-QeP">
                                                 <button key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2Vv-as-ukJ">
-                                                    <rect key="frame" x="99" y="-2" width="74" height="18"/>
+                                                    <rect key="frame" x="99" y="18" width="74" height="18"/>
                                                     <buttonCell key="cell" type="check" title="Tracking" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="PTe-Xu-1o3">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" metaFont="system"/>
@@ -824,10 +825,24 @@
                                                     </connections>
                                                 </button>
                                             </gridCell>
+                                            <gridCell row="gAI-EV-5G7" column="7dU-Sy-m9a" id="458-s8-QaH"/>
+                                            <gridCell row="gAI-EV-5G7" column="Hau-fv-LJK" id="Ayn-JA-gUZ"/>
+                                            <gridCell row="gAI-EV-5G7" column="4r2-o0-5bV" id="i8r-7v-alK">
+                                                <button key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OUE-x2-rib">
+                                                    <rect key="frame" x="99" y="-2" width="109" height="18"/>
+                                                    <buttonCell key="cell" type="check" title="PrintCollisions" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="wDC-SW-F9o">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="printCollisionsChanged:" target="XfG-lQ-9wD" id="Ow6-lv-fO4"/>
+                                                    </connections>
+                                                </button>
+                                            </gridCell>
                                         </gridCells>
                                     </gridView>
                                     <gridView xPlacement="leading" yPlacement="bottom" rowAlignment="none" translatesAutoresizingMaskIntoConstraints="NO" id="2yM-I4-4eO">
-                                        <rect key="frame" x="727" y="373" width="53" height="40"/>
+                                        <rect key="frame" x="727" y="353" width="53" height="40"/>
                                         <rows>
                                             <gridRow id="4Dy-0d-CZ7"/>
                                             <gridRow id="6GB-jR-JvG"/>
@@ -1358,6 +1373,7 @@
                         <outlet property="leftLabel" destination="XIG-Ap-nTs" id="3Cp-H6-7sb"/>
                         <outlet property="leftOfLabel" destination="f2n-WL-0KK" id="6xd-Hc-49N"/>
                         <outlet property="offsetLabel" destination="tFa-Uf-9Ba" id="ZO6-nm-WXN"/>
+                        <outlet property="printCollisionsCheckbox" destination="OUE-x2-rib" id="4nA-Bi-H5I"/>
                         <outlet property="rightLabel" destination="J6i-rg-APa" id="eHO-iC-Zqs"/>
                         <outlet property="rightOfLabel" destination="K27-qN-ghW" id="y0T-3P-yYQ"/>
                         <outlet property="runLabel" destination="PGv-Tl-ZwP" id="llX-TK-DVD"/>

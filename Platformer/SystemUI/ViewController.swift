@@ -38,6 +38,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var velocityLabel: NSTextField!
     @IBOutlet weak var offsetLabel: NSTextField!
     @IBOutlet weak var cameraTrackingCheckbox: NSButton!
+    @IBOutlet weak var printCollisionsCheckbox: NSButton!
     
     @IBOutlet weak var tileCollectionView: UnselectorCollectionView!
     
@@ -94,9 +95,13 @@ class ViewController: NSViewController {
     @IBAction func cameraTrackingChanged(_ checkBox: NSButton) {
         AppState.shared.cameraTracking = checkBox.state == .on
     }
+    @IBAction func printCollisionsChanged(_ checkBox: NSButton) {
+        AppState.shared.printCollisions = checkBox.state == .on
+    }
     
     private func updateUI() {
         cameraTrackingCheckbox.state = AppState.shared.cameraTracking ? .on : .off
+        printCollisionsCheckbox.state = AppState.shared.printCollisions ? .on : .off
         
         switch AppState.shared.editMode {
         case .paint(let tileType):
