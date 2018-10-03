@@ -210,11 +210,13 @@ class Player {
                 // Don't check other tile because we are in slope land
                 return
             } else {
+                
+                // Do adjacent slope checking:
+                
                 // Did not collide with slope but check if we should if we moved down
                 // Are there any slopes below us, if so, ignore squares below us
-                
-                var slopeDownCheck = result.collideTile
-                slopeDownCheck.y += 1
+                let slopeDownCheck = IntPoint(x: result.collideTile.x,
+                                              y: result.collideTile.y + 1)
                 if Map.tile(point: slopeDownCheck).intersection([.slope_right, .slope_left]).rawValue != 0 {
                     if AppState.shared.printCollisions {
                         print("skipHorizontalForSlope: \(slopeDownCheck)")
@@ -225,38 +227,24 @@ class Player {
                 
                 if vel.x > 0.01 {
                     // Moving right
-                    var slopeHorizontalCheck = IntPoint(x: i.x / TILESIZE,
+                    let slopeHorizontalCheck = IntPoint(x: i.x / TILESIZE,
                                                         y: (i.y + PH) / TILESIZE)
-                    while slopeHorizontalCheck.x < AppState.shared.blocks[slopeHorizontalCheck.y].count {
-                        guard Map.tile(point: slopeHorizontalCheck).intersection(.solid).rawValue == 0 else {
-                            break
+                    if Map.tile(point: slopeHorizontalCheck).intersection([.slope_right, .slope_left]).rawValue != 0 {
+                        if AppState.shared.printCollisions {
+                            print("slopeHorizontalCheck right: \(slopeDownCheck)")
                         }
-                        
-                        if Map.tile(point: slopeHorizontalCheck).intersection([.slope_right, .slope_left]).rawValue != 0 {
-                            if AppState.shared.printCollisions {
-                                print("slopeHorizontalCheck right: \(slopeDownCheck)")
-                            }
-                            skipHorizontalForSlope = true
-                        }
-                        slopeHorizontalCheck.x += 1
+                        skipHorizontalForSlope = true
                     }
                     
                 } else if vel.x < -0.01 {
                     // Moving left
-                    var slopeHorizontalCheck = IntPoint(x: (i.x + PW) / TILESIZE,
+                    let slopeHorizontalCheck = IntPoint(x: (i.x + PW) / TILESIZE,
                                                         y: (i.y + PH) / TILESIZE)
-                    while slopeHorizontalCheck.x >= 0 {
-                        guard Map.tile(point: slopeHorizontalCheck).intersection(.solid).rawValue == 0 else {
-                            break
+                    if Map.tile(point: slopeHorizontalCheck).intersection([.slope_right, .slope_left]).rawValue != 0 {
+                        if AppState.shared.printCollisions {
+                            print("slopeHorizontalCheck left: \(slopeDownCheck)")
                         }
-                        
-                        if Map.tile(point: slopeHorizontalCheck).intersection([.slope_right, .slope_left]).rawValue != 0 {
-                            if AppState.shared.printCollisions {
-                                print("slopeHorizontalCheck left: \(slopeDownCheck)")
-                            }
-                            skipHorizontalForSlope = true
-                        }
-                        slopeHorizontalCheck.x -= 1
+                        skipHorizontalForSlope = true
                     }
                 }
             }

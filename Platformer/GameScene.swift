@@ -185,7 +185,7 @@ class GameScene: SKScene {
         let height = Int(self.size.height / CGFloat(TILESIZE) - 3) * TILESIZE
         let node = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE*2, height: height))
         node.fillColor = .clear
-        node.strokeColor = .orange
+        node.strokeColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.1)
         node.position = CGPoint(x: 0, y: 0)
         node.zPosition = Constants.Layer.debug.rawValue
         return node
@@ -195,7 +195,7 @@ class GameScene: SKScene {
         let height = Int(self.size.height / CGFloat(TILESIZE) - 1) * TILESIZE
         let node = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE*6, height: height))
         node.fillColor = .clear
-        node.strokeColor = .blue
+        node.strokeColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.1)
         node.position = CGPoint(x: 0, y: 0)
         node.zPosition = Constants.Layer.debug.rawValue
         return node
@@ -204,7 +204,7 @@ class GameScene: SKScene {
     private lazy var cameraCenter: SKShapeNode = {
         let node = SKShapeNode(circleOfRadius: 10)
         node.fillColor = .clear
-        node.strokeColor = .green
+        node.strokeColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.1)
         node.position = CGPoint(x: 0, y: 0)
         node.zPosition = Constants.Layer.debug.rawValue
         return node
