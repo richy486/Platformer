@@ -38,15 +38,16 @@ class Player {
     private var oldvel: CGPoint = CGPoint.zero
     
     private(set) var lastGroundPosition: Int = Int.max
-    private var slope_prevtile = IntPoint.zero
+//    private var slope_prevtile = IntPoint.zero
     
     
     private var lockjump = false
-    private(set) var inair = false
+    private(set) var inAir = false
+    private(set) var lastSlopeTile: IntPoint?
     
     func restart() {
         lockjump = false
-        inair = false
+        inAir = false
         
         f = startingPlayerPosition
         fOld = f
@@ -71,7 +72,7 @@ class Player {
             // Jump!
             
             if !lockjump {
-                if !inair {
+                if !inAir {
                     if tryFallingThroughPlatform(inDirectionX: movementDirectionX) {
                         
                     } else {
@@ -151,7 +152,7 @@ class Player {
         }
         
         
-        inair = true;
+        inAir = true;
     }
     
     func enableFreeFall() {
@@ -186,7 +187,7 @@ class Player {
         
         // slopes ( ◿ ◺ )
         // check for slopes (only if moving down)
-        if vel.y > 0.0 {
+        if vel.y > 0.0 || lastSlopeTile != nil {
             let s = IntPoint(x: i.x + (PW>>1) + Int(vel.x),
                              y: i.y + PH)
             // we entered a slope (y is set by collision_slope)
@@ -196,20 +197,80 @@ class Player {
                 // We entered a slope (y is set by result)
                 
                 f.x += vel.x    //move on
-                slope_prevtile = result.collideTile
+//                slope_prevtile = result.collideTile
                 guard f.y + vel.y >= result.position.y else {
                     f.y += vel.y
                     return
                 }
                 f.y = result.position.y
                 
-                inair = false
+                inAir = false
+                lastSlopeTile = result.collideTile
+                
                 
                 vel.y = CGFloat(1)
                 
                 // Don't check other tile because we are in slope land
                 return
+            
+                
+                
             } else {
+                
+                
+                if let lastSlopeTile = lastSlopeTile {
+                    enum SlopeMove: Int {
+                        case notIn = -1     // -1 ... we didn't move from slope to slope
+                        case exitDown = 0   //  0 ... we left a slope after moving down
+                        case exitUp = 1     //  1 ... we left a slope after moving up
+                    }
+                    
+                    var what: SlopeMove = .notIn
+                    
+                    var nextS = lastSlopeTile
+                    if Map.tile(point: lastSlopeTile).intersection(.slope_right).rawValue != 0 {
+                        what = vel.x > 0
+                            ? .exitDown
+                            : .exitUp
+
+                    } else if Map.tile(point: lastSlopeTile).contains(.slope_left) {
+                        what = vel.x < 0
+                            ? .exitDown
+                            : .exitUp
+                    }
+                    
+                    if what != .notIn {
+                        // If we left a slope and now are on a slope
+                        nextS.x += vel.x > 0
+                            ? 1
+                            : -1
+                        
+                        var potentialPosition = f
+                        if what == .exitUp {
+                            potentialPosition.y = CGFloat(result.collideTile.y * TILESIZE - PH - 1)
+                            nextS.y -= 1
+                        } else {
+                            potentialPosition.y =  CGFloat((result.collideTile.y + 1) * TILESIZE - PH - 1)
+                            nextS.y += 1
+                        }
+                        
+                        // Don't check if we are colliding with slode, since `lastSlopeTile` is
+                        // not nil then we are on a slope and just update the the player position
+                        let secondResult = collision_slope(movePosition: potentialPosition,
+                                                           intPosion: nextS)
+                        if Map.tile(point: lastSlopeTile).intersection([.slope_left, .slope_right]).rawValue != 0 {
+                            f.x += vel.x
+                            f.y = secondResult.position.y
+                            
+                            inAir = false
+                            vel.y = 1
+                            self.lastSlopeTile = secondResult.collideTile
+                            return
+                        }
+                    }
+
+
+                }
                 
                 // Do adjacent slope checking:
                 
@@ -222,7 +283,7 @@ class Player {
                         print("skipHorizontalForSlope: \(slopeDownCheck)")
                     }
                     skipVerticalForSlope = true
-                    inair = true
+                    inAir = true
                 }
                 
                 if vel.x > 0.01 {
@@ -249,9 +310,10 @@ class Player {
                 }
             }
         }
+        lastSlopeTile = nil
         
         //  x axis (<-->) Horizontal
-        if !skipHorizontalForSlope {// && f.y + CGFloat(PH) >= 0.0 {
+        if !skipHorizontalForSlope {
             if vel.x > 0.01 {
                 // Moving right
                 
@@ -328,8 +390,8 @@ class Player {
             } else {
                 //moving down / on ground
                 var collide = false
-                var potentialPosition = f
-                var inAir = inair
+                var potentialPosition = self.f
+                var inAir = self.inAir
                 var groundPosition: Int = lastGroundPosition
                 while f.y < targetPlayerPostition.y - COLLISION_GIVE && !collide {
                     f.y = min(f.y + CGFloat(TILESIZE), targetPlayerPostition.y)
@@ -345,8 +407,8 @@ class Player {
                     inAir = result.inAir
                     groundPosition = result.groundPosition
                 }
-                f = potentialPosition
-                inair = inAir
+                self.f = potentialPosition
+                self.inAir = inAir
                 
                 if collide && abs(lastGroundPosition - groundPosition) > 1 {
                     lastGroundPosition = groundPosition
@@ -357,14 +419,14 @@ class Player {
         }
     
         // Reset gravity if on the ground
-        if !inair {
+        if !inAir {
             vel.y = AppState.shared.GRAVITATION
         }
         
 //        slope_prevtilex = (x + (w>>1)) / TILESIZE;
 //        slope_prevtiley = (y + h) / TILESIZE;
-        slope_prevtile = IntPoint(x: (i.x + (PW>>1)) / TILESIZE,
-                                  y: (i.y + PH) / TILESIZE)
+//        slope_prevtile = IntPoint(x: (i.x + (PW>>1)) / TILESIZE,
+//                                  y: (i.y + PH) / TILESIZE)
     }
     
     // bool CPlayer::collision_slope(int sx, int sy, int &tsx;, int &tsy;)
@@ -505,7 +567,7 @@ class Player {
             position.x = unAlignedBlockFX
         }
         
-        inair = true
+        inAir = true
         
         return (position: position, collide: false)
     }

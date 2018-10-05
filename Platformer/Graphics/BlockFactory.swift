@@ -11,7 +11,6 @@ import SpriteKit
 class BlockFactory {
     static func blockNode(forTileType tileType: TileTypeFlag) -> SKNode? {
         
-        
         if tileType.rawValue == 0 || tileType.intersection(.nonsolid).rawValue != 0  {
             return nil
         } else if tileType.intersection(.breakable).rawValue != 0 {

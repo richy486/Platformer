@@ -89,6 +89,7 @@ struct AppState : Codable {
     
     var cameraTracking = true
     var printCollisions = false
+    var showBlockCoords = true
     
     // Stairs
     // new velocity jump: 14.901377688172044
@@ -169,7 +170,7 @@ struct AppState : Codable {
             print("Error writing: \(error)")
             return
         }
-        print("Saved!")
+        print("Saved! \(fileURL.absoluteString)")
     }
     
     static func load() {

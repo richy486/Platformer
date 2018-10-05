@@ -117,7 +117,7 @@ func setModifierKeysDown(_ modifierFlags: NSEvent.ModifierFlags) {
 protocol GameSceneDelegate {
     func keysUpdated(keysDown: [KeyCode: Bool], oldKeysDown: [KeyCode: Bool])
     func cameraModeUpdated(cameraMode: CameraMode)
-    func playerVelocityUpdated(velocity: CGPoint, offset: CGFloat)
+    func playerStateUpdated(player: Player)
     func setDebugModeUI(_ debugUI: Bool)
 }
 
@@ -260,6 +260,15 @@ class GameScene: SKScene {
                 
                 guard let blockNode = BlockFactory.blockNode(forTileType: tileType) else {
                     return
+                }
+                
+                if AppState.shared.showBlockCoords {
+                    let coordNode = SKLabelNode(text: "\(point.x), \(point.y)")
+                    coordNode.fontColor = tileType.contains(.solid_on_top) ? #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                    coordNode.fontSize = 10
+                    coordNode.position = CGPoint(x: TILESIZE/2, y: TILESIZE/2 - TILESIZE)
+                    coordNode.zPosition = Constants.Layer.debug.rawValue
+                    blockNode.addChild(coordNode)
                 }
                 
                 blockNode.position = CGPoint(x: point.x * TILESIZE, y: point.y * TILESIZE)
@@ -435,7 +444,7 @@ class GameScene: SKScene {
         let movementDirectionX = player.f.x - playerNode.position.x
         playerNode.position = player.f
         
-        gameSceneDelegate?.playerVelocityUpdated(velocity: player.vel, offset: 0)
+        gameSceneDelegate?.playerStateUpdated(player: player)
         
         // Camera
         if AppState.shared.cameraTracking {
@@ -516,12 +525,13 @@ class GameScene: SKScene {
             playerNode.fillColor = #colorLiteral(red: 0.7054507506, green: 0.07813194169, blue: 0, alpha: 1)
         }
         
-        if player.inair {
+        if player.inAir {
             playerNode.strokeColor = #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)
+        } else if player.lastSlopeTile != nil {
+            playerNode.strokeColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         } else {
             playerNode.strokeColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        }
-        
+        }        
         
         lastUpdateTimeInterval = currentTime
     }
@@ -534,7 +544,7 @@ class GameScene: SKScene {
         localCameraMode = .center
     }
     
-    private func setupBlocks() {
+    func setupBlocks() {
         blockNodes.forEach { (arg0) in
             let (_, node) = arg0
             node.removeFromParent()
@@ -547,6 +557,14 @@ class GameScene: SKScene {
                 
                 let tileType = TileTypeFlag(rawValue: blockVal)
                 if let blockNode = BlockFactory.blockNode(forTileType: tileType) {
+                    if AppState.shared.showBlockCoords {
+                        let coordNode = SKLabelNode(text: "\(x), \(y)")
+                        coordNode.fontColor = tileType.contains(.solid_on_top) ? #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                        coordNode.fontSize = 10
+                        coordNode.position = CGPoint(x: TILESIZE/2, y: TILESIZE/2 - TILESIZE)
+                        coordNode.zPosition = Constants.Layer.debug.rawValue
+                        blockNode.addChild(coordNode)
+                    }
                     blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
                     addChild(blockNode)
                     blockNodes[IntPoint(x: x, y: y)] = blockNode

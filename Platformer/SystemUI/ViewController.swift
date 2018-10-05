@@ -34,11 +34,14 @@ class ViewController: NSViewController {
     @IBOutlet weak var leftOfLabel: NSTextField!
     @IBOutlet weak var centerLabel: NSTextField!
     @IBOutlet weak var rightOfLabel: NSTextField!
+    @IBOutlet weak var inAirLabel: NSTextField!
+    @IBOutlet weak var onSlopeLabel: NSTextField!
     
     @IBOutlet weak var velocityLabel: NSTextField!
     @IBOutlet weak var offsetLabel: NSTextField!
     @IBOutlet weak var cameraTrackingCheckbox: NSButton!
     @IBOutlet weak var printCollisionsCheckbox: NSButton!
+    @IBOutlet weak var showBlockCoordsCheckbox: NSButton!
     
     @IBOutlet weak var tileCollectionView: UnselectorCollectionView!
     
@@ -98,10 +101,17 @@ class ViewController: NSViewController {
     @IBAction func printCollisionsChanged(_ checkBox: NSButton) {
         AppState.shared.printCollisions = checkBox.state == .on
     }
+    @IBAction func showBlockCoordsChanged(_ checkBox: NSButton) {
+        AppState.shared.showBlockCoords = checkBox.state == .on
+        if let gameScene = gameScene as? GameScene {
+            gameScene.setupBlocks()
+        }
+    }
     
     private func updateUI() {
         cameraTrackingCheckbox.state = AppState.shared.cameraTracking ? .on : .off
         printCollisionsCheckbox.state = AppState.shared.printCollisions ? .on : .off
+        showBlockCoordsCheckbox.state = AppState.shared.showBlockCoords ? .on : .off
         
         switch AppState.shared.editMode {
         case .paint(let tileType):
@@ -132,9 +142,11 @@ extension ViewController: GameSceneDelegate {
         rightOfLabel.backgroundColor = cameraMode == .lockRightOfPlayer ? .red : .lightGray
     }
     
-    func playerVelocityUpdated(velocity: CGPoint, offset: CGFloat) {
-        velocityLabel.stringValue = String(format: "Velocity: %.02f", velocity.x)
-        offsetLabel.stringValue = String(format: "Offset: %.02f", offset)
+    func playerStateUpdated(player: Player) {
+        velocityLabel.stringValue = String(format: "Velocity: %.02f", player.vel.x)
+        offsetLabel.stringValue = String(format: "Offset: %.02f", 0.0)
+        inAirLabel.backgroundColor = player.inAir ? .red : .lightGray
+        onSlopeLabel.backgroundColor = player.lastSlopeTile != nil ? .red : .lightGray
     }
     func setDebugModeUI(_ debugUI: Bool) {
         debugView.isHidden = !debugUI
