@@ -16,5 +16,11 @@ Experements in building a platformer in the style of Super Mario World and/or 3.
 - Slopes from (jrndev #2)[https://web.archive.org/web/20100526071550/http://jnrdev.72dpiarmy.com:80/en/jnrdev2/] by Florian Hufsky
 - Slopes from (tuts+)[https://gamedevelopment.tutsplus.com/tutorials/basic-2d-platformer-physics-part-7-slopes-groundwork--cms-28472]
 
+## Slope Colisions
+
+Collisions on slopes are done by using two bounding boxes on each half of the player and adjusting them if the player is above a slope.
+
+![Adjusting Bounding Box Slope Collision](images/adjustingBoundingBoxSlopeCollision.png "Logo Title Text 1")
+
 
  

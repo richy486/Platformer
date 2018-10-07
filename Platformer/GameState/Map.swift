@@ -135,6 +135,46 @@ class Map {
         return collide
     }
     
+    class func slopesBelow(position: CGPoint) -> (left: TileTypeFlag?, right: TileTypeFlag?) {
+        
+        var y = (Int(position.x) + PH) / TILESIZE
+        let leftCheck = Int(position.x) / TILESIZE
+        let centerCheck = (Int(position.x) + PW/2) / TILESIZE
+        let rightCheck = (Int(position.x) + PW) / TILESIZE
+        
+        var foundSlopeLeft: TileTypeFlag? = nil
+        var foundSlopeRight: TileTypeFlag? = nil
+        
+        while y > AppState.shared.blocks.count {
+            
+            guard foundSlopeLeft != nil && foundSlopeRight != nil else {
+                break
+            }
+            
+            let leftTile = Map.tile(point: IntPoint(x: leftCheck, y: y ))
+            let centerTile = Map.tile(point: IntPoint(x: centerCheck, y: y ))
+            let rightTile = Map.tile(point: IntPoint(x: rightCheck, y: y ))
+            
+            // Left side only cares about slopes that are facing right
+            if foundSlopeLeft != nil && leftTile.intersection(.slope_right).rawValue != 0 {
+                foundSlopeLeft = leftTile
+            }
+            if centerTile != leftTile && foundSlopeLeft != nil && centerTile.intersection(.slope_right).rawValue != 0 {
+                foundSlopeLeft = centerTile
+            }
+            if centerTile != rightTile && foundSlopeRight != nil && centerTile.intersection(.slope_left).rawValue != 0 {
+                foundSlopeRight = centerTile
+            }
+            if foundSlopeRight != nil && rightTile.intersection(.slope_left).rawValue != 0 {
+                foundSlopeRight = rightTile
+            }
+            
+            y += 1
+        }
+        
+        return (left: foundSlopeLeft, right: foundSlopeRight)
+    }
+    
     typealias MapChangeCallback = (_ point: IntPoint, _ tileType: TileTypeFlag) -> Void
     static var mapChangeCallbacks: [MapChangeCallback] = []
     class func listenForMapChanges(_ update: @escaping MapChangeCallback) {
