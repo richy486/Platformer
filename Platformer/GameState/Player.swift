@@ -39,6 +39,7 @@ class Player {
     
     private(set) var lastGroundPosition: Int = Int.max
 //    private var slope_prevtile = IntPoint.zero
+    private(set) var slopesBelow: (left: TileTypeFlag?, right: TileTypeFlag?) = (nil, nil)
     
     
     private var lockjump = false
@@ -184,7 +185,8 @@ class Player {
         vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
         let targetPlayerPostition = CGPoint(x: f.x + vel.x, y: f.y + vel.y)
         
-        let slopesBelow = Map.slopesBelow(position: targetPlayerPostition)
+        slopesBelow = Map.slopesBelow(position: targetPlayerPostition)
+//        print("L: \(slopesBelow.left)\nR: \(slopesBelow.right)")
         
         let slopeResult = collision_slope(movePosition: f, velocity: vel)
         if slopeResult.collide {
@@ -195,11 +197,11 @@ class Player {
         }
         
         // X axis ⇄ Horizontal
-        let hightWithSlope = 13
+        
         if vel.x > 0.01 {
             // Moving right
             
-            let size = CGSize(width: PW, height: slopesBelow.right == nil ? hightWithSlope : PH)
+            let size = CGSize(width: PW, height: slopesBelow.right == nil ? PH : PH_SLOPE)
             
             var collide = false
             while f.x < targetPlayerPostition.x - COLLISION_GIVE && !collide {
@@ -212,7 +214,7 @@ class Player {
         } else if vel.x < -0.01 {
             // Moving left
             
-            let size = CGSize(width: PW, height: slopesBelow.left == nil ? hightWithSlope : PH)
+            let size = CGSize(width: PW, height: slopesBelow.left == nil ? PH : PH_SLOPE)
             
             var collide = false
             while f.x > targetPlayerPostition.x + COLLISION_GIVE && !collide {
@@ -225,13 +227,13 @@ class Player {
         
         // Y axis ⇅ Vertical if not on a slope
         if !slopeResult.collide {
-            let iPlayerL = i.x
-            let iPlayerC = i.x + HALFPW
-            let iPlayerR = i.x + PW
+            let iPlayerL = i.x / TILESIZE
+            let iPlayerC = (i.x + HALFPW) / TILESIZE
+            let iPlayerR = (i.x + PW) / TILESIZE
             
-            let txl = iPlayerL / TILESIZE
-            let txc = iPlayerC / TILESIZE
-            let txr = iPlayerR / TILESIZE
+            let txl = slopesBelow.left == nil ? iPlayerL : iPlayerC
+            let txc = iPlayerC
+            let txr = slopesBelow.right == nil ? iPlayerR : iPlayerC
             
             var alignedBlockX = 0
             var unAlignedBlockX = 0

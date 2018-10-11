@@ -38,7 +38,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var onSlopeLabel: NSTextField!
     
     @IBOutlet weak var velocityLabel: NSTextField!
-    @IBOutlet weak var offsetLabel: NSTextField!
+    @IBOutlet weak var positionLabel: NSTextField!
     @IBOutlet weak var cameraTrackingCheckbox: NSButton!
     @IBOutlet weak var printCollisionsCheckbox: NSButton!
     @IBOutlet weak var showBlockCoordsCheckbox: NSButton!
@@ -144,7 +144,11 @@ extension ViewController: GameSceneDelegate {
     
     func playerStateUpdated(player: Player) {
         velocityLabel.stringValue = String(format: "Velocity: %.02f", player.vel.x)
-        offsetLabel.stringValue = String(format: "Offset: %.02f", 0.0)
+        positionLabel.stringValue = String(format: "%.02f,%.02f (%ld,%ld)",
+                                           player.f.x,
+                                           player.f.y,
+                                           player.i.x/TILESIZE,
+                                           player.i.y/TILESIZE)
         inAirLabel.backgroundColor = player.inAir ? .red : .lightGray
         onSlopeLabel.backgroundColor = player.lastSlopeTile != nil ? .red : .lightGray
     }

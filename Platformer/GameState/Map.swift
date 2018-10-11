@@ -137,7 +137,7 @@ class Map {
     
     class func slopesBelow(position: CGPoint) -> (left: TileTypeFlag?, right: TileTypeFlag?) {
         
-        var y = (Int(position.x) + PH) / TILESIZE
+        var y = (Int(position.y) + PH_SLOPE) / TILESIZE
         let leftCheck = Int(position.x) / TILESIZE
         let centerCheck = (Int(position.x) + PW/2) / TILESIZE
         let rightCheck = (Int(position.x) + PW) / TILESIZE
@@ -145,9 +145,10 @@ class Map {
         var foundSlopeLeft: TileTypeFlag? = nil
         var foundSlopeRight: TileTypeFlag? = nil
         
-        while y > AppState.shared.blocks.count {
+        var i = 0; // Check current tile and the next one
+        while y < AppState.shared.blocks.count && i < 2 {
             
-            guard foundSlopeLeft != nil && foundSlopeRight != nil else {
+            guard foundSlopeLeft == nil || foundSlopeRight == nil else {
                 break
             }
             
@@ -156,20 +157,27 @@ class Map {
             let rightTile = Map.tile(point: IntPoint(x: rightCheck, y: y ))
             
             // Left side only cares about slopes that are facing right
-            if foundSlopeLeft != nil && leftTile.intersection(.slope_right).rawValue != 0 {
+            if foundSlopeLeft == nil && leftTile.intersection(.slope_right).rawValue != 0 {
                 foundSlopeLeft = leftTile
             }
-            if centerTile != leftTile && foundSlopeLeft != nil && centerTile.intersection(.slope_right).rawValue != 0 {
+            if foundSlopeRight == nil && leftTile.intersection(.slope_left).rawValue != 0 {
+                foundSlopeRight = leftTile
+            }
+            if centerTile != leftTile && foundSlopeLeft == nil && centerTile.intersection(.slope_right).rawValue != 0 {
                 foundSlopeLeft = centerTile
             }
-            if centerTile != rightTile && foundSlopeRight != nil && centerTile.intersection(.slope_left).rawValue != 0 {
+            if centerTile != rightTile && foundSlopeRight == nil && centerTile.intersection(.slope_left).rawValue != 0 {
                 foundSlopeRight = centerTile
             }
-            if foundSlopeRight != nil && rightTile.intersection(.slope_left).rawValue != 0 {
+            if foundSlopeRight == nil && rightTile.intersection(.slope_left).rawValue != 0 {
                 foundSlopeRight = rightTile
+            }
+            if foundSlopeLeft == nil && rightTile.intersection(.slope_right).rawValue != 0 {
+                foundSlopeLeft = rightTile
             }
             
             y += 1
+            i += 1
         }
         
         return (left: foundSlopeLeft, right: foundSlopeRight)

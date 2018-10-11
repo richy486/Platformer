@@ -84,6 +84,7 @@ extension CGPoint {
 let VELMOVINGFRICTION = CGFloat(0.2)
 let PH = Int(25)      //Player height
 let PW = Int(22)      //Player width
+let PH_SLOPE = Int(13/2)
 let HALFPH = Int(12)
 let HALFPW = Int(11)
 let TILESIZE = Int(32)
@@ -129,6 +130,8 @@ class GameScene: SKScene {
     
     private var player = Player()
     private var playerNode: SKShapeNode!
+    private var playerNodeLeft: SKShapeNode!
+    private var playerNodeRight: SKShapeNode!
 
     private var blockNodes: [IntPoint: SKNode] = [:]
     
@@ -152,7 +155,7 @@ class GameScene: SKScene {
     private let collideXBlockNode: SKShapeNode = {
         let node = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
         node.fillColor = .clear
-        node.strokeColor = .orange
+        node.strokeColor = .green
         node.position = CGPoint(x: 0, y: 0)
         node.isHidden = true
         node.zPosition = Constants.Layer.debug.rawValue
@@ -237,6 +240,21 @@ class GameScene: SKScene {
         playerNode.name = "player"
         playerNode.zPosition = Constants.Layer.active.rawValue
         addChild(playerNode)
+        
+        playerNodeLeft = SKShapeNode(rect: CGRect(x: 0, y: 0, width: PW/2, height: PH))
+        playerNodeLeft.fillColor = #colorLiteral(red: 0, green: 0.5694751143, blue: 1, alpha: 1)
+        playerNodeLeft.position = CGPoint(x: 0, y: 0)
+        playerNodeLeft.name = "playerLeft"
+        playerNodeLeft.zPosition = Constants.Layer.active.rawValue
+        playerNode.addChild(playerNodeLeft)
+        
+        playerNodeRight = SKShapeNode(rect: CGRect(x: 0, y: 0, width: PW/2, height: PH))
+        playerNodeRight.fillColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        playerNodeRight.position = CGPoint(x: PW/2, y: 0)
+        playerNodeRight.name = "playerRight"
+        playerNodeRight.zPosition = Constants.Layer.active.rawValue
+        playerNode.addChild(playerNodeRight)
+        
         
         restart()
         
@@ -443,6 +461,9 @@ class GameScene: SKScene {
 
         let movementDirectionX = player.f.x - playerNode.position.x
         playerNode.position = player.f
+        
+        playerNodeLeft.yScale = player.slopesBelow.left == nil ? 1 : CGFloat(PH_SLOPE)/CGFloat(PH)
+        playerNodeRight.yScale = player.slopesBelow.right == nil ? 1 : CGFloat(PH_SLOPE)/CGFloat(PH)
         
         gameSceneDelegate?.playerStateUpdated(player: player)
         

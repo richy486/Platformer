@@ -915,7 +915,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <clipView key="contentView" ambiguous="YES" id="oEp-h4-ty3">
                                             <rect key="frame" x="1" y="1" width="312" height="195"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j2M-Wq-2Jc">
                                                     <rect key="frame" x="0.0" y="-229" width="310" height="424"/>
@@ -1341,7 +1341,7 @@
                                             <rect key="frame" x="-100" y="-100" width="312" height="15"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="0.47161572052401746" horizontal="NO" id="1y8-bC-ITo">
+                                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="0.99126637554585151" horizontal="NO" id="1y8-bC-ITo">
                                             <rect key="frame" x="313" y="1" width="15" height="195"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -1350,7 +1350,7 @@
                                         <rect key="frame" x="748" y="30" width="52" height="100"/>
                                         <clipView key="contentView" id="iZd-DD-i8j">
                                             <rect key="frame" x="1" y="1" width="50" height="98"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <collectionView selectable="YES" id="DFh-oj-NtQ" customClass="UnselectorCollectionView" customModule="Platformer" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="98"/>
@@ -1410,8 +1410,8 @@
                         <outlet property="jumpLabel" destination="xqf-7N-TUr" id="YH3-p0-OGs"/>
                         <outlet property="leftLabel" destination="XIG-Ap-nTs" id="3Cp-H6-7sb"/>
                         <outlet property="leftOfLabel" destination="f2n-WL-0KK" id="6xd-Hc-49N"/>
-                        <outlet property="offsetLabel" destination="tFa-Uf-9Ba" id="ZO6-nm-WXN"/>
                         <outlet property="onSlopeLabel" destination="pYD-pI-wDq" id="1qF-7t-Djm"/>
+                        <outlet property="positionLabel" destination="tFa-Uf-9Ba" id="ZO6-nm-WXN"/>
                         <outlet property="printCollisionsCheckbox" destination="OUE-x2-rib" id="4nA-Bi-H5I"/>
                         <outlet property="rightLabel" destination="J6i-rg-APa" id="eHO-iC-Zqs"/>
                         <outlet property="rightOfLabel" destination="K27-qN-ghW" id="y0T-3P-yYQ"/>
