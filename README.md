@@ -22,5 +22,11 @@ Collisions on slopes are done by using two bounding boxes on each half of the pl
 
 ![Adjusting Bounding Box Slope Collision](images/adjustingBoundingBoxSlopeCollision.png "Logo Title Text 1")
 
+This is similar to the solution found on [this](https://forums.tigsource.com/index.php?topic=47713.msg1135390#msg1135390) post.
 
- 
+## Other Links
+
+- http://www.metanetsoftware.com/technique/tutorialA.html
+- http://lazyfoo.net/SDL_tutorials/index.php
+- http://danjb.com/blog/tilebased_platformer_slopes
+- https://forums.tigsource.com/index.php?topic=47713.0
