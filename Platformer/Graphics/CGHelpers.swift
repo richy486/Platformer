@@ -10,6 +10,7 @@
 import CoreGraphics
 
 // MARK: Lerpable protocol
+
 public protocol Lerpable {
     func lerp(min: Self, max: Self) -> Self
     func ilerp(min: Self, max: Self) -> Self
@@ -19,6 +20,12 @@ public protocol Lerpable {
 
 public protocol Clampable {
     func clamp(min: Self, max: Self) -> Self
+}
+
+// MARK: Vector maths protocol
+
+public protocol Vector {
+    func rotated(radians: CGFloat) -> Self
 }
 
 // MARK: - CGFloat
@@ -177,6 +184,32 @@ extension CGPoint: Clampable {
         return CGPoint(x: x, y: y)
     }
     
+}
+
+// MARK: Vector maths
+
+extension CGPoint: Vector {
+    public func rotated(radians: CGFloat) -> CGPoint {
+        let ca = cos(radians)
+        let sa = sin(radians)
+        return CGPoint(x: ca*x - sa*y, y: sa*x - ca*y)
+    }
+    public var radians: CGFloat {
+//        return atan(y/x)
+        return atan2(y, x)
+    }
+    public var length: CGFloat {
+        return sqrt(x*x + y*y)
+    }
+    public var normalized: CGPoint {
+        let length = self.length
+
+        guard length > 0 else {
+            return CGPoint.zero
+        }
+        
+        return CGPoint(x: x/length, y: y/length)
+    }
 }
 
 // MARK: - CGSize

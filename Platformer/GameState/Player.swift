@@ -46,9 +46,27 @@ class Player {
     private(set) var inAir = false
     private(set) var lastSlopeTile: IntPoint?
     
+//    private enum Direction: Int {
+////        case notIn = -1     // -1 ... we didn't move from slope to slope
+////        case exitDown = 0   //  0 ... we left a slope after moving down
+////        case exitUp = 1     //  1 ... we left a slope after moving up
+//        case stationary
+//
+//        case up
+//        case down
+//        case left
+//        case right
+//
+//        case upLeft
+//        case upRight
+//        case downLeft
+//        case doenRight
+//    }
+    
     func restart() {
         lockjump = false
-        inAir = false
+        inAir = true//false
+        lastSlopeTile = nil
         
         f = startingPlayerPosition
         fOld = f
@@ -58,6 +76,12 @@ class Player {
     }
     
     func update(keysDown: [KeyCode: Bool]) {
+        
+        // Lets add gravity here
+        if inAir {
+            vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
+        }
+        
         var movementDirectionX = CGFloat(0.0)
         if keysDown[.left] == keysDown[.right] {
             // Both left and right down or both left and right up
@@ -95,6 +119,8 @@ class Player {
         fOld = f
         
         collision_detection_map()
+        
+//        print(String(format: "Velocity: %.02f,%.02f", vel.x, vel.y))
     }
     
     // MARK: Movement
@@ -102,17 +128,43 @@ class Player {
     // void CPlayer::accelerate(float direction)
     func accelerateX(_ direction: CGFloat) {
         
+//        vel.x += AppState.shared.VELMOVINGADD * direction
         
-        vel.x += AppState.shared.VELMOVINGADD * direction
+        var accelVel = CGPoint(x: AppState.shared.VELMOVINGADD, y: 0)
+        #if PUSHUPSLOPE
+        if let lastSlopeTile = lastSlopeTile {
+//        if true {
+//            TileTypeFlag.slope_right//
+            let tile = Map.tile(point: lastSlopeTile)
+            let sDirection = slopeDirection(forVelocity: CGPoint(x: AppState.shared.VELMOVINGADD * direction, y: 0),
+                                            andTile: tile)
+
+            // ??????????
+
+            accelVel = accelVel.rotated(radians: sDirection.radians)
+//            accelVel.y = -vel.y
+//            vel.y = 0
+            vel += accelVel
+        } else {
+            accelVel.x *= direction
+            vel += accelVel
+        }
+        #else
+        accelVel.x *= direction
+        vel += accelVel
+        #endif
+//        accelVel = accelVel.rotated(radians: slopeMoveDirection.radians)
+
+        
+        
+        
+        
         let maxVel: CGFloat
         if keysDown[.shift] == true {
             maxVel = AppState.shared.VELTURBOMOVING
         } else {
             maxVel = AppState.shared.VELMOVING
         }
-        
-        
-        
         if abs(vel.x) > maxVel {
             vel.x = maxVel * direction
         }
@@ -172,17 +224,56 @@ class Player {
         return fallThrough
     }
     
+    // This only works for 45º slopes
+    private var slopeMoveDirection: Direction {
+        var direction: Direction = .stationary
+        if let lastSlopeTile = lastSlopeTile {
+            if Map.tile(point: lastSlopeTile).intersection(.slope_right).rawValue != 0 {
+                direction = vel.x > 0
+                    ? .downRight
+                    : .upRight
+                
+            } else if Map.tile(point: lastSlopeTile).contains(.slope_left) {
+                direction = vel.x < 0
+                    ? .downLeft
+                    : .upLeft
+            }
+        }
+        return direction
+    }
+    
+    private func slopeDirection(forVelocity velocity: CGPoint, andTile tile: TileTypeFlag) -> Direction {
+        var direction: Direction = .stationary
+        
+        if tile.intersection(.slope_right).rawValue != 0 {
+            if velocity.x > 0 {
+                direction = .downRight
+            } else if velocity.x < 0 {
+                direction = .upLeft
+            }
+            
+        } else if tile.contains(.slope_left) {
+            if velocity.x > 0 {
+                direction = .upRight
+            } else if velocity.x < 0 {
+                direction = .downLeft
+            }
+        }
+        
+        return direction
+    }
+    
     // MARK: Collisions
     
     // Can change f in this function
-    func collision_detection_map() {
+    private func collision_detection_map() {
         
         if AppState.shared.printCollisions {
             print("--- frame ---")
         }
         
-        // Lets add gravity here
-        vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
+//        // Lets add gravity here
+//        vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
         let targetPlayerPostition = CGPoint(x: f.x + vel.x, y: f.y + vel.y)
         
         slopesBelow = Map.slopesBelow(position: targetPlayerPostition)
@@ -193,7 +284,11 @@ class Player {
             f.y = slopeResult.position.y
             inAir = false
             lastSlopeTile = slopeResult.collideTile
-            vel.y = CGFloat(1)
+//            #if UNKNOWN
+            vel.y = CGFloat(1) // What is this for?
+//            #endif
+        } else {
+            lastSlopeTile = nil
         }
         
         // X axis ⇄ Horizontal
@@ -303,9 +398,11 @@ class Player {
         }
     
         // Reset gravity if on the ground
+        #if UNKNOWN
         if !inAir {
             vel.y = AppState.shared.GRAVITATION
         }
+        #endif
     }
     
     // bool CPlayer::collision_slope(int sx, int sy, int &tsx;, int &tsy;)
@@ -418,6 +515,7 @@ class Player {
             }
             
             if abs(vel.x) > 0.0 {
+                print("collide x")
                 vel.x = 0.0
             }
             if abs(oldvel.x) > 0.0 {
@@ -532,11 +630,13 @@ class Player {
         return (position, !inAir, inAir, ty)
     }
     
+    
+    
     // ObjectBase.h
-    private func cap(fallingVelocity vel: CGFloat) -> CGFloat {
-        if vel > MAXVELY {
+    private func cap(fallingVelocity velY: CGFloat) -> CGFloat {
+        if velY > MAXVELY {
             return MAXVELY
         }
-        return vel
+        return velY
     }
 }

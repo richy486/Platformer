@@ -44,6 +44,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var showBlockCoordsCheckbox: NSButton!
     
     @IBOutlet weak var tileCollectionView: UnselectorCollectionView!
+    @IBOutlet weak var rotateCircle: NSImageView!
+    
     
     weak var gameScene: SKScene!
     
@@ -86,6 +88,9 @@ class ViewController: NSViewController {
                 tileCollectionView.setFrameSize(contentSize)
             }
         }
+        
+//        velocitySlider.minValue = -Double.pi
+//        velocitySlider.maxValue = Double.pi
         
         updateUI()
     }
@@ -143,7 +148,14 @@ extension ViewController: GameSceneDelegate {
     }
     
     func playerStateUpdated(player: Player) {
-        velocityLabel.stringValue = String(format: "Velocity: %.02f", player.vel.x)
+        let velRad = player.vel.radians
+        let velNorm = player.vel.normalized
+        let normalRad = velNorm.radians
+        
+        velocityLabel.stringValue = String(format: "Velocity: %.02f,%.02f, norm: %.02f,%.02f (%.02fn %.02f) ",
+                                           player.vel.x, player.vel.y,
+                                           velNorm.x, velNorm.y,
+                                           normalRad, velRad)
         positionLabel.stringValue = String(format: "%.02f,%.02f (%ld,%ld)",
                                            player.f.x,
                                            player.f.y,
@@ -151,6 +163,14 @@ extension ViewController: GameSceneDelegate {
                                            player.i.y/TILESIZE)
         inAirLabel.backgroundColor = player.inAir ? .red : .lightGray
         onSlopeLabel.backgroundColor = player.lastSlopeTile != nil ? .red : .lightGray
+        
+        var transform = CGAffineTransform.identity
+        transform = transform.scaledBy(x: 1, y: -1)
+        transform = transform.translatedBy(x: 16, y: 16)
+        transform = transform.rotated(by: normalRad.isNaN ? CGFloat.zero : normalRad)
+        transform = transform.translatedBy(x: -16, y: -16)
+        
+        rotateCircle.layer?.setAffineTransform(transform)
     }
     func setDebugModeUI(_ debugUI: Bool) {
         debugView.isHidden = !debugUI

@@ -879,13 +879,14 @@
                                         </gridCells>
                                     </gridView>
                                     <gridView xPlacement="leading" yPlacement="bottom" rowAlignment="none" translatesAutoresizingMaskIntoConstraints="NO" id="2yM-I4-4eO">
-                                        <rect key="frame" x="727" y="321" width="53" height="40"/>
+                                        <rect key="frame" x="621" y="321" width="159" height="40"/>
                                         <rows>
                                             <gridRow id="4Dy-0d-CZ7"/>
                                             <gridRow id="6GB-jR-JvG"/>
                                         </rows>
                                         <columns>
                                             <gridColumn id="40v-Qy-V7O"/>
+                                            <gridColumn id="XnI-qV-0to"/>
                                         </columns>
                                         <gridCells>
                                             <gridCell row="4Dy-0d-CZ7" column="40v-Qy-V7O" id="jMW-Fm-KXU">
@@ -898,6 +899,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                             </gridCell>
+                                            <gridCell row="4Dy-0d-CZ7" column="XnI-qV-0to" id="Dfw-Wr-Ldh"/>
                                             <gridCell row="6GB-jR-JvG" column="40v-Qy-V7O" id="YOM-HI-G9H">
                                                 <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tFa-Uf-9Ba">
                                                     <rect key="frame" x="0.0" y="0.0" width="42" height="17"/>
@@ -908,6 +910,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                             </gridCell>
+                                            <gridCell row="6GB-jR-JvG" column="XnI-qV-0to" id="EsO-fv-Gc9"/>
                                         </gridCells>
                                     </gridView>
                                     <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cNX-Lt-YhT">
@@ -915,7 +918,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <clipView key="contentView" ambiguous="YES" id="oEp-h4-ty3">
                                             <rect key="frame" x="1" y="1" width="312" height="195"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j2M-Wq-2Jc">
                                                     <rect key="frame" x="0.0" y="-229" width="310" height="424"/>
@@ -1350,7 +1353,7 @@
                                         <rect key="frame" x="748" y="30" width="52" height="100"/>
                                         <clipView key="contentView" id="iZd-DD-i8j">
                                             <rect key="frame" x="1" y="1" width="50" height="98"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <collectionView selectable="YES" id="DFh-oj-NtQ" customClass="UnselectorCollectionView" customModule="Platformer" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="98"/>
@@ -1379,6 +1382,11 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
+                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tOo-96-f2V">
+                                        <rect key="frame" x="734" y="215" width="32" height="32"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="rotate_circle" id="mYY-ci-inp"/>
+                                    </imageView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="vXP-fv-PjW" secondAttribute="bottom" constant="30" id="375-tQ-qwe"/>
@@ -1415,6 +1423,7 @@
                         <outlet property="printCollisionsCheckbox" destination="OUE-x2-rib" id="4nA-Bi-H5I"/>
                         <outlet property="rightLabel" destination="J6i-rg-APa" id="eHO-iC-Zqs"/>
                         <outlet property="rightOfLabel" destination="K27-qN-ghW" id="y0T-3P-yYQ"/>
+                        <outlet property="rotateCircle" destination="tOo-96-f2V" id="f9s-hV-5yr"/>
                         <outlet property="runLabel" destination="PGv-Tl-ZwP" id="llX-TK-DVD"/>
                         <outlet property="showBlockCoordsCheckbox" destination="gzW-sG-lFJ" id="aiB-dO-ea6"/>
                         <outlet property="skView" destination="m2S-Jp-Qdl" id="qux-te-cT3"/>
@@ -1432,4 +1441,7 @@
             <point key="canvasLocation" x="75" y="817"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="rotate_circle" width="32" height="32"/>
+    </resources>
 </document>

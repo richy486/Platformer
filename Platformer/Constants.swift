@@ -9,8 +9,7 @@
 import Foundation
 
 struct Constants {
-//    let
-//    public static let NSCalendarDayChanged: NSNotification.Name
+
     public static let kNotificationCollide = NSNotification.Name(rawValue: "kNotificationCollide")
     public static let kCollideXPosition = "kCollideXPosition"
     public static let kCollideYLeftPosition = "kCollideYLeftPosition"

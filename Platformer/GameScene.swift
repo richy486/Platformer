@@ -37,6 +37,9 @@ enum KeyCode: Int, CaseIterable {
     case d = 2
     case tab = 48
     
+    case lessThan = 43
+    case greaterThan = 47
+    
 }
 
 enum CameraMode {
@@ -44,14 +47,6 @@ enum CameraMode {
     case lockLeftOfPlayer
     case lockRightOfPlayer
 }
-
-enum Direction {
-    case up
-    case down
-    case left
-    case right
-}
-
 
 public struct IntPoint: Hashable {
     public var x: Int
@@ -84,7 +79,7 @@ extension CGPoint {
 let VELMOVINGFRICTION = CGFloat(0.2)
 let PH = Int(25)      //Player height
 let PW = Int(22)      //Player width
-let PH_SLOPE = Int(13/2)
+let PH_SLOPE = PH - HALFPW - 1
 let HALFPH = Int(12)
 let HALFPW = Int(11)
 let TILESIZE = Int(32)
@@ -141,6 +136,8 @@ class GameScene: SKScene {
     private var showDebugUI = true
     
     private var startingCameraPosition = CGPoint.zero
+    
+    private var forcedKeysDown: [KeyCode : Bool] = [:]
     
     private let selectedBlockNode: SKShapeNode = {
         let node = SKShapeNode(rect: CGRect(x: 0, y: 0, width: TILESIZE, height: TILESIZE))
@@ -444,7 +441,6 @@ class GameScene: SKScene {
         if keysDown[.r] == true {
             keysDown[.r] = false
             restart()
-            
         }
         
         if keysDown[.tab] == true {
@@ -455,6 +451,28 @@ class GameScene: SKScene {
             cameraMoveBox.isHidden = !showDebugUI
             forwardFocusBox.isHidden = !showDebugUI
             cameraCenter.isHidden = !showDebugUI
+        }
+        
+        if keysDown[.lessThan] == true {
+            keysDown[.lessThan] = false
+            if let _ = forcedKeysDown[.left] {
+                forcedKeysDown.removeValue(forKey: .left)
+                keysDown[.left] = false
+            } else {
+                forcedKeysDown[.left] = true
+            }
+        }
+        if keysDown[.greaterThan] == true {
+            keysDown[.greaterThan] = false
+            if let _ = forcedKeysDown[.right] {
+                forcedKeysDown.removeValue(forKey: .right)
+                keysDown[.right] = false
+            } else {
+                forcedKeysDown[.right] = true
+            }
+        }
+        for (key, value) in forcedKeysDown {
+            keysDown[key] = value
         }
         
         player.update(keysDown: keysDown)
