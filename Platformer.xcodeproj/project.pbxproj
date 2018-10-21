@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		B914DB66214C867300628D23 /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B914DB65214C867300628D23 /* SliderView.swift */; };
+		B91F10ED217C146C00F15EA6 /* Collision.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91F10EC217C146C00F15EA6 /* Collision.swift */; };
+		B91F10EF217C16F600F15EA6 /* CollisionObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91F10EE217C16F600F15EA6 /* CollisionObject.swift */; };
 		B949B3FA216051B000DFA633 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = B949B3F9216051B000DFA633 /* Player.swift */; };
 		B949B3FC21605ABA00DFA633 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B949B3FB21605ABA00DFA633 /* Constants.swift */; };
 		B950B5B1216F9C420011A44B /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950B5B0216F9C420011A44B /* Direction.swift */; };
@@ -30,6 +32,8 @@
 
 /* Begin PBXFileReference section */
 		B914DB65214C867300628D23 /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
+		B91F10EC217C146C00F15EA6 /* Collision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collision.swift; sourceTree = "<group>"; };
+		B91F10EE217C16F600F15EA6 /* CollisionObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollisionObject.swift; sourceTree = "<group>"; };
 		B949B3F8215FD28600DFA633 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		B949B3F9216051B000DFA633 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		B949B3FB21605ABA00DFA633 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -138,6 +142,8 @@
 				B95F038A212FB84C003E84E8 /* AppState.swift */,
 				B9B646912152920600AE3A1A /* Map.swift */,
 				B949B3F9216051B000DFA633 /* Player.swift */,
+				B91F10EC217C146C00F15EA6 /* Collision.swift */,
+				B91F10EE217C16F600F15EA6 /* CollisionObject.swift */,
 			);
 			path = GameState;
 			sourceTree = "<group>";
@@ -218,6 +224,7 @@
 				B95F037D212EFAA3003E84E8 /* ViewController.swift in Sources */,
 				B95F037B212EFAA3003E84E8 /* GameScene.swift in Sources */,
 				B9B6469C2156ED1A00AE3A1A /* UnselectorCollectionView.swift in Sources */,
+				B91F10EF217C16F600F15EA6 /* CollisionObject.swift in Sources */,
 				B9B6469E215D211F00AE3A1A /* BlockFactory.swift in Sources */,
 				B949B3FA216051B000DFA633 /* Player.swift in Sources */,
 				B95F0375212EFAA3003E84E8 /* AppDelegate.swift in Sources */,
@@ -225,6 +232,7 @@
 				B950B5B1216F9C420011A44B /* Direction.swift in Sources */,
 				B949B3FC21605ABA00DFA633 /* Constants.swift in Sources */,
 				B95F038B212FB84C003E84E8 /* AppState.swift in Sources */,
+				B91F10ED217C146C00F15EA6 /* Collision.swift in Sources */,
 				B9B6469A2156EA1C00AE3A1A /* FirstResponderWindow.swift in Sources */,
 				B9C905F121508E5B007BCF00 /* CGHelpers.swift in Sources */,
 				B9B6469521553D5500AE3A1A /* TileItem.swift in Sources */,

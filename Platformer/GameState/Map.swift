@@ -22,6 +22,8 @@ struct TileTypeFlag: OptionSet {
     static let slope_left = TileTypeFlag(rawValue: 1 << 6)  // ◿
     static let slope_right = TileTypeFlag(rawValue: 1 << 7) // ◺
     
+    static let pickup = TileTypeFlag(rawValue: 1 << 8)
+    
     // 0000
     // 1010
     // 8421
@@ -39,8 +41,9 @@ class Map {
         .solid_on_top,
         [.breakable, .solid],
         [.powerup, .solid],
-        .slope_left, // ◿
-        .slope_right // ◺
+        .slope_left,    // ◿
+        .slope_right,   // ◺
+        .pickup
     ]
 
     class func tile(point: IntPoint) -> TileTypeFlag {
@@ -77,6 +80,27 @@ class Map {
         let isGap = leftSolid && !pointSolid && rightSolid && !topLeftSolid && !topSolid && !topRightSolid
         
         return isGap
+    }
+    
+    class func slopeDirection(forVelocity velocity: CGPoint, andTile tile: TileTypeFlag) -> Direction {
+        var direction: Direction = .stationary
+        
+        if tile.intersection(.slope_right).rawValue != 0 {
+            if velocity.x > 0 {
+                direction = .downRight
+            } else if velocity.x < 0 {
+                direction = .upLeft
+            }
+            
+        } else if tile.contains(.slope_left) {
+            if velocity.x > 0 {
+                direction = .upRight
+            } else if velocity.x < 0 {
+                direction = .downLeft
+            }
+        }
+        
+        return direction
     }
 
     class func setMap(x: Int, y: Int, tileType: TileTypeFlag) {
