@@ -55,4 +55,25 @@ struct Direction: OptionSet {
         
         return radians
     }
+    
+    var string: String {
+        guard self != .stationary else {
+            return "Stationary"
+        }
+        
+        var str = ""
+        if self.contains(.up) {
+            str.append("Up")
+        } else if self.contains(.down) {
+            str.append("Down")
+        }
+        
+        if self.contains(.left) {
+            str.append(", Left")
+        } else if self.contains(.right) {
+            str.append(", Right")
+        }
+        
+        return str
+    }
 }

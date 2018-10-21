@@ -162,7 +162,7 @@ extension ViewController: GameSceneDelegate {
                                            player.i.x/TILESIZE,
                                            player.i.y/TILESIZE)
         inAirLabel.backgroundColor = player.inAir ? .red : .lightGray
-        onSlopeLabel.backgroundColor = player.lastSlopeTile != nil ? .red : .lightGray
+        onSlopeLabel.backgroundColor = player.lastSlopeTilePoint != nil ? .red : .lightGray
         
         var transform = CGAffineTransform.identity
         transform = transform.scaledBy(x: 1, y: -1)

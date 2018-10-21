@@ -566,7 +566,7 @@ class GameScene: SKScene {
         
         if player.inAir {
             playerNode.strokeColor = #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)
-        } else if player.lastSlopeTile != nil {
+        } else if player.lastSlopeTilePoint != nil {
             playerNode.strokeColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         } else {
             playerNode.strokeColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
