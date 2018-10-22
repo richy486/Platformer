@@ -23,6 +23,7 @@ struct TileTypeFlag: OptionSet {
     static let slope_right = TileTypeFlag(rawValue: 1 << 7) // ◺
     
     static let pickup = TileTypeFlag(rawValue: 1 << 8)
+    static let player_start = TileTypeFlag(rawValue: 1 << 9)
     
     // 0000
     // 1010
@@ -43,7 +44,8 @@ class Map {
         [.powerup, .solid],
         .slope_left,    // ◿
         .slope_right,   // ◺
-        .pickup
+        .pickup,
+        .player_start
     ]
 
     class func tile(point: IntPoint) -> TileTypeFlag {
@@ -68,7 +70,6 @@ class Map {
     }
     
     class func isGap(point: IntPoint) -> Bool {
-//        if (fLeftSolid && !fCenterSolid && fRightSolid && !fTopLeftSolid && !fTopCenterSolid && !fTopRightSolid) {
         
         let pointSolid = tile(point: point).contains(.solid)
         let leftSolid = tile(point: IntPoint(x: point.x-1, y: point.y) ).contains(.solid)

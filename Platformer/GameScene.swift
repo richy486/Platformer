@@ -135,8 +135,6 @@ class GameScene: SKScene {
     private var localCameraMode = CameraMode.center
     private var showDebugUI = true
     
-    private var startingCameraPosition = CGPoint.zero
-    
     private var forcedKeysDown: [KeyCode : Bool] = [:]
     
     private let selectedBlockNode: SKShapeNode = {
@@ -214,22 +212,13 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         
-        player.startingPlayerPosition = CGPoint(x: size.width/2 - CGFloat(PW)/2,
-                                         y: size.height - CGFloat(2 * TILESIZE))
-        startingCameraPosition = CGPoint(x: size.width/2,
-                                         y: ((size.height / CGFloat(TILESIZE)) / 2) * CGFloat(TILESIZE))
-        
         AppState.load()
         
-        localCameraTarget = startingCameraPosition
         localCamera.yScale = -1
-        localCamera.position = localCameraTarget
-        
         addChild(localCamera)
         self.camera = localCamera
         
         
-        setupBlocks()
         
         playerNode = SKShapeNode(rect: CGRect(x: 0, y: 0, width: PW, height: PH))
         playerNode.fillColor = .red
@@ -252,7 +241,8 @@ class GameScene: SKScene {
         playerNodeRight.zPosition = Constants.Layer.active.rawValue
         playerNode.addChild(playerNodeRight)
         
-        
+        setupBlocks()
+        setupActors()
         restart()
         
         addChild(selectedBlockNode)
@@ -263,7 +253,6 @@ class GameScene: SKScene {
         addChild(cameraMoveBox)
         addChild(forwardFocusBox)
         addChild(cameraCenter)
-        
         
         Map.listenForMapChanges { [weak self] (point, tileType) in
             
@@ -435,11 +424,14 @@ class GameScene: SKScene {
             keysDown[.d] = false
             AppState.load()
             setupBlocks()
+            setupActors()
             restart()
         }
         
         if keysDown[.r] == true {
             keysDown[.r] = false
+            setupBlocks()
+            setupActors()
             restart()
         }
         
@@ -578,9 +570,9 @@ class GameScene: SKScene {
     private func restart() {
         player.restart()
         
-        localCameraTarget = startingCameraPosition
+        localCameraTarget.x = player.f.x + CGFloat(PW)/2
+        localCameraTarget.y = player.f.y + CGFloat(PH) + CGFloat(AppState.shared.BLOCKSOFFCENTER * TILESIZE)
         localCamera.position = localCameraTarget
-        localCameraMode = .center
     }
     
     func setupBlocks() {
@@ -607,6 +599,20 @@ class GameScene: SKScene {
                     blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
                     addChild(blockNode)
                     blockNodes[IntPoint(x: x, y: y)] = blockNode
+                }
+            }
+        }
+    }
+    
+    func setupActors() {
+        for (y, xBlocks) in AppState.shared.blocks.enumerated() {
+            for (x, blockVal) in xBlocks.enumerated() {
+                let tileType = TileTypeFlag(rawValue: blockVal)
+                if tileType.contains(.player_start) {
+                    player.f = CGPoint(x: x*TILESIZE + (TILESIZE/2) - PW/2,
+                                       y: y*TILESIZE + (TILESIZE - PH) - 1)
+                    
+                    
                 }
             }
         }

@@ -75,6 +75,13 @@ class BlockFactory {
             blockNode.zPosition = Constants.Layer.active.rawValue
             return blockNode
             
+        } else if tileType.intersection(.player_start).rawValue != 0 {
+            let blockNode = SKSpriteNode(imageNamed: "playerStart")
+            blockNode.anchorPoint = CGPoint(x: 0, y: 1)
+            blockNode.yScale = -1
+            blockNode.zPosition = Constants.Layer.active.rawValue
+            return blockNode
+            
         } else {
             print("Unhandled block: \(tileType), \(String(tileType.rawValue, radix: 2))")
             // Unhandled blocks

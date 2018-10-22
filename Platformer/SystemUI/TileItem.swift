@@ -56,6 +56,10 @@ class TileItem: NSCollectionViewItem {
             tileLabel.isHidden = true
             tileImageView.image = #imageLiteral(resourceName: "pickup")
             tileImageView.isHidden = false
+        case .player_start:
+            tileLabel.isHidden = true
+            tileImageView.image = #imageLiteral(resourceName: "playerStart")
+            tileImageView.isHidden = false
         default:
             break
         }

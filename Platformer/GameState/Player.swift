@@ -10,8 +10,6 @@ import Foundation
 
 class Player: Collision, CollisionObject {
     
-    var startingPlayerPosition = CGPoint.zero
-    
     private var _i = IntPoint.zero
     internal(set) var i: IntPoint { //x, y coordinate (top left of the player rectangle)
         set {
@@ -35,10 +33,8 @@ class Player: Collision, CollisionObject {
     
     internal(set) var vel: CGPoint = CGPoint.zero //velocity on x, y axis
     internal var fOld: CGPoint = CGPoint.zero
-//    private var oldvel: CGPoint = CGPoint.zero
     
     internal(set) var lastGroundPosition: Int = Int.max
-//    private var slope_prevtile = IntPoint.zero
     internal(set) var slopesBelow: (left: TileTypeFlag?, right: TileTypeFlag?) = (nil, nil)
     
     
@@ -46,33 +42,14 @@ class Player: Collision, CollisionObject {
     internal(set) var inAir = false
     internal(set) var lastSlopeTilePoint: IntPoint?
     
-//    private enum Direction: Int {
-////        case notIn = -1     // -1 ... we didn't move from slope to slope
-////        case exitDown = 0   //  0 ... we left a slope after moving down
-////        case exitUp = 1     //  1 ... we left a slope after moving up
-//        case stationary
-//
-//        case up
-//        case down
-//        case left
-//        case right
-//
-//        case upLeft
-//        case upRight
-//        case downLeft
-//        case doenRight
-//    }
-    
     func restart() {
         lockjump = false
-        inAir = true//false
+        inAir = true
         lastSlopeTilePoint = nil
         
-        f = startingPlayerPosition
         fOld = f
         
         vel = CGPoint.zero
-//        oldvel = CGPoint.zero
     }
     
     func update(keysDown: [KeyCode: Bool]) {
@@ -129,21 +106,8 @@ class Player: Collision, CollisionObject {
     func accelerateX(_ direction: CGFloat) {
         
         var accelVel = CGPoint(x: AppState.shared.VELMOVINGADD, y: 0)
-        #if PUSHUPSLOPE
-            if let lastSlopeTilePoint = lastSlopeTilePoint {
-                let tile = Map.tile(point: lastSlopeTilePoint)
-                let sDirection = Map.slopeDirection(forVelocity: CGPoint(x: AppState.shared.VELMOVINGADD * direction, y: 0),
-                                                andTile: tile)
-                accelVel = accelVel.rotated(radians: sDirection.radians)
-                vel += accelVel
-            } else {
-                accelVel.x *= direction
-                vel += accelVel
-            }
-        #else
-            accelVel.x *= direction
-            vel += accelVel
-        #endif
+        accelVel.x *= direction
+        vel += accelVel
         
         let maxVel: CGFloat
         if keysDown[.shift] == true {
@@ -155,16 +119,6 @@ class Player: Collision, CollisionObject {
             vel.x = maxVel * direction
         }
     }
-    
-    // for testing
-    //    func accelerateY(_ direction: CGFloat) {
-    //        vel.y += AppState.shared.VELMOVINGADD * direction
-    //        let maxVel: CGFloat = AppState.shared.VELMOVING
-    //
-    //        if abs(vel.y) > maxVel {
-    //            vel.y = maxVel * direction
-    //        }
-    //    }
     
     func decreaseVelocity() {
         if vel.x > 0.0 {
