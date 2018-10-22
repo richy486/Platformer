@@ -73,6 +73,7 @@ class BlockFactory {
             blockNode.anchorPoint = CGPoint(x: 0, y: 1)
             blockNode.yScale = -1
             blockNode.zPosition = Constants.Layer.active.rawValue
+            blockNode.alpha = 0.25
             return blockNode
             
         } else if tileType.intersection(.player_start).rawValue != 0 {

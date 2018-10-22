@@ -9,6 +9,7 @@
 import Foundation
 
 protocol CollisionObject: class {
+    
     var f: CGPoint { get set }
     var i: IntPoint { get set }
     var fOld: CGPoint { get set }
@@ -17,13 +18,13 @@ protocol CollisionObject: class {
     var lastSlopeTilePoint: IntPoint? { get set }
     var slopesBelow: (left: TileTypeFlag?, right: TileTypeFlag?) { get set }
     var lastGroundPosition: Int { get set }
+    
+    func update(currentTime: TimeInterval, level: Level) -> Level
 }
 
 extension CollisionObject where Self: Collision {
-    // MARK: Collisions
-    
+
     // Can change f in this function
-//    mutating
     func collision_detection_map() {
         
         if AppState.shared.printCollisions {
@@ -39,59 +40,22 @@ extension CollisionObject where Self: Collision {
             f.y = slopeResult.position.y
             inAir = false
             lastSlopeTilePoint = slopeResult.collideTile
-            //            #if UNKNOWN
             vel.y = CGFloat(1) // What is this for?
-            //            #endif
-        }
-            //        else {
-            //            lastSlopeTilePoint = nil
-            //        }
-            
-            
-            //        #if SECOND_CHECK
-        else if let lastSlopeTilePoint = lastSlopeTilePoint {
+        } else if let lastSlopeTilePoint = lastSlopeTilePoint {
             let lastSlopeTile = Map.tile(point: lastSlopeTilePoint)
-            var nextSlopeTilePoint = lastSlopeTilePoint
             let slopeDir = Map.slopeDirection(forVelocity: vel, andTile: lastSlopeTile)
             
             // We know it's diagonal by now
             if slopeDir != .stationary {
-                // If we left a slope and now are on another slope
-                //                nextSlopeTilePoint.x += vel.x > 0
-                //                    ? 1
-                //                    : -1
-                
-                //
                 var potentialPosition = f
-                
-                
-                //                if vel.x > 0 {
-                ////                    potentialPosition.x = CGFloat(slopeResult.collideTile.x * TILESIZE - PH - 1)
-                //                    nextSlopeTilePoint.x += 1
-                //                } else if vel.x < 0 {
-                //                    nextSlopeTilePoint.x -= 1
-                //                }
-                
-                // y    potentialPosition
-                // s    s
-                // ts   slopeResult.collideTile
-                
                 var s = IntPoint(x: Int(f.x + CGFloat(PW)/2 + vel.x), y: 0)
                 if slopeDir.contains(.up) {
                     potentialPosition.y = CGFloat(slopeResult.collideTile.y * TILESIZE - PH - 1)
                     s.y = Int(potentialPosition.y) + PH
-                    //                    nextSlopeTilePoint.y -= 1
-                    //                    nextSlopeTilePoint.y = Int(CGFloat(lastSlopeTilePoint.y*TILESIZE - PH - 1))/TILESIZE
                 } else if slopeDir.contains(.down) {
                     potentialPosition.y = CGFloat((slopeResult.collideTile.y + 1) * TILESIZE - PH - 1)
                     s.y = Int(potentialPosition.y) + PH + TILESIZE
-                    //                    nextSlopeTilePoint.y += 1
-                    //                    nextSlopeTilePoint.y += Int(CGFloat((lastSlopeTilePoint.y+1)*TILESIZE - PH - 1))/TILESIZE
                 }
-                
-                // Don't check if we are colliding with slode, since `lastSlopeTilePoint` is
-                // not nil then we are on a slope and just update the the player position
-                
                 
                 let collideTile = IntPoint(x: s.x / TILESIZE, y: s.y / TILESIZE)
                 
@@ -120,7 +84,6 @@ extension CollisionObject where Self: Collision {
         }
         
         // X axis ⇄ Horizontal
-        
         if vel.x > 0.01 {
             // Moving right
             
@@ -228,12 +191,5 @@ extension CollisionObject where Self: Collision {
                 }
             }
         }
-        
-        // Reset gravity if on the ground
-        #if UNKNOWN
-        if !inAir {
-            vel.y = AppState.shared.GRAVITATION
-        }
-        #endif
     }
 }

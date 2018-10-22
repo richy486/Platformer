@@ -19,27 +19,12 @@ extension Collision {
     // Shouldn't change f in this function, TODO: put into protocol extension
     func collision_slope(movePosition position: CGPoint, velocity: CGPoint, forTile tilePosition: IntPoint? = nil, force: Bool = false) -> (position: CGPoint, collide: Bool, collideTile: IntPoint) {
 
-        //        let s: IntPoint
-        //        if let tilePosition = tilePosition {
-        //            s = tilePosition
-        //        } else {
         let s = IntPoint(x: Int(position.x) + (PW>>1) + Int(velocity.x),
                          y: Int(position.y) + PH)
-        //        }
 
         var resultingPosition = position
         var collide = false
-        //map coordinates of the tile we check against
-
         let ts = IntPoint(x: s.x / TILESIZE, y: s.y / TILESIZE)
-
-        //        let ts: IntPoint
-        //        if let tilePosition = tilePosition {
-        //            ts = tilePosition
-        //        } else {
-        //            ts = IntPoint(x: s.x / TILESIZE, y: s.y / TILESIZE)
-        //        }
-
         let t = Map.tile(point: ts)
 
         //if we found a slope we set align y to the slope.
@@ -81,73 +66,6 @@ extension Collision {
 
         return (resultingPosition, collide, ts)
     }
-
-    func adjustToSlope(potentialPosition: CGPoint) -> (position: CGPoint, collide: Bool, collideTile: IntPoint) {
-
-        //        let s: IntPoint
-        //        if let tilePosition = tilePosition {
-        //            s = tilePosition
-        //        } else {
-        let s = IntPoint(x: Int(potentialPosition.x),// + (PW>>1) + Int(velocity.x),
-            y: Int(potentialPosition.y))// + PH)
-        //        }
-        //        let s = potentialPosition
-
-        var resultingPosition = potentialPosition
-        var collide = false
-        //map coordinates of the tile we check against
-
-        let ts = IntPoint(x: s.x / TILESIZE, y: s.y / TILESIZE)
-
-        //        let ts: IntPoint
-        //        if let tilePosition = tilePosition {
-        //            ts = tilePosition
-        //        } else {
-        //            ts = IntPoint(x: s.x / TILESIZE, y: s.y / TILESIZE)
-        //        }
-
-        let t = Map.tile(point: ts)
-
-        //if we found a slope we set align y to the slope.
-        if t.contains(.slope_right) {
-            // ◺
-            if AppState.shared.printCollisions {
-                print("◺: \(ts)")
-            }
-            let yGround = (ts.y+1) * TILESIZE       // y pixel coordinate of the ground of the tile
-            let inside = TILESIZE - (s.x%TILESIZE)  // minus how far sx is inside the tile (16 pixels in the exapmle)
-
-            // PH: minus the height (sx is located at the bottom of the player, but y is at the top)
-            // -1: we don't want to stick in a tile, this would cause complications in the next frame
-            resultingPosition.y = CGFloat(yGround - inside - PH - 1)
-
-            //            if position.y + vel.y >= resultingPosition.y || force{
-            if AppState.shared.printCollisions {
-                print("no slope ◺: \(ts)")
-            }
-            collide = true
-            //            }
-        } else if t.contains(.slope_left) {
-            // ◿
-            if AppState.shared.printCollisions {
-                print("◿: \(ts)")
-            }
-            resultingPosition.y = CGFloat((ts.y+1)*TILESIZE - s.x%TILESIZE - PH - 1)
-            //            if position.y + vel.y >= resultingPosition.y  || force {
-            if AppState.shared.printCollisions {
-                print("no slope ◿: \(ts)")
-            }
-            collide = true
-            //            }
-        } else {
-            if AppState.shared.printCollisions {
-                print("no slope: \(ts)")
-            }
-        }
-
-        return (resultingPosition, collide, ts)
-    }
-
 
     // Shouldn't change f in this function, TODO: put into protocol extension
     func mapcolldet_moveHorizontal(movePosition position: CGPoint, velocity: CGPoint, horizontallyInDirection direction: Int, size: CGSize) -> (position: CGPoint, velocity: CGPoint, collide: Bool) {
@@ -315,7 +233,4 @@ extension Collision {
 
         return (position, !inAir, inAir, ty)
     }
-
-
-
 }

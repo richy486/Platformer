@@ -8,45 +8,9 @@
 
 import Foundation
 
-struct TileTypeFlag: OptionSet {
-    
-    let rawValue: Int
-    
-    static let nonsolid = TileTypeFlag(rawValue: 1 << 0)
-    static let solid = TileTypeFlag(rawValue: 1 << 1)
-    static let solid_on_top = TileTypeFlag(rawValue: 1 << 2)
-    static let breakable = TileTypeFlag(rawValue: 1 << 3)
-    static let used = TileTypeFlag(rawValue: 1 << 4)
-    static let powerup = TileTypeFlag(rawValue: 1 << 5)
-    
-    static let slope_left = TileTypeFlag(rawValue: 1 << 6)  // ◿
-    static let slope_right = TileTypeFlag(rawValue: 1 << 7) // ◺
-    
-    static let pickup = TileTypeFlag(rawValue: 1 << 8)
-    static let player_start = TileTypeFlag(rawValue: 1 << 9)
-    
-    // 0000
-    // 1010
-    // 8421
-}
-
-let S = TileTypeFlag.solid.rawValue
-let T = TileTypeFlag.solid_on_top.rawValue
-let B = TileTypeFlag.breakable.rawValue
-
 class Map {
 
-    static var basicTileTypes: [TileTypeFlag] = [
-        .nonsolid,
-        .solid,
-        .solid_on_top,
-        [.breakable, .solid],
-        [.powerup, .solid],
-        .slope_left,    // ◿
-        .slope_right,   // ◺
-        .pickup,
-        .player_start
-    ]
+    
 
     class func tile(point: IntPoint) -> TileTypeFlag {
         let mapValue = map(point: point)

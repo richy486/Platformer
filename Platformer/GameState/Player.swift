@@ -52,7 +52,7 @@ class Player: Collision, CollisionObject {
         vel = CGPoint.zero
     }
     
-    func update(keysDown: [KeyCode: Bool]) {
+    func update(currentTime: TimeInterval, controlCommands: ControlCommands, level: Level) -> Level {
         
         // Lets add gravity here
         if inAir {
@@ -60,17 +60,17 @@ class Player: Collision, CollisionObject {
         }
         
         var movementDirectionX = CGFloat(0.0)
-        if keysDown[.left] == keysDown[.right] {
+        if controlCommands.left == controlCommands.right {
             // Both left and right down or both left and right up
             movementDirectionX = 0.0
-        } else if keysDown[.left] == true {
+        } else if controlCommands.left {
             movementDirectionX = -1.0
-        } else if keysDown[.right] == true {
+        } else if controlCommands.right {
             movementDirectionX = 1.0
         }
         
         //jump pressed?
-        if keysDown[.a] == true {
+        if controlCommands.jump {
             // Jump!
             
             if !lockjump {
@@ -95,9 +95,16 @@ class Player: Collision, CollisionObject {
             decreaseVelocity()
         }
         
+        return update(currentTime: currentTime, level: level)
+    }
+    
+    func update(currentTime: TimeInterval, level: Level) -> Level {
+        
         fOld = f
         
         collision_detection_map()
+        
+        return level
     }
     
     // MARK: Movement

@@ -10,6 +10,18 @@ import Cocoa
 import SpriteKit
 import GameplayKit
 
+var basicTileTypes: [TileTypeFlag] = [
+    .nonsolid,
+    .solid,
+    .solid_on_top,
+    [.breakable, .solid],
+    [.powerup, .solid],
+    .slope_left,    // ◿
+    .slope_right,   // ◺
+    .pickup,
+    .player_start
+]
+
 // View Controller is origin bottom left
 class ViewController: NSViewController {
 
@@ -120,7 +132,7 @@ class ViewController: NSViewController {
         
         switch AppState.shared.editMode {
         case .paint(let tileType):
-            guard let index = Map.basicTileTypes.firstIndex(of: tileType) else {
+            guard let index = basicTileTypes.firstIndex(of: tileType) else {
                 fallthrough
             }
             let indexPath = IndexPath(item: index, section: 0)
@@ -183,7 +195,7 @@ extension ViewController: NSCollectionViewDelegate {
         guard let indexPath = indexPaths.first else {
             return
         }
-        let tileType = Map.basicTileTypes[indexPath.item]
+        let tileType = basicTileTypes[indexPath.item]
         AppState.shared.editMode = .paint(tileType: tileType)
     }
     func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
@@ -206,7 +218,7 @@ extension ViewController: NSCollectionViewDelegate {
 }
 extension ViewController: NSCollectionViewDataSource {
     func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
-        let count = Map.basicTileTypes.count
+        let count = basicTileTypes.count
         return count
     }
     
@@ -214,7 +226,7 @@ extension ViewController: NSCollectionViewDataSource {
         let item = collectionView.makeItem(withIdentifier: .tileItem, for: indexPath)
         guard let tileItem = item as? TileItem else {return item}
         
-        tileItem.setup(withTileType: Map.basicTileTypes[indexPath.item])
+        tileItem.setup(withTileType: basicTileTypes[indexPath.item])
         
         return tileItem
     }

@@ -42,12 +42,6 @@ enum KeyCode: Int, CaseIterable {
     
 }
 
-enum CameraMode {
-    case center
-    case lockLeftOfPlayer
-    case lockRightOfPlayer
-}
-
 public struct IntPoint: Hashable {
     public var x: Int
     public var y: Int
@@ -467,7 +461,11 @@ class GameScene: SKScene {
             keysDown[key] = value
         }
         
-        player.update(keysDown: keysDown)
+        
+        let playerControlCommands = ControlCommands(left: keysDown[.left] == true,
+                                                   right: keysDown[.right] == true,
+                                                   jump: keysDown[.a] == true)
+        let _ = player.update(currentTime: currentTime, controlCommands: playerControlCommands, level: Level())
 
         let movementDirectionX = player.f.x - playerNode.position.x
         playerNode.position = player.f
