@@ -1,5 +1,5 @@
 //
-//  Level.swift
+//  Map.swift
 //  Platformer
 //
 //  Created by Richard Adem on 21/10/18.
@@ -190,8 +190,6 @@ extension Level {
         
         blocks[y][x] = tileType.rawValue
         
-//        callMapChange(forPoint: IntPoint(x: x, y: y), tileType: tileType)
-        
         NotificationCenter.default.post(name: Constants.kNotificationMapChange,
                                         object: self,
                                         userInfo: [
@@ -241,7 +239,7 @@ extension Level {
         return collide
     }
     
-    func slopesBelow(position: CGPoint) -> (left: TileTypeFlag?, right: TileTypeFlag?) {
+    func slopesBelow(position: CGPoint, level: Level) -> (left: TileTypeFlag?, right: TileTypeFlag?) {
         
         var y = (Int(position.y) + PH_SLOPE) / TILESIZE
         let leftCheck = Int(position.x) / TILESIZE
@@ -258,9 +256,9 @@ extension Level {
                 break
             }
             
-            let leftTile = Map.tile(point: IntPoint(x: leftCheck, y: y ))
-            let centerTile = Map.tile(point: IntPoint(x: centerCheck, y: y ))
-            let rightTile = Map.tile(point: IntPoint(x: rightCheck, y: y ))
+            let leftTile = level.tile(point: IntPoint(x: leftCheck, y: y ))
+            let centerTile = level.tile(point: IntPoint(x: centerCheck, y: y ))
+            let rightTile = level.tile(point: IntPoint(x: rightCheck, y: y ))
             
             // Left side only cares about slopes that are facing right
             if foundSlopeLeft == nil && leftTile.intersection(.slope_right).rawValue != 0 {
@@ -288,15 +286,4 @@ extension Level {
         
         return (left: foundSlopeLeft, right: foundSlopeRight)
     }
-    
-//    typealias MapChangeCallback = (_ point: IntPoint, _ tileType: TileTypeFlag) -> Void
-//    var mapChangeCallbacks: [MapChangeCallback] = []
-//    func listenForMapChanges(_ update: @escaping MapChangeCallback) {
-//        mapChangeCallbacks.append(update)
-//    }
-//    class func callMapChange(forPoint point: IntPoint, tileType: TileTypeFlag) {
-//        for update in mapChangeCallbacks {
-//            update(point, tileType)
-//        }
-//    }
 }

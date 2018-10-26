@@ -15,8 +15,8 @@ enum CameraMode {
 }
 
 class Camera {
-    private(set) var position = CGPoint.zero
-    private var target = CGPoint.zero
+    var position = CGPoint.zero
+    private(set) var target = CGPoint.zero
     private var cameraMode = CameraMode.center
     private var lastUpdateTimeInterval: CFTimeInterval = 0
     
@@ -82,5 +82,7 @@ class Camera {
                 .lerp(min: position.y, max: target.y)
             position.y = posY
         }
+        
+        lastUpdateTimeInterval = currentTime
     }
 }

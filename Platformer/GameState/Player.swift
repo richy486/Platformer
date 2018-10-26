@@ -99,10 +99,11 @@ class Player: Collision, CollisionObject {
     }
     
     func update(currentTime: TimeInterval, level: Level) -> Level {
+        var level = level
         
         fOld = f
         
-        collision_detection_map()
+        level = collisionDetection(level: level)
         
         return level
     }
@@ -169,24 +170,6 @@ class Player: Collision, CollisionObject {
         // TODO: fall through code
         let fallThrough = false
         return fallThrough
-    }
-    
-    // This only works for 45º slopes
-    private var slopeMoveDirection: Direction {
-        var direction: Direction = .stationary
-        if let lastSlopeTile = lastSlopeTilePoint {
-            if Map.tile(point: lastSlopeTile).intersection(.slope_right).rawValue != 0 {
-                direction = vel.x > 0
-                    ? .downRight
-                    : .upRight
-                
-            } else if Map.tile(point: lastSlopeTile).contains(.slope_left) {
-                direction = vel.x < 0
-                    ? .downLeft
-                    : .upLeft
-            }
-        }
-        return direction
     }
     
     // ObjectBase.h

@@ -25,25 +25,26 @@ protocol CollisionObject: class {
 extension CollisionObject where Self: Collision {
 
     // Can change f in this function
-    func collision_detection_map() {
+    func collisionDetection(level: Level) -> Level {
         
+        var level = level
         if AppState.shared.printCollisions {
             print("--- frame ---")
         }
         
         let targetPlayerPostition = CGPoint(x: f.x + vel.x, y: f.y + vel.y)
         
-        slopesBelow = Map.slopesBelow(position: targetPlayerPostition)
+        slopesBelow = level.slopesBelow(position: targetPlayerPostition, level: level)
         
-        let slopeResult = collision_slope(movePosition: f, velocity: vel, forTile: nil, force: lastSlopeTilePoint != nil)
+        let slopeResult = collision_slope(movePosition: f, velocity: vel, level: level, forTile: nil, force: lastSlopeTilePoint != nil)
         if slopeResult.collide {
             f.y = slopeResult.position.y
             inAir = false
             lastSlopeTilePoint = slopeResult.collideTile
             vel.y = CGFloat(1) // What is this for?
         } else if let lastSlopeTilePoint = lastSlopeTilePoint {
-            let lastSlopeTile = Map.tile(point: lastSlopeTilePoint)
-            let slopeDir = Map.slopeDirection(forVelocity: vel, andTile: lastSlopeTile)
+            let lastSlopeTile = level.tile(point: lastSlopeTilePoint)
+            let slopeDir = level.slopeDirection(forVelocity: vel, andTile: lastSlopeTile)
             
             // We know it's diagonal by now
             if slopeDir != .stationary {
@@ -59,7 +60,7 @@ extension CollisionObject where Self: Collision {
                 
                 let collideTile = IntPoint(x: s.x / TILESIZE, y: s.y / TILESIZE)
                 
-                let t = Map.tile(point: collideTile)
+                let t = level.tile(point: collideTile)
                 
                 if t.contains(.slope_right) {
                     // ◺
@@ -71,12 +72,12 @@ extension CollisionObject where Self: Collision {
                     // -1: we don't want to stick in a tile, this would cause complications in the next frame
                     f.y = CGFloat(yGround - inside - PH - 1)
                     
-                    return
+                    return level
                 } else if t.contains(.slope_left) {
                     // ◿
                     f.x += vel.x
                     f.y = CGFloat((collideTile.y+1)*TILESIZE - s.x%TILESIZE - PH - 1)
-                    return
+                    return level
                 }
                 
             }
@@ -92,10 +93,11 @@ extension CollisionObject where Self: Collision {
             var collide = false
             while f.x < targetPlayerPostition.x - COLLISION_GIVE && !collide {
                 f.x = min(f.x + CGFloat(TILESIZE), targetPlayerPostition.x)
-                let result = mapcolldet_moveHorizontal(movePosition: f, velocity: vel, horizontallyInDirection: 3, size: size)
+                let result = mapcolldet_moveHorizontal(movePosition: f, velocity: vel, horizontallyInDirection: 3, size: size, level: level)
                 f = result.position
                 vel = result.velocity
                 collide = result.collide
+                level = result.level
             }
             
         } else if vel.x < -0.01 {
@@ -106,10 +108,11 @@ extension CollisionObject where Self: Collision {
             var collide = false
             while f.x > targetPlayerPostition.x + COLLISION_GIVE && !collide {
                 f.x = max(f.x - CGFloat(TILESIZE), targetPlayerPostition.x)
-                let result = mapcolldet_moveHorizontal(movePosition: f, velocity: vel, horizontallyInDirection: 1, size: size)
+                let result = mapcolldet_moveHorizontal(movePosition: f, velocity: vel, horizontallyInDirection: 1, size: size, level: level)
                 f = result.position
                 vel = result.velocity
                 collide = result.collide
+                level = result.level
             }
         }
         
@@ -152,9 +155,11 @@ extension CollisionObject where Self: Collision {
                                                        txr: txr,
                                                        alignedBlockX: alignedBlockX,
                                                        unAlignedBlockX: unAlignedBlockX,
-                                                       unAlignedBlockFX: unAlignedBlockFX)
+                                                       unAlignedBlockFX: unAlignedBlockFX,
+                                                       level: level)
                     collide = result.collide
                     potentialPosition = result.position
+                    level = result.level
                 }
                 if collide && vel.y < 0.0 {
                     print("bounce")
@@ -177,11 +182,13 @@ extension CollisionObject where Self: Collision {
                                                          txr: txr,
                                                          alignedBlockX: alignedBlockX,
                                                          unAlignedBlockX: unAlignedBlockX,
-                                                         unAlignedBlockFX: unAlignedBlockFX)
+                                                         unAlignedBlockFX: unAlignedBlockFX,
+                                                         level: level)
                     collide = result.collide
                     potentialPosition = result.position
                     inAir = result.inAir
                     groundPosition = result.groundPosition
+                    level = result.level
                 }
                 self.f = potentialPosition
                 self.inAir = inAir
@@ -191,5 +198,7 @@ extension CollisionObject where Self: Collision {
                 }
             }
         }
+        
+        return level
     }
 }

@@ -117,12 +117,10 @@ class GameScene: SKScene {
     
     private var lastUpdateTimeInterval: CFTimeInterval = 0
     
-    private var player = Player()
-    private var playerNode: SKShapeNode!
-    private var playerNodeLeft: SKShapeNode!
-    private var playerNodeRight: SKShapeNode!
-
+    private var gameManager = GameManager()
+    
     private var blockNodes: [IntPoint: SKNode] = [:]
+    private var spriteNodes: [UUID: SKNode] = [:]
     
     private let localCamera = SKCameraNode()
     private var localCameraTarget = CGPoint.zero
@@ -212,32 +210,9 @@ class GameScene: SKScene {
         addChild(localCamera)
         self.camera = localCamera
         
-        
-        
-        playerNode = SKShapeNode(rect: CGRect(x: 0, y: 0, width: PW, height: PH))
-        playerNode.fillColor = .red
-        playerNode.position = player.f
-        playerNode.name = "player"
-        playerNode.zPosition = Constants.Layer.active.rawValue
-        addChild(playerNode)
-        
-        playerNodeLeft = SKShapeNode(rect: CGRect(x: 0, y: 0, width: PW/2, height: PH))
-        playerNodeLeft.fillColor = #colorLiteral(red: 0, green: 0.5694751143, blue: 1, alpha: 1)
-        playerNodeLeft.position = CGPoint(x: 0, y: 0)
-        playerNodeLeft.name = "playerLeft"
-        playerNodeLeft.zPosition = Constants.Layer.active.rawValue
-        playerNode.addChild(playerNodeLeft)
-        
-        playerNodeRight = SKShapeNode(rect: CGRect(x: 0, y: 0, width: PW/2, height: PH))
-        playerNodeRight.fillColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
-        playerNodeRight.position = CGPoint(x: PW/2, y: 0)
-        playerNodeRight.name = "playerRight"
-        playerNodeRight.zPosition = Constants.Layer.active.rawValue
-        playerNode.addChild(playerNodeRight)
-        
+        gameManager.loadLevel()
         setupBlocks()
-        setupActors()
-        restart()
+        resetCamera()
         
         addChild(selectedBlockNode)
         addChild(collideXBlockNode)
@@ -248,11 +223,20 @@ class GameScene: SKScene {
         addChild(forwardFocusBox)
         addChild(cameraCenter)
         
-        Map.listenForMapChanges { [weak self] (point, tileType) in
+        
+        NotificationCenter.default.addObserver(forName: Constants.kNotificationMapChange,
+                                               object: nil,//gameManager.player,
+                                               queue: OperationQueue.main) { notification in
+            guard let point = notification.userInfo?[Constants.kMapChangePoint] as? IntPoint else {
+                return
+            }
+            guard let tileType = notification.userInfo?[Constants.kMapChangeTileType] as? TileTypeFlag else {
+                return
+            }
             
             // Replace the block graphic
             let replaceBlock = {
-                if let currentBlockNode = self?.blockNodes[point] {
+                if let currentBlockNode = self.blockNodes[point] {
                     currentBlockNode.removeFromParent()
                 }
                 
@@ -270,12 +254,12 @@ class GameScene: SKScene {
                 }
                 
                 blockNode.position = CGPoint(x: point.x * TILESIZE, y: point.y * TILESIZE)
-                self?.addChild(blockNode)
-                self?.blockNodes[point] = blockNode
+                self.addChild(blockNode)
+                self.blockNodes[point] = blockNode
             }
             
             // If there is no current block then just add the graphic
-            guard let currentBLockNode = self?.blockNodes[point] else {
+            guard let currentBLockNode = self.blockNodes[point] else {
                 replaceBlock()
                 return
             }
@@ -299,7 +283,7 @@ class GameScene: SKScene {
             
         }
         NotificationCenter.default.addObserver(forName: Constants.kNotificationCollide,
-                                               object: player,
+                                               object: nil,//gameManager.player,
                                                queue: OperationQueue.main) { notification in
                                                 
                                                 func update(debugBlock: SKNode, withPosition position: CGPoint) {
@@ -364,9 +348,10 @@ class GameScene: SKScene {
     
     override func mouseDown(with event: NSEvent) {
 
+        var level = gameManager.levelManager.level
         let location = event.location(in: self)
-        let tile = Map.posToTile(location)
-        let tilePos = Map.posToTilePos(location)
+        let tile = level.posToTile(location)
+        let tilePos = level.posToTilePos(location)
         
         print("location: \(location) tile: \(tile) - (\(tilePos.x), \(tilePos.y))")
         
@@ -376,21 +361,23 @@ class GameScene: SKScene {
         switch AppState.shared.editMode {
         case .paint(let tileType):
             print("type type: \(tileType)")
-            Map.setMap(x: tilePos.x, y: tilePos.y, tileType: tileType)
+            level.setMap(x: tilePos.x, y: tilePos.y, tileType: tileType)
         case .erase:
-            Map.setMap(x: tilePos.x, y: tilePos.y, tileType: .nonsolid)
+            level.setMap(x: tilePos.x, y: tilePos.y, tileType: .nonsolid)
         default:
             break
         }
+        
+        gameManager.levelManager.level = level
         
     }
     
     override func update(_ currentTime: TimeInterval) {
         
+        // Before update
         if lastUpdateTimeInterval == 0 {
             lastUpdateTimeInterval = currentTime
         }
-        let delta = currentTime - lastUpdateTimeInterval
         
         // Debug
         let cameraMoveAmount = CGFloat(10)
@@ -413,20 +400,19 @@ class GameScene: SKScene {
         if keysDown[.s] == true {
             keysDown[.s] = false
             AppState.save()
+            gameManager.levelManager.level.save()
         }
         if keysDown[.d] == true {
             keysDown[.d] = false
             AppState.load()
             setupBlocks()
-            setupActors()
-            restart()
+            resetCamera()
         }
         
         if keysDown[.r] == true {
             keysDown[.r] = false
             setupBlocks()
-            setupActors()
-            restart()
+            resetCamera()
         }
         
         if keysDown[.tab] == true {
@@ -461,84 +447,46 @@ class GameScene: SKScene {
             keysDown[key] = value
         }
         
+        // Update Game
         
-        let playerControlCommands = ControlCommands(left: keysDown[.left] == true,
-                                                   right: keysDown[.right] == true,
-                                                   jump: keysDown[.a] == true)
-        let _ = player.update(currentTime: currentTime, controlCommands: playerControlCommands, level: Level())
-
-        let movementDirectionX = player.f.x - playerNode.position.x
-        playerNode.position = player.f
+        let controls = Controls(player: ControlCommands(left: keysDown[.left] == true,
+                                                        right: keysDown[.right] == true,
+                                                        jump: keysDown[.a] == true))
         
-        playerNodeLeft.yScale = player.slopesBelow.left == nil ? 1 : CGFloat(PH_SLOPE)/CGFloat(PH)
-        playerNodeRight.yScale = player.slopesBelow.right == nil ? 1 : CGFloat(PH_SLOPE)/CGFloat(PH)
+        gameManager.update(currentTime: currentTime, controls: controls)
         
-        gameSceneDelegate?.playerStateUpdated(player: player)
+        // After update
+        
+        // Remove old actors
+        let removedUUIDs = Set(spriteNodes.keys).subtracting(Set(gameManager.levelManager.actors.keys))
+        for removedUUID in removedUUIDs {
+            guard let removedNode = spriteNodes.removeValue(forKey: removedUUID) else {
+                continue
+            }
+            removedNode.removeFromParent()
+        }
+        
+        for (uuid, actor) in gameManager.levelManager.actors {
+            // create new actors
+            if spriteNodes[uuid] == nil {
+                guard let node = SpriteFactory.spriteNode(forCollisionObject: actor) else {
+                    continue
+                }
+                spriteNodes[uuid] = node
+                addChild(node)
+            }
+            
+            // Update actors
+            spriteNodes[uuid]?.position = actor.f
+        }
+        
+        
+        
+        gameSceneDelegate?.playerStateUpdated(player: gameManager.player)
         
         // Camera
-        if AppState.shared.cameraTracking {
-            
-            // Camera X
-            
-            // Update to the corrent mode
-            switch localCameraMode {
-            case .center:
-                
-                if player.f.x - localCamera.position.x > CGFloat(3*TILESIZE) {
-                    print("switch to lock left of player")
-                    localCameraMode = .lockLeftOfPlayer
-                } else if player.f.x - localCamera.position.x < -CGFloat(3*TILESIZE) {
-                    print("switch to lock right of player")
-                    localCameraMode = .lockRightOfPlayer
-                }
-            case .lockLeftOfPlayer:
-                // direction right -> center
-                if movementDirectionX < 0.0 {
-                    localCameraMode = .center
-                }
-            case .lockRightOfPlayer:
-                if movementDirectionX > 0.0 {
-                    localCameraMode = .center
-                }
-            }
-            gameSceneDelegate?.cameraModeUpdated(cameraMode: localCameraMode)
-            
-            // Update the camera depending on the mode
-            
-            switch localCameraMode {
-            case .center:
-                break
-            case .lockLeftOfPlayer:
-                localCameraTarget.x = player.f.x + CGFloat(PW)/2 + CGFloat(TILESIZE)
-            case .lockRightOfPlayer:
-                localCameraTarget.x = player.f.x + CGFloat(PW)/2 - CGFloat(TILESIZE)
-            }
-            
-            if localCameraMode == .lockLeftOfPlayer || localCameraMode == .lockRightOfPlayer {
-                
-                let distance = abs(localCamera.position.x - localCameraTarget.x)
-                let percent = (AppState.shared.cameraMoveSpeed / distance) * CGFloat(delta)
-                let posX = percent
-                    .clamp(min: 0, max: 1)
-                    .lerp(min: localCamera.position.x, max: localCameraTarget.x)
-                localCamera.position.x = posX
+        localCamera.position = gameManager.levelManager.camera.position
 
-            }
-            
-            // Camera Y
-            if player.lastGroundPosition >= 0 && player.lastGroundPosition < AppState.shared.blocks.count {
-                localCameraTarget.y = CGFloat((player.lastGroundPosition + AppState.shared.BLOCKSOFFCENTER) * TILESIZE)
-                let distance = abs(localCamera.position.y - localCameraTarget.y)
-                let percent = (AppState.shared.cameraMoveSpeed / distance) * CGFloat(delta)
-                let posY = percent
-                    .clamp(min: 0, max: 1)
-                    .lerp(min: localCamera.position.y, max: localCameraTarget.y)
-                localCamera.position.y = posY
-            }
-            
-            
-            
-        }
 
         //                []        *
         cameraMoveBox.position = CGPoint(x: localCamera.position.x - cameraMoveBox.frame.width/2,
@@ -548,25 +496,25 @@ class GameScene: SKScene {
         cameraCenter.position = CGPoint(x: localCamera.position.x,
                                         y: localCamera.position.y)
         
-        if keysDown[.shift] == true {
-            playerNode.fillColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
-        } else {
-            playerNode.fillColor = #colorLiteral(red: 0.7054507506, green: 0.07813194169, blue: 0, alpha: 1)
-        }
-        
-        if player.inAir {
-            playerNode.strokeColor = #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)
-        } else if player.lastSlopeTilePoint != nil {
-            playerNode.strokeColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
-        } else {
-            playerNode.strokeColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        }        
+//        if keysDown[.shift] == true {
+//            playerNode.fillColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
+//        } else {
+//            playerNode.fillColor = #colorLiteral(red: 0.7054507506, green: 0.07813194169, blue: 0, alpha: 1)
+//        }
+//        
+//        if player.inAir {
+//            playerNode.strokeColor = #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)
+//        } else if player.lastSlopeTilePoint != nil {
+//            playerNode.strokeColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+//        } else {
+//            playerNode.strokeColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+//        }        
         
         lastUpdateTimeInterval = currentTime
     }
     
-    private func restart() {
-        player.restart()
+    private func resetCamera() {
+        let player = gameManager.player
         
         localCameraTarget.x = player.f.x + CGFloat(PW)/2
         localCameraTarget.y = player.f.y + CGFloat(PH) + CGFloat(AppState.shared.BLOCKSOFFCENTER * TILESIZE)
@@ -581,7 +529,8 @@ class GameScene: SKScene {
         blockNodes.removeAll()
         
         // Blocks
-        for (y, xBlocks) in AppState.shared.blocks.enumerated() {
+        
+        for (y, xBlocks) in gameManager.levelManager.level.blocks.enumerated() {
             for (x, blockVal) in xBlocks.enumerated() {
                 
                 let tileType = TileTypeFlag(rawValue: blockVal)
@@ -597,20 +546,6 @@ class GameScene: SKScene {
                     blockNode.position = CGPoint(x: x * TILESIZE, y: y * TILESIZE)
                     addChild(blockNode)
                     blockNodes[IntPoint(x: x, y: y)] = blockNode
-                }
-            }
-        }
-    }
-    
-    func setupActors() {
-        for (y, xBlocks) in AppState.shared.blocks.enumerated() {
-            for (x, blockVal) in xBlocks.enumerated() {
-                let tileType = TileTypeFlag(rawValue: blockVal)
-                if tileType.contains(.player_start) {
-                    player.f = CGPoint(x: x*TILESIZE + (TILESIZE/2) - PW/2,
-                                       y: y*TILESIZE + (TILESIZE - PH) - 1)
-                    
-                    
                 }
             }
         }

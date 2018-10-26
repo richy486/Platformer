@@ -11,23 +11,30 @@
 import Foundation
 
 class GameManager {
-    var levelManager: LevelManager?
+    var levelManager: LevelManager
+    var player: Player
     
     init() {
+        
+        player = Player()
         let level = Level()
-        
-        
-        let blocks = level.blocks.map({ rowInts -> [TileTypeFlag] in
-            rowInts.map({ tileInt -> TileTypeFlag in
-                TileTypeFlag(rawValue: tileInt)
-            })
-        })
-        
-        levelManager = LevelManager(blocks: blocks)
-        
+        levelManager = LevelManager(level: level, player: player)
     }
     
     func update(currentTime: TimeInterval, controls: Controls) {
-        levelManager?.update(currentTime: currentTime, controls: controls)
+        levelManager.update(currentTime: currentTime, controls: controls)
+    }
+    
+    func loadLevel() {
+        let level: Level
+        if let loadedLevel = Level(withFilename: "Level 1") {
+            level = loadedLevel
+        } else {
+            level = Level()
+        }
+        
+        levelManager = LevelManager(level: level, player: player)
+        
+        player.restart()
     }
 }
