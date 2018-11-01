@@ -12,6 +12,8 @@ protocol CollisionObject: class {
     
     var f: CGPoint { get set }
     var i: IntPoint { get set }
+    var _f: CGPoint { get set }
+    var _i: IntPoint { get set }
     var fOld: CGPoint { get set }
     var vel: CGPoint { get set }
     var inAir: Bool { get set }
@@ -23,6 +25,32 @@ protocol CollisionObject: class {
 }
 
 extension CollisionObject where Self: Collision {
+    
+    var f: CGPoint {
+        set {
+            _f = newValue
+            _i = newValue.intPoint
+        }
+        get {
+            return _f
+        }
+    }
+    var i: IntPoint { //x, y coordinate (top left of the player rectangle)
+        set {
+            _f = newValue.cgPoint
+            _i = newValue
+        }
+        get {
+            return _i
+        }
+    }
+    
+    func cap(fallingVelocity velY: CGFloat) -> CGFloat {
+        if velY > MAXVELY {
+            return MAXVELY
+        }
+        return velY
+    }
 
     // Can change f in this function
     func collisionDetection(level: Level) -> Level {

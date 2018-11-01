@@ -405,6 +405,7 @@ class GameScene: SKScene {
         if keysDown[.d] == true {
             keysDown[.d] = false
             AppState.load()
+            gameManager.loadLevel()
             setupBlocks()
             resetCamera()
         }

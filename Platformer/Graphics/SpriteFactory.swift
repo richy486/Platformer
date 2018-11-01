@@ -32,6 +32,14 @@ class SpriteFactory {
             
             return playerNode
         }
+        
+        if collisionObject is Pickup {
+            let blockNode = SKSpriteNode(imageNamed: "pickup")
+            blockNode.anchorPoint = CGPoint(x: 0, y: 1)
+            blockNode.yScale = -1
+            blockNode.zPosition = Constants.Layer.active.rawValue
+            return blockNode
+        }
         return nil
     }
 }

@@ -8,39 +8,18 @@
 
 import Foundation
 
-class Player: Collision, CollisionObject {
+class Player: CollisionObject {
     
-    private var _i = IntPoint.zero
-    internal(set) var i: IntPoint { //x, y coordinate (top left of the player rectangle)
-        set {
-            _f = newValue.cgPoint
-            _i = newValue
-        }
-        get {
-            return _i
-        }
-    }
-    private var _f = CGPoint.zero
-    internal(set) var f: CGPoint {
-        set {
-            _f = newValue
-            _i = newValue.intPoint
-        }
-        get {
-            return _f
-        }
-    }
-    
+    internal(set) var _i = IntPoint.zero
+    internal(set) var _f = CGPoint.zero
     internal(set) var vel: CGPoint = CGPoint.zero //velocity on x, y axis
     internal var fOld: CGPoint = CGPoint.zero
-    
     internal(set) var lastGroundPosition: Int = Int.max
     internal(set) var slopesBelow: (left: TileTypeFlag?, right: TileTypeFlag?) = (nil, nil)
-    
-    
-    private var lockjump = false
     internal(set) var inAir = false
     internal(set) var lastSlopeTilePoint: IntPoint?
+    
+    private var lockjump = false
     
     func restart() {
         lockjump = false
@@ -171,12 +150,10 @@ class Player: Collision, CollisionObject {
         let fallThrough = false
         return fallThrough
     }
-    
-    // ObjectBase.h
-    private func cap(fallingVelocity velY: CGFloat) -> CGFloat {
-        if velY > MAXVELY {
-            return MAXVELY
-        }
-        return velY
+}
+
+extension Player: Collision {
+    func tryCollide(withObject object: MovingObject) {
+        
     }
 }

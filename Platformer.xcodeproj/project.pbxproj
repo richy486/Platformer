@@ -29,6 +29,7 @@
 		B95F037F212EFAA5003E84E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B95F037E212EFAA5003E84E8 /* Assets.xcassets */; };
 		B95F0382212EFAA5003E84E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B95F0380212EFAA5003E84E8 /* Main.storyboard */; };
 		B95F038B212FB84C003E84E8 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95F038A212FB84C003E84E8 /* AppState.swift */; };
+		B98C7D8A2187F44400E935CD /* Pickup.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98C7D892187F44400E935CD /* Pickup.swift */; };
 		B9B6469521553D5500AE3A1A /* TileItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B6469321553D5500AE3A1A /* TileItem.swift */; };
 		B9B6469621553D5500AE3A1A /* TileItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = B9B6469421553D5500AE3A1A /* TileItem.xib */; };
 		B9B6469A2156EA1C00AE3A1A /* FirstResponderWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B646992156EA1C00AE3A1A /* FirstResponderWindow.swift */; };
@@ -64,6 +65,7 @@
 		B95F0383212EFAA5003E84E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B95F0384212EFAA5003E84E8 /* Platformer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Platformer.entitlements; sourceTree = "<group>"; };
 		B95F038A212FB84C003E84E8 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		B98C7D892187F44400E935CD /* Pickup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pickup.swift; sourceTree = "<group>"; };
 		B9B6469321553D5500AE3A1A /* TileItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileItem.swift; sourceTree = "<group>"; };
 		B9B6469421553D5500AE3A1A /* TileItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TileItem.xib; sourceTree = "<group>"; };
 		B9B646992156EA1C00AE3A1A /* FirstResponderWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstResponderWindow.swift; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 				B91F10F3217D6E6300F15EA6 /* LevelManager.swift */,
 				B949B3F9216051B000DFA633 /* Player.swift */,
 				B91F1100217D8B0600F15EA6 /* Camera.swift */,
+				B98C7D892187F44400E935CD /* Pickup.swift */,
 			);
 			path = GameState;
 			sourceTree = "<group>";
@@ -269,6 +272,7 @@
 				B91F1103217D8E3900F15EA6 /* TileTypeFlag.swift in Sources */,
 				B91F1101217D8B0600F15EA6 /* Camera.swift in Sources */,
 				B91F10F4217D6E6300F15EA6 /* LevelManager.swift in Sources */,
+				B98C7D8A2187F44400E935CD /* Pickup.swift in Sources */,
 				B95F037D212EFAA3003E84E8 /* ViewController.swift in Sources */,
 				B95F037B212EFAA3003E84E8 /* GameScene.swift in Sources */,
 				B9B6469C2156ED1A00AE3A1A /* UnselectorCollectionView.swift in Sources */,

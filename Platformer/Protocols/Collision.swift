@@ -8,10 +8,13 @@
 
 import Foundation
 
-protocol Collision {
+typealias MovingObject = Collision & CollisionObject
 
+protocol Collision {
+    func tryCollide(withObject object: MovingObject)
 }
 
+// MARK: Map Collision
 extension Collision {
 
     // bool CPlayer::collision_slope(int sx, int sy, int &tsx;, int &tsy;)
@@ -124,7 +127,6 @@ extension Collision {
             }
 
             if abs(velocity.x) > 0.0 {
-                print("collide x")
                 velocity.x = 0.0
             }
 
@@ -239,5 +241,44 @@ extension Collision {
         }
 
         return (position, !inAir, inAir, ty, level)
+    }
+}
+
+// MARK: Object Collision
+
+extension Collision {
+    
+    // bool coldec_obj2obj(CObject * o1, CObject * o2)
+    func collisionDetection(withObject object: MovingObject) -> Bool {
+        guard let o1 = self as? MovingObject else {
+            return false
+        }
+        let o2 = object
+        
+        // TODO: Replace PW, PH with individual sizes
+        let o1r = o1.i.x + PW
+        let o1b = o1.i.y + PH
+        let o2r = o2.i.x + PW
+        let o2b = o2.i.y + PH
+        
+//        if o1r < o2.i.x {
+//            return
+////                o1->ix + smw->ScreenWidth < o2r &&
+////                o1r + smw->ScreenWidth >= o2->ix &&
+//                o1.i.y < o2b &&
+//                o2.i.y <= o1b
+//        } else if o2r < o1.i.x {
+//            return
+////                o1->ix < o2r + smw->ScreenWidth &&
+////                o1r >= o2->ix + smw->ScreenWidth &&
+//                o1.i.y < o2b &&
+//                o1b >= o2.i.y
+//        } else {
+            return
+                o1.i.x < o2r &&
+                o1r >= o2.i.x &&
+                o1.i.y < o2b &&
+                o1b >= o2.i.y
+//        }
     }
 }
