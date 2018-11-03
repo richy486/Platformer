@@ -18,6 +18,7 @@ class Player: CollisionObject {
     internal(set) var slopesBelow: (left: TileTypeFlag?, right: TileTypeFlag?) = (nil, nil)
     internal(set) var inAir = false
     internal(set) var lastSlopeTilePoint: IntPoint?
+    internal(set) var size = IntSize(width: 22, height: 25)
     
     private var lockjump = false
     

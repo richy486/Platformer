@@ -20,12 +20,14 @@ protocol CollisionObject: class {
     var lastSlopeTilePoint: IntPoint? { get set }
     var slopesBelow: (left: TileTypeFlag?, right: TileTypeFlag?) { get set }
     var lastGroundPosition: Int { get set }
+    var size: IntSize { get }
     
     func update(currentTime: TimeInterval, level: Level) -> Level
 }
 
 extension CollisionObject where Self: Collision {
     
+    // MARK: Helper functions and vars
     var f: CGPoint {
         set {
             _f = newValue
@@ -51,6 +53,13 @@ extension CollisionObject where Self: Collision {
         }
         return velY
     }
+    
+//    let PH_SLOPE = PH - HALFPW - 1
+    var heightSlope: Int {
+        return size.height - (size.width/2) - 1
+    }
+    
+    // MARK: Collision
 
     // Can change f in this function
     func collisionDetection(level: Level) -> Level {
@@ -62,9 +71,9 @@ extension CollisionObject where Self: Collision {
         
         let targetPlayerPostition = CGPoint(x: f.x + vel.x, y: f.y + vel.y)
         
-        slopesBelow = level.slopesBelow(position: targetPlayerPostition, level: level)
+        slopesBelow = level.slopesBelow(position: targetPlayerPostition, size: size, level: level)
         
-        let slopeResult = collision_slope(movePosition: f, velocity: vel, level: level, forTile: nil, force: lastSlopeTilePoint != nil)
+        let slopeResult = collisionSlope(movePosition: f, velocity: vel, size: size, level: level, forTile: nil, force: lastSlopeTilePoint != nil)
         if slopeResult.collide {
             f.y = slopeResult.position.y
             inAir = false
@@ -77,13 +86,13 @@ extension CollisionObject where Self: Collision {
             // We know it's diagonal by now
             if slopeDir != .stationary {
                 var potentialPosition = f
-                var s = IntPoint(x: Int(f.x + CGFloat(PW)/2 + vel.x), y: 0)
+                var s = IntPoint(x: Int(f.x + CGFloat(size.width)/2 + vel.x), y: 0)
                 if slopeDir.contains(.up) {
-                    potentialPosition.y = CGFloat(slopeResult.collideTile.y * TILESIZE - PH - 1)
-                    s.y = Int(potentialPosition.y) + PH
+                    potentialPosition.y = CGFloat(slopeResult.collideTile.y * TILESIZE - size.height - 1)
+                    s.y = Int(potentialPosition.y) + size.height
                 } else if slopeDir.contains(.down) {
-                    potentialPosition.y = CGFloat((slopeResult.collideTile.y + 1) * TILESIZE - PH - 1)
-                    s.y = Int(potentialPosition.y) + PH + TILESIZE
+                    potentialPosition.y = CGFloat((slopeResult.collideTile.y + 1) * TILESIZE - size.height - 1)
+                    s.y = Int(potentialPosition.y) + size.height + TILESIZE
                 }
                 
                 let collideTile = IntPoint(x: s.x / TILESIZE, y: s.y / TILESIZE)
@@ -98,13 +107,13 @@ extension CollisionObject where Self: Collision {
                     f.x += vel.x
                     // PH: minus the height (sx is located at the bottom of the player, but y is at the top)
                     // -1: we don't want to stick in a tile, this would cause complications in the next frame
-                    f.y = CGFloat(yGround - inside - PH - 1)
+                    f.y = CGFloat(yGround - inside - size.height - 1)
                     
                     return level
                 } else if t.contains(.slope_left) {
                     // ◿
                     f.x += vel.x
-                    f.y = CGFloat((collideTile.y+1)*TILESIZE - s.x%TILESIZE - PH - 1)
+                    f.y = CGFloat((collideTile.y+1)*TILESIZE - s.x%TILESIZE - size.height - 1)
                     return level
                 }
                 
@@ -116,12 +125,12 @@ extension CollisionObject where Self: Collision {
         if vel.x > 0.01 {
             // Moving right
             
-            let size = CGSize(width: PW, height: slopesBelow.right == nil ? PH : PH_SLOPE)
+            let adjustedSize = CGSize(width: size.width, height: slopesBelow.right == nil ? size.height : heightSlope)
             
             var collide = false
             while f.x < targetPlayerPostition.x - COLLISION_GIVE && !collide {
                 f.x = min(f.x + CGFloat(TILESIZE), targetPlayerPostition.x)
-                let result = mapcolldet_moveHorizontal(movePosition: f, velocity: vel, horizontallyInDirection: 3, size: size, level: level)
+                let result = mapCollDetMoveHorizontal(movePosition: f, velocity: vel, horizontallyInDirection: 3, adjustedSize: adjustedSize, size: size, level: level)
                 f = result.position
                 vel = result.velocity
                 collide = result.collide
@@ -131,12 +140,12 @@ extension CollisionObject where Self: Collision {
         } else if vel.x < -0.01 {
             // Moving left
             
-            let size = CGSize(width: PW, height: slopesBelow.left == nil ? PH : PH_SLOPE)
+            let adjustedSize = CGSize(width: size.width, height: slopesBelow.left == nil ? size.height : heightSlope)
             
             var collide = false
             while f.x > targetPlayerPostition.x + COLLISION_GIVE && !collide {
                 f.x = max(f.x - CGFloat(TILESIZE), targetPlayerPostition.x)
-                let result = mapcolldet_moveHorizontal(movePosition: f, velocity: vel, horizontallyInDirection: 1, size: size, level: level)
+                let result = mapCollDetMoveHorizontal(movePosition: f, velocity: vel, horizontallyInDirection: 1, adjustedSize: adjustedSize, size: size, level: level)
                 f = result.position
                 vel = result.velocity
                 collide = result.collide
@@ -147,8 +156,8 @@ extension CollisionObject where Self: Collision {
         // Y axis ⇅ Vertical if not on a slope
         if !slopeResult.collide {
             let iPlayerL = i.x / TILESIZE
-            let iPlayerC = (i.x + HALFPW) / TILESIZE
-            let iPlayerR = (i.x + PW) / TILESIZE
+            let iPlayerC = (i.x + (size.width/2)) / TILESIZE
+            let iPlayerR = (i.x + size.width) / TILESIZE
             
             let txl = slopesBelow.left == nil ? iPlayerL : iPlayerC
             let txc = iPlayerC
@@ -160,10 +169,10 @@ extension CollisionObject where Self: Collision {
             
             let overlaptxl = (txl << 5) + TILESIZE + 1
             
-            if i.x + HALFPW < overlaptxl {
+            if i.x + (size.width/2) < overlaptxl {
                 alignedBlockX = txl
                 unAlignedBlockX = txr
-                unAlignedBlockFX = CGFloat((txr << 5) - PW) - COLLISION_GIVE
+                unAlignedBlockFX = CGFloat((txr << 5) - size.width) - COLLISION_GIVE
             } else {
                 alignedBlockX = txr
                 unAlignedBlockX = txl
@@ -202,9 +211,10 @@ extension CollisionObject where Self: Collision {
                 var groundPosition: Int = lastGroundPosition
                 while f.y < targetPlayerPostition.y - COLLISION_GIVE && !collide {
                     f.y = min(f.y + CGFloat(TILESIZE), targetPlayerPostition.y)
-                    let result = mapcolldet_moveDownward(movePosition: f,
+                    let result = mapCollDetMoveDownward(movePosition: f,
                                                          oldPosition: fOld,
                                                          velocity: vel,
+                                                         size: size,
                                                          txl: txl,
                                                          txc: txc,
                                                          txr: txr,

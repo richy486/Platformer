@@ -42,40 +42,7 @@ enum KeyCode: Int, CaseIterable {
     
 }
 
-public struct IntPoint: Hashable {
-    public var x: Int
-    public var y: Int
-    public init() {
-        x = 0
-        y = 0
-    }
-    public init(x: Int, y: Int) {
-        self.x = x
-        self.y = y
-    }
-    public static var zero: IntPoint {
-        get {
-            return IntPoint()
-        }
-    }
-    
-    var cgPoint: CGPoint {
-        return CGPoint(x: CGFloat(x), y: CGFloat(y))
-    }
-}
-
-extension CGPoint {
-    var intPoint: IntPoint {
-        return IntPoint(x: Int(x), y: Int(y))
-    }
-}
-
 let VELMOVINGFRICTION = CGFloat(0.2)
-let PH = Int(25)      //Player height
-let PW = Int(22)      //Player width
-let PH_SLOPE = PH - HALFPW - 1
-let HALFPH = Int(12)
-let HALFPW = Int(11)
 let TILESIZE = Int(32)
 let COLLISION_GIVE = CGFloat(0.2) // Move back by this amount when colliding
 let BOUNCESTRENGTH = CGFloat(0.5)
@@ -517,8 +484,8 @@ class GameScene: SKScene {
     private func resetCamera() {
         let player = gameManager.player
         
-        localCameraTarget.x = player.f.x + CGFloat(PW)/2
-        localCameraTarget.y = player.f.y + CGFloat(PH) + CGFloat(AppState.shared.BLOCKSOFFCENTER * TILESIZE)
+        localCameraTarget.x = player.f.x + CGFloat(player.size.width)/2
+        localCameraTarget.y = player.f.y + CGFloat(player.size.height) + CGFloat(AppState.shared.BLOCKSOFFCENTER * TILESIZE)
         localCamera.position = localCameraTarget
     }
     

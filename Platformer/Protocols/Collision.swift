@@ -20,10 +20,10 @@ extension Collision {
     // bool CPlayer::collision_slope(int sx, int sy, int &tsx;, int &tsy;)
     // https://web.archive.org/web/20100526071550/http://jnrdev.72dpiarmy.com:80/en/jnrdev2/
     // Shouldn't change f in this function, TODO: put into protocol extension
-    func collision_slope(movePosition position: CGPoint, velocity: CGPoint, level: Level, forTile tilePosition: IntPoint? = nil, force: Bool = false) -> (position: CGPoint, collide: Bool, collideTile: IntPoint) {
+    func collisionSlope(movePosition position: CGPoint, velocity: CGPoint, size: IntSize, level: Level, forTile tilePosition: IntPoint? = nil, force: Bool = false) -> (position: CGPoint, collide: Bool, collideTile: IntPoint) {
 
-        let s = IntPoint(x: Int(position.x) + (PW>>1) + Int(velocity.x),
-                         y: Int(position.y) + PH)
+        let s = IntPoint(x: Int(position.x) + (size.width>>1) + Int(velocity.x),
+                         y: Int(position.y) + size.height)
 
         var resultingPosition = position
         var collide = false
@@ -41,7 +41,7 @@ extension Collision {
 
             // PH: minus the height (sx is located at the bottom of the player, but y is at the top)
             // -1: we don't want to stick in a tile, this would cause complications in the next frame
-            resultingPosition.y = CGFloat(yGround - inside - PH - 1)
+            resultingPosition.y = CGFloat(yGround - inside - size.height - 1)
 
             if position.y + velocity.y >= resultingPosition.y || force{
                 if AppState.shared.printCollisions {
@@ -54,7 +54,7 @@ extension Collision {
             if AppState.shared.printCollisions {
                 print("◿: \(ts)")
             }
-            resultingPosition.y = CGFloat((ts.y+1)*TILESIZE - s.x%TILESIZE - PH - 1)
+            resultingPosition.y = CGFloat((ts.y+1)*TILESIZE - s.x%TILESIZE - size.height - 1)
             if position.y + velocity.y >= resultingPosition.y  || force {
                 if AppState.shared.printCollisions {
                     print("no slope ◿: \(ts)")
@@ -71,7 +71,12 @@ extension Collision {
     }
 
     // Shouldn't change f in this function, TODO: put into protocol extension
-    func mapcolldet_moveHorizontal(movePosition position: CGPoint, velocity: CGPoint, horizontallyInDirection direction: Int, size: CGSize, level: Level) -> (position: CGPoint, velocity: CGPoint, collide: Bool, level: Level) {
+    func mapCollDetMoveHorizontal(movePosition position: CGPoint,
+                                  velocity: CGPoint,
+                                  horizontallyInDirection direction: Int,
+                                  adjustedSize: CGSize,
+                                  size: IntSize,
+                                  level: Level) -> (position: CGPoint, velocity: CGPoint, collide: Bool, level: Level) {
         
         var level = level
         
@@ -82,7 +87,7 @@ extension Collision {
 
         //Could be optimized with bit shift >> 5
         let ty = Int(position.y) / TILESIZE
-        let ty2 = Int(position.y + size.height) / TILESIZE
+        let ty2 = Int(position.y + adjustedSize.height) / TILESIZE
         var tx = -1
 
         if direction == 1 {
@@ -90,7 +95,7 @@ extension Collision {
             tx = Int(position.x) / TILESIZE;
         } else {
             //moving right
-            tx = Int(position.x + size.width) / TILESIZE;
+            tx = Int(position.x + adjustedSize.width) / TILESIZE;
         }
 
         let topTilePoint = IntPoint(x: tx, y: ty)
@@ -123,7 +128,7 @@ extension Collision {
                 position.x = CGFloat((tx << 5) + TILESIZE) + COLLISION_GIVE
             } else {
                 // move to the edge of the tile (tile on the right -> mind the player width)
-                position.x = CGFloat((tx << 5) - PW) - COLLISION_GIVE
+                position.x = CGFloat((tx << 5) - size.width) - COLLISION_GIVE
             }
 
             if abs(velocity.x) > 0.0 {
@@ -170,21 +175,22 @@ extension Collision {
     }
 
     // Shouldn't change f in this function, TODO: put into protocol extension
-    func mapcolldet_moveDownward(movePosition position: CGPoint,
-                                 oldPosition: CGPoint,
-                                 velocity: CGPoint,
-                                 txl: Int,
-                                 txc: Int,
-                                 txr: Int,
-                                 alignedBlockX: Int,
-                                 unAlignedBlockX: Int,
-                                 unAlignedBlockFX: CGFloat,
-                                 level: Level) -> (position: CGPoint, collide: Bool, inAir: Bool, groundPosition: Int, level: Level) {
+    func mapCollDetMoveDownward(movePosition position: CGPoint,
+                                oldPosition: CGPoint,
+                                velocity: CGPoint,
+                                size: IntSize,
+                                txl: Int,
+                                txc: Int,
+                                txr: Int,
+                                alignedBlockX: Int,
+                                unAlignedBlockX: Int,
+                                unAlignedBlockFX: CGFloat,
+                                level: Level) -> (position: CGPoint, collide: Bool, inAir: Bool, groundPosition: Int, level: Level) {
 
         var position = position
         var level = level
 
-        let ty = (Int(position.y) + PH) / TILESIZE
+        let ty = (Int(position.y) + size.height) / TILESIZE
 
 
         let collideTiles: TileTypeFlag = [.solid]
@@ -222,18 +228,18 @@ extension Collision {
         }
 
         let inAir: Bool
-        if (fSolidOnTopUnderPlayer || fGapSupport) && oldPosition.y + CGFloat(PH) <= CGFloat(ty << 5) {
+        if (fSolidOnTopUnderPlayer || fGapSupport) && oldPosition.y + CGFloat(size.height) <= CGFloat(ty << 5) {
 
             // on ground
             // Deal with player down jumping through solid on top tiles
 
             // we were above the tile in the previous frame
-            position.y = CGFloat((ty << 5) - PH) - COLLISION_GIVE
+            position.y = CGFloat((ty << 5) - size.height) - COLLISION_GIVE
             inAir = false
 
         } else if fSolidTileUnderPlayer {
             // on ground
-            position.y = CGFloat((ty << 5) - PH) - COLLISION_GIVE
+            position.y = CGFloat((ty << 5) - size.height) - COLLISION_GIVE
             inAir = false
         } else {
             // falling (in air)
@@ -256,10 +262,10 @@ extension Collision {
         let o2 = object
         
         // TODO: Replace PW, PH with individual sizes
-        let o1r = o1.i.x + PW
-        let o1b = o1.i.y + PH
-        let o2r = o2.i.x + PW
-        let o2b = o2.i.y + PH
+        let o1r = o1.i.x + o1.size.width
+        let o1b = o1.i.y + o1.size.height
+        let o2r = o2.i.x + o2.size.width
+        let o2b = o2.i.y + o2.size.height
         
 //        if o1r < o2.i.x {
 //            return

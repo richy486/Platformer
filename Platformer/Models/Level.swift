@@ -239,12 +239,15 @@ extension Level {
         return collide
     }
     
-    func slopesBelow(position: CGPoint, level: Level) -> (left: TileTypeFlag?, right: TileTypeFlag?) {
+    func slopesBelow(position: CGPoint, size: IntSize, level: Level) -> (left: TileTypeFlag?, right: TileTypeFlag?) {
         
-        var y = (Int(position.y) + PH_SLOPE) / TILESIZE
+        // TODO: this is also defined in CollisionObject
+        let heightSlope = size.height - (size.width/2) - 1
+        
+        var y = (Int(position.y) + heightSlope) / TILESIZE
         let leftCheck = Int(position.x) / TILESIZE
-        let centerCheck = (Int(position.x) + PW/2) / TILESIZE
-        let rightCheck = (Int(position.x) + PW) / TILESIZE
+        let centerCheck = (Int(position.x) + size.width/2) / TILESIZE
+        let rightCheck = (Int(position.x) + size.width) / TILESIZE
         
         var foundSlopeLeft: TileTypeFlag? = nil
         var foundSlopeRight: TileTypeFlag? = nil

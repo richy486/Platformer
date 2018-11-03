@@ -56,9 +56,9 @@ class Camera {
         case .center:
             break
         case .lockLeftOfPlayer:
-            target.x = targetObject.f.x + CGFloat(PW)/2 + CGFloat(TILESIZE)
+            target.x = targetObject.f.x + CGFloat(targetObject.size.width)/2 + CGFloat(TILESIZE)
         case .lockRightOfPlayer:
-            target.x = targetObject.f.x + CGFloat(PW)/2 - CGFloat(TILESIZE)
+            target.x = targetObject.f.x + CGFloat(targetObject.size.width)/2 - CGFloat(TILESIZE)
         }
         
         if cameraMode == .lockLeftOfPlayer || cameraMode == .lockRightOfPlayer {

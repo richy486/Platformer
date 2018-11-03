@@ -15,8 +15,9 @@ class Pickup: CollisionObject {
     internal var fOld: CGPoint = CGPoint.zero
     internal(set) var lastGroundPosition: Int = Int.max
     internal(set) var slopesBelow: (left: TileTypeFlag?, right: TileTypeFlag?) = (nil, nil)
-    internal(set) var inAir = false
+    internal(set) var inAir = true
     internal(set) var lastSlopeTilePoint: IntPoint?
+    internal(set) var size = IntSize(width: 30, height: 30)
     
     func update(currentTime: TimeInterval, level: Level) -> Level {
         

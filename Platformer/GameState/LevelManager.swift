@@ -81,10 +81,10 @@ class LevelManager {
                     }
                     
                     
-                    player.f = CGPoint(x: x*TILESIZE + (TILESIZE/2) - PW/2,
-                                       y: y*TILESIZE + (TILESIZE - PH) - 1)
+                    player.f = CGPoint(x: x*TILESIZE + (TILESIZE/2) - player.size.width/2,
+                                       y: y*TILESIZE + (TILESIZE - player.size.height) - 1)
 
-                    let groundPos = Int((player.f.y + CGFloat(PH)) / CGFloat(TILESIZE))
+                    let groundPos = Int((player.f.y + CGFloat(player.size.height)) / CGFloat(TILESIZE))
                     let cameraY = CGFloat((groundPos + AppState.shared.BLOCKSOFFCENTER) * TILESIZE)
                     
                     camera.position = CGPoint(x: player.f.x,
