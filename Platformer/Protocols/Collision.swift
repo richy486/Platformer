@@ -15,7 +15,7 @@ protocol Collision {
 }
 
 // MARK: Map Collision
-extension Collision {
+extension Collision where Self: CollisionHorizontal {
 
     // bool CPlayer::collision_slope(int sx, int sy, int &tsx;, int &tsy;)
     // https://web.archive.org/web/20100526071550/http://jnrdev.72dpiarmy.com:80/en/jnrdev2/
@@ -132,7 +132,9 @@ extension Collision {
             }
 
             if abs(velocity.x) > 0.0 {
-                velocity.x = 0.0
+//                velocity.x = 0.0
+//                velocity.x = velocity.x * -1.0
+                velocity = collisionHorizontalResponse(vel: velocity)
             }
 
         }

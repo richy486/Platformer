@@ -25,7 +25,7 @@ protocol CollisionObject: class {
     func update(currentTime: TimeInterval, level: Level) -> Level
 }
 
-extension CollisionObject where Self: Collision {
+extension CollisionObject where Self: Collision, Self: CollisionHorizontal {
     
     // MARK: Helper functions and vars
     var f: CGPoint {

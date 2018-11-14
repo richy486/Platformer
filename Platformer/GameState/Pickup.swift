@@ -51,3 +51,11 @@ extension Pickup: Collision {
         
     }
 }
+
+extension Pickup: CollisionHorizontal {
+    func collisionHorizontalResponse(vel: CGPoint) -> CGPoint {
+        var vel = vel
+        vel.x = vel.x * -1.0
+        return vel
+    }
+}

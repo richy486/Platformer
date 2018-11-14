@@ -158,3 +158,11 @@ extension Player: Collision {
         
     }
 }
+
+extension Player: CollisionHorizontal {
+    func collisionHorizontalResponse(vel: CGPoint) -> CGPoint {
+        var vel = vel
+        vel.x = 0
+        return vel
+    }
+}
