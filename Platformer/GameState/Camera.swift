@@ -26,6 +26,10 @@ class Camera {
         }
         let delta = currentTime - lastUpdateTimeInterval
         
+        guard AppState.shared.cameraTracking else {
+            return
+        }
+        
         // Camera X
         
         // Update to the corrent mode
