@@ -33,11 +33,14 @@ class Pickup: CollisionObject {
     }
     
     func kick(by object: MovingObject) {
-        if object.vel.x > 0 {
+        if object.f.x <= f.x {
             vel.x = 5.0
-        } else if object.vel.x < 0 {
+        } else if object.f.x > f.x {
             vel.x = -5.0
         }
+    }
+    func stop() {
+        vel.x = 0
     }
 }
 
@@ -45,10 +48,33 @@ extension Pickup: Collision {
     func tryCollide(withObject object: MovingObject) {
         
         if collisionDetection(withObject: object) {
-            kick(by: object)
+            
+            if let player = object as? Player {
+                
+                //player->fOldY + PH <= iy && player->iy + PH >= iy
+                if player.fOld.y + CGFloat(player.size.height) <= CGFloat(i.y) && player.i.y + player.size.height >= i.y {
+                    // was hit on top
+                    
+                    
+                    if vel.x != 0.0 {
+                        // Moving
+                        print("top: stop")
+                        player.jump(inDirectionX: 0, jumpModifier: 1.0)
+                        stop()
+                    } else {
+                        // Stopped
+                        print("top: kick")
+                        kick(by: player)
+                    }
+                } else {
+                    // was hit below
+
+                    print("below: kick")
+                    kick(by: player)
+
+                }
+            }
         }
-        
-        
     }
 }
 

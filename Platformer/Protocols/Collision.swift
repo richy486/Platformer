@@ -263,7 +263,6 @@ extension Collision {
         }
         let o2 = object
         
-        // TODO: Replace PW, PH with individual sizes
         let o1r = o1.i.x + o1.size.width
         let o1b = o1.i.y + o1.size.height
         let o2r = o2.i.x + o2.size.width
