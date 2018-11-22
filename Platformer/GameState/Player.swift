@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Player: CollisionObject {
+class Player: CollisionObject, ActorCarrier {
     
     internal(set) var _i = IntPoint.zero
     internal(set) var _f = CGPoint.zero
@@ -20,6 +20,8 @@ class Player: CollisionObject {
     internal(set) var lastSlopeTilePoint: IntPoint?
     internal(set) var size = IntSize(width: 22, height: 25)
     
+    internal var actors: [UUID: Actor] = [:]
+    
     private var lockjump = false
     
     func restart() {
@@ -30,6 +32,7 @@ class Player: CollisionObject {
         fOld = f
         
         vel = CGPoint.zero
+        actors = [:]
     }
     
     func update(currentTime: TimeInterval, controlCommands: ControlCommands, level: Level) -> Level {
@@ -80,10 +83,13 @@ class Player: CollisionObject {
     
     func update(currentTime: TimeInterval, level: Level) -> Level {
         var level = level
-        
         fOld = f
-        
         level = collisionDetection(level: level)
+        
+        for attached in actors {
+            level = attached.value.update(currentTime: currentTime, level: level)
+            attached.value.f = f
+        }
         
         return level
     }
@@ -154,8 +160,8 @@ class Player: CollisionObject {
 }
 
 extension Player: Collision {
-    func tryCollide(withObject object: MovingObject) {
-        
+    func tryCollide(withObject object: Actor) -> CollideResult {
+        return .none
     }
 }
 

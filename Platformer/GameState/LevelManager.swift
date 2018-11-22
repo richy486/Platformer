@@ -9,8 +9,8 @@
 
 import Foundation
 
-class LevelManager {
-    var actors: [UUID: CollisionObject & Collision] = [:]
+class LevelManager: ActorCarrier {
+    var actors: [UUID: Actor] = [:]
     let camera = Camera()
     weak var player: Player!
     
@@ -47,17 +47,35 @@ class LevelManager {
         // Updated Actors vs Actors
         // handleP2ObjCollisions();
         // handleObj2ObjCollisions();
+        var attachmentUUIDsToAttach: [(attach: UUID, to: UUID)] = []
         for a in actors {
             for b in actors {
                 guard a.key != b.key else {
                     continue
                 }
                 
-                a.value.tryCollide(withObject: b.value)
-                
-                // a.collide(b)
+                let collisionResult = a.value.tryCollide(withObject: b.value)
+                switch collisionResult {
+                case .attach:
+                    // a will attach to b
+                    attachmentUUIDsToAttach.append((attach: a.key, to: b.key))
+                default:
+                    break
+                }
                 
             }
+        }
+        for attachmentUUIDs in attachmentUUIDsToAttach {
+            guard var carrier = actors[attachmentUUIDs.to] as? ActorCarrier else {
+                print("Attampting to attach \(attachmentUUIDs.attach) to non-attachable carrier: \(attachmentUUIDs.to)")
+                continue
+            }
+            guard let attachedObject = actors.removeValue(forKey: attachmentUUIDs.attach) else {
+                print("No attachment actor for UUID: \(attachmentUUIDs.attach)")
+                return
+            }
+            carrier.actors[attachmentUUIDs.attach] = attachedObject
+            
         }
         
         // Other Updates

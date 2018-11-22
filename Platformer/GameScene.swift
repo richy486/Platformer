@@ -424,9 +424,11 @@ class GameScene: SKScene {
         gameManager.update(currentTime: currentTime, controls: controls)
         
         // After update
-        
+
+        let allActorsAndKeys = gameManager.levelManager.allActorsAndSubActors()
+
         // Remove old actors
-        let removedUUIDs = Set(spriteNodes.keys).subtracting(Set(gameManager.levelManager.actors.keys))
+        let removedUUIDs = Set(spriteNodes.keys).subtracting(Set(allActorsAndKeys.keys))
         for removedUUID in removedUUIDs {
             guard let removedNode = spriteNodes.removeValue(forKey: removedUUID) else {
                 continue
@@ -434,7 +436,7 @@ class GameScene: SKScene {
             removedNode.removeFromParent()
         }
         
-        for (uuid, actor) in gameManager.levelManager.actors {
+        for (uuid, actor) in allActorsAndKeys {
             // create new actors
             if spriteNodes[uuid] == nil {
                 guard let node = SpriteFactory.spriteNode(forCollisionObject: actor) else {

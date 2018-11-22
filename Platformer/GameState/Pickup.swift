@@ -32,7 +32,7 @@ class Pickup: CollisionObject {
         return level
     }
     
-    func kick(by object: MovingObject) {
+    func kick(by object: Actor) {
         if object.f.x <= f.x {
             vel.x = 5.0
         } else if object.f.x > f.x {
@@ -45,7 +45,7 @@ class Pickup: CollisionObject {
 }
 
 extension Pickup: Collision {
-    func tryCollide(withObject object: MovingObject) {
+    func tryCollide(withObject object: Actor) -> CollideResult {
         
         if collisionDetection(withObject: object) {
             
@@ -65,16 +65,32 @@ extension Pickup: Collision {
                         // Stopped
                         print("top: kick")
                         kick(by: player)
+                        
                     }
                 } else {
                     // was hit below
 
-                    print("below: kick")
-                    kick(by: player)
+                    if vel.x != 0.0 {
+                        // Moving
+                        print("below: kick")
+                        kick(by: player)
+                    } else if abs(player.vel.x) > AppState.shared.VELMOVING {
+                        // Stopped & player running
+                        
+                        print("below: kick")
+                        return .attach
+                    } else {
+                        // Stopped
+                        
+                        print("below: kick")
+                        kick(by: player)
+                    }
 
                 }
             }
+            return .collide
         }
+        return .none
     }
 }
 

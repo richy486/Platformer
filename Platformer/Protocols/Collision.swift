@@ -8,10 +8,16 @@
 
 import Foundation
 
-typealias MovingObject = Collision & CollisionObject
+typealias Actor = Collision & CollisionObject
+enum CollideResult {
+    case none
+    case collide
+    case attach
+}
 
 protocol Collision {
-    func tryCollide(withObject object: MovingObject)
+    
+    func tryCollide(withObject object: Actor) -> CollideResult
 }
 
 // MARK: Map Collision
@@ -257,8 +263,8 @@ extension Collision where Self: CollisionHorizontal {
 extension Collision {
     
     // bool coldec_obj2obj(CObject * o1, CObject * o2)
-    func collisionDetection(withObject object: MovingObject) -> Bool {
-        guard let o1 = self as? MovingObject else {
+    func collisionDetection(withObject object: Actor) -> Bool {
+        guard let o1 = self as? Actor else {
             return false
         }
         let o2 = object
