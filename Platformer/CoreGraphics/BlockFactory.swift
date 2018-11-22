@@ -72,7 +72,7 @@ class BlockFactory {
             let blockNode = SKSpriteNode(imageNamed: "pickup")
             blockNode.anchorPoint = CGPoint(x: 0, y: 1)
             blockNode.yScale = -1
-            blockNode.zPosition = Constants.Layer.active.rawValue
+            blockNode.zPosition = Constants.Layer.background.rawValue
             blockNode.alpha = 0.25
             return blockNode
             
@@ -80,7 +80,7 @@ class BlockFactory {
             let blockNode = SKSpriteNode(imageNamed: "playerStart")
             blockNode.anchorPoint = CGPoint(x: 0, y: 1)
             blockNode.yScale = -1
-            blockNode.zPosition = Constants.Layer.active.rawValue
+            blockNode.zPosition = Constants.Layer.background.rawValue
             return blockNode
             
         } else {
