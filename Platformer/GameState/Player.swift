@@ -64,7 +64,7 @@ class Player: CollisionObject, ActorCarrier {
                         lastSlopeTilePoint = nil
                         
                         // This functions was called through tryFallingThroughPlatform in SMW
-                        jump(inDirectionX: movementDirectionX, jumpModifier: 1.0)
+                        jump(inDirectionX: movementDirectionX, jumpModifier: 1.0)//, turbo: controlCommands.turbo)
                     }
                 }
             }
@@ -73,7 +73,7 @@ class Player: CollisionObject, ActorCarrier {
         }
         
         if movementDirectionX != 0.0 {
-            accelerateX(movementDirectionX)
+            accelerateX(movementDirectionX, turbo: controlCommands.turbo)
         } else {
             decreaseVelocity()
         }
@@ -97,14 +97,14 @@ class Player: CollisionObject, ActorCarrier {
     // MARK: Movement
     
     // void CPlayer::accelerate(float direction)
-    func accelerateX(_ direction: CGFloat) {
+    func accelerateX(_ direction: CGFloat, turbo: Bool) {
         
         var accelVel = CGPoint(x: AppState.shared.VELMOVINGADD, y: 0)
         accelVel.x *= direction
         vel += accelVel
         
         let maxVel: CGFloat
-        if keysDown[.shift] == true {
+        if turbo {
             maxVel = AppState.shared.VELTURBOMOVING
         } else {
             maxVel = AppState.shared.VELMOVING
@@ -133,7 +133,7 @@ class Player: CollisionObject, ActorCarrier {
     func jump(inDirectionX movementDirectionX: CGFloat, jumpModifier: CGFloat) {
         lockjump = true
         
-        if abs(vel.x) > AppState.shared.VELMOVING && movementDirectionX != 0 && keysDown[.shift] == true {
+        if abs(vel.x) > AppState.shared.VELMOVING && movementDirectionX != 0 {// && turbo {
             vel.y = -AppState.shared.VELTURBOJUMP * jumpModifier
         } else {
             vel.y = -AppState.shared.VELJUMP * jumpModifier

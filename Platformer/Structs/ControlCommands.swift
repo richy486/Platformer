@@ -12,4 +12,5 @@ struct ControlCommands {
     let left: Bool
     let right: Bool
     let jump: Bool
+    let turbo: Bool
 }

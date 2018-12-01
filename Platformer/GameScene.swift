@@ -48,26 +48,9 @@ let COLLISION_GIVE = CGFloat(0.2) // Move back by this amount when colliding
 let BOUNCESTRENGTH = CGFloat(0.5)
 let MAXVELY = CGFloat(20.0)
 
-var keysDown: [KeyCode: Bool] = {
-    var keys: [KeyCode: Bool] = [:]
-    KeyCode.allCases.forEach { keyCode in
-        keys[keyCode] = false
-    }
-    return keys
-}()
 
-func setModifierKeysDown(_ modifierFlags: NSEvent.ModifierFlags) {
-    
-    keysDown[.capsLock] = modifierFlags.contains(.capsLock)
-    keysDown[.shift] = modifierFlags.contains(.shift)
-    keysDown[.control] = modifierFlags.contains(.control)
-    keysDown[.option] = modifierFlags.contains(.option)
-    keysDown[.command] = modifierFlags.contains(.command)
-    keysDown[.numericPad] = modifierFlags.contains(.numericPad)
-    keysDown[.help] = modifierFlags.contains(.help)
-    keysDown[.function] = modifierFlags.contains(.function)
 
-}
+
 
 
 
@@ -94,6 +77,13 @@ class GameScene: SKScene {
     private var localCameraMode = CameraMode.center
     private var showDebugUI = true
     
+    private var keysDown: [KeyCode: Bool] = {
+        var keys: [KeyCode: Bool] = [:]
+        KeyCode.allCases.forEach { keyCode in
+            keys[keyCode] = false
+        }
+        return keys
+    }()
     private var forcedKeysDown: [KeyCode : Bool] = [:]
     
     private let selectedBlockNode: SKShapeNode = {
@@ -419,7 +409,8 @@ class GameScene: SKScene {
         
         let controls = Controls(player: ControlCommands(left: keysDown[.left] == true,
                                                         right: keysDown[.right] == true,
-                                                        jump: keysDown[.a] == true))
+                                                        jump: keysDown[.a] == true,
+                                                        turbo: keysDown[.shift] == true))
         
         gameManager.update(currentTime: currentTime, controls: controls)
         
@@ -481,6 +472,19 @@ class GameScene: SKScene {
 //        }        
         
         lastUpdateTimeInterval = currentTime
+    }
+    
+    private func setModifierKeysDown(_ modifierFlags: NSEvent.ModifierFlags) {
+        
+        keysDown[.capsLock] = modifierFlags.contains(.capsLock)
+        keysDown[.shift] = modifierFlags.contains(.shift)
+        keysDown[.control] = modifierFlags.contains(.control)
+        keysDown[.option] = modifierFlags.contains(.option)
+        keysDown[.command] = modifierFlags.contains(.command)
+        keysDown[.numericPad] = modifierFlags.contains(.numericPad)
+        keysDown[.help] = modifierFlags.contains(.help)
+        keysDown[.function] = modifierFlags.contains(.function)
+        
     }
     
     private func resetCamera() {
