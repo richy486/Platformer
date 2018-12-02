@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Piggy: CollisionObject {
+class Piggy: CollisionObject, UsesComponents, GravityComponent {
     internal(set) var _i = IntPoint.zero
     internal(set) var _f = CGPoint.zero
     internal(set) var vel: CGPoint = CGPoint.zero //velocity on x, y axis
@@ -22,16 +22,23 @@ class Piggy: CollisionObject {
     
     func update(currentTime: TimeInterval, level: Level) -> Level {
         
-        // Lets add gravity here
-        if inAir {
-            vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
-        }
         
+//        // Lets add gravity here
+//        if inAir {
+//            vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
+//        }
         var level = level
+        level = updateComponents(currentTime: currentTime, level: level)
+        
         fOld = f
         level = collisionDetection(level: level)
         return level
     }
+    
+    
+}
+
+extension Piggy: Collision {
     
     func kick(by object: Actor) {
         if object.f.x <= f.x {
@@ -43,9 +50,8 @@ class Piggy: CollisionObject {
     func stop() {
         vel.x = 0
     }
-}
-
-extension Piggy: Collision {
+    
+    
     func tryCollide(withObject object: Actor) -> CollideResult {
         
         if collisionDetection(withObject: object) {

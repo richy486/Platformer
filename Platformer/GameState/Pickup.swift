@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Pickup: CollisionObject {
+class Pickup: CollisionObject, UsesComponents, GravityComponent {
     internal(set) var _i = IntPoint.zero
     internal(set) var _f = CGPoint.zero
     internal(set) var vel: CGPoint = CGPoint.zero //velocity on x, y axis
@@ -22,12 +22,14 @@ class Pickup: CollisionObject {
     
     func update(currentTime: TimeInterval, level: Level) -> Level {
         
-        // Lets add gravity here
-        if inAir {
-            vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
-        }
+//        // Lets add gravity here
+//        if inAir {
+//            vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
+//        }
         
         var level = level
+        level = updateComponents(currentTime: currentTime, level: level)
+        
         fOld = f
         level = collisionDetection(level: level)
         return level

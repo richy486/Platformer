@@ -8,7 +8,6 @@
 
 import Foundation
 
-typealias Actor = Collision & CollisionObject
 enum CollideResult {
     case none
     case collide

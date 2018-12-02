@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Player: CollisionObject, ActorCarrier {
+class Player: CollisionObject, ActorCarrier, UsesComponents, GravityComponent {
     
     internal(set) var _i = IntPoint.zero
     internal(set) var _f = CGPoint.zero
@@ -38,10 +38,13 @@ class Player: CollisionObject, ActorCarrier {
     
     func update(currentTime: TimeInterval, controlCommands: ControlCommands, level: Level) -> Level {
         
-        // Lets add gravity here
-        if inAir {
-            vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
-        }
+//        // Lets add gravity here
+//        if inAir {
+//            vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
+//        }
+        
+        var level = level
+        level = updateComponents(currentTime: currentTime, level: level)
         
         var movementDirectionX = CGFloat(0.0)
         if controlCommands.left == controlCommands.right {

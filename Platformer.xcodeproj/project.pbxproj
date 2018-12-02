@@ -21,6 +21,9 @@
 		B93B4DC021A670AD00A442EF /* ActorCarrier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93B4DBF21A670AD00A442EF /* ActorCarrier.swift */; };
 		B93B4DD021B376E900A442EF /* Droppable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93B4DCF21B376E900A442EF /* Droppable.swift */; };
 		B93B4DD221B38FA200A442EF /* Piggy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93B4DD121B38FA200A442EF /* Piggy.swift */; };
+		B93B4DD521B39A9400A442EF /* GravityComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93B4DD421B39A9400A442EF /* GravityComponent.swift */; };
+		B93B4DD721B39AC100A442EF /* Actor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93B4DD621B39AC100A442EF /* Actor.swift */; };
+		B93B4DD921B39B8000A442EF /* UsesComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93B4DD821B39B8000A442EF /* UsesComponents.swift */; };
 		B949B3FA216051B000DFA633 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = B949B3F9216051B000DFA633 /* Player.swift */; };
 		B949B3FC21605ABA00DFA633 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B949B3FB21605ABA00DFA633 /* Constants.swift */; };
 		B950B5B1216F9C420011A44B /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950B5B0216F9C420011A44B /* Direction.swift */; };
@@ -59,6 +62,9 @@
 		B93B4DBF21A670AD00A442EF /* ActorCarrier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorCarrier.swift; sourceTree = "<group>"; };
 		B93B4DCF21B376E900A442EF /* Droppable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Droppable.swift; sourceTree = "<group>"; };
 		B93B4DD121B38FA200A442EF /* Piggy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Piggy.swift; sourceTree = "<group>"; };
+		B93B4DD421B39A9400A442EF /* GravityComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravityComponent.swift; sourceTree = "<group>"; };
+		B93B4DD621B39AC100A442EF /* Actor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actor.swift; sourceTree = "<group>"; };
+		B93B4DD821B39B8000A442EF /* UsesComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsesComponents.swift; sourceTree = "<group>"; };
 		B949B3F8215FD28600DFA633 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		B949B3F9216051B000DFA633 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		B949B3FB21605ABA00DFA633 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -108,6 +114,7 @@
 		B91F10FA217D7A7200F15EA6 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				B93B4DD621B39AC100A442EF /* Actor.swift */,
 				B91F10EE217C16F600F15EA6 /* CollisionObject.swift */,
 				B91F10EC217C146C00F15EA6 /* Collision.swift */,
 				B93B4DCF21B376E900A442EF /* Droppable.swift */,
@@ -127,6 +134,15 @@
 				B91F10FE217D7D8800F15EA6 /* Controls.swift */,
 			);
 			path = Structs;
+			sourceTree = "<group>";
+		};
+		B93B4DD321B39A7000A442EF /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				B93B4DD821B39B8000A442EF /* UsesComponents.swift */,
+				B93B4DD421B39A9400A442EF /* GravityComponent.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		B95F0368212EFAA3003E84E8 = {
@@ -153,6 +169,7 @@
 				B98C7D8B218C956F00E935CD /* Math */,
 				B9B646A1215D246700AE3A1A /* CoreGraphics */,
 				B9B646A2215D24CA00AE3A1A /* GameState */,
+				B93B4DD321B39A7000A442EF /* Components */,
 				B91F10FA217D7A7200F15EA6 /* Protocols */,
 				B91F10FB217D7B0B00F15EA6 /* Structs */,
 				B91F10F5217D6FED00F15EA6 /* Models */,
@@ -299,6 +316,7 @@
 				B91F1101217D8B0600F15EA6 /* Camera.swift in Sources */,
 				B91F10F4217D6E6300F15EA6 /* LevelManager.swift in Sources */,
 				B98C7D8A2187F44400E935CD /* Pickup.swift in Sources */,
+				B93B4DD921B39B8000A442EF /* UsesComponents.swift in Sources */,
 				B95F037D212EFAA3003E84E8 /* ViewController.swift in Sources */,
 				B95F037B212EFAA3003E84E8 /* GameScene.swift in Sources */,
 				B9B6469C2156ED1A00AE3A1A /* UnselectorCollectionView.swift in Sources */,
@@ -318,6 +336,7 @@
 				B93B4DD021B376E900A442EF /* Droppable.swift in Sources */,
 				B98C7D8D218C95B200E935CD /* IntPoint.swift in Sources */,
 				B91F10ED217C146C00F15EA6 /* Collision.swift in Sources */,
+				B93B4DD521B39A9400A442EF /* GravityComponent.swift in Sources */,
 				B91F10F9217D76B500F15EA6 /* GameManager.swift in Sources */,
 				B9B6469A2156EA1C00AE3A1A /* FirstResponderWindow.swift in Sources */,
 				B9C905F121508E5B007BCF00 /* CGHelpers.swift in Sources */,
@@ -325,6 +344,7 @@
 				B9B6469521553D5500AE3A1A /* TileItem.swift in Sources */,
 				B91F10FD217D7B3300F15EA6 /* ControlCommands.swift in Sources */,
 				B914DB66214C867300628D23 /* SliderView.swift in Sources */,
+				B93B4DD721B39AC100A442EF /* Actor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
