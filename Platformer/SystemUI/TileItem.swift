@@ -30,35 +30,39 @@ class TileItem: NSCollectionViewItem {
             tileImageView.isHidden = true
         case [.breakable, .solid]:
             tileLabel.isHidden = true
-            tileImageView.image = #imageLiteral(resourceName: "breakable")
+            tileImageView.image = NSImage(named: "breakable")
             tileImageView.isHidden = false
         case [.powerup, .solid]:
             tileLabel.isHidden = true
-            tileImageView.image = #imageLiteral(resourceName: "powerup")
+            tileImageView.image = NSImage(named: "powerup")
             tileImageView.isHidden = false
         case .solid:
             tileLabel.isHidden = true
-            tileImageView.image = #imageLiteral(resourceName: "solid")
+            tileImageView.image = NSImage(named: "solid")
             tileImageView.isHidden = false
         case .solid_on_top:
             tileLabel.isHidden = true
-            tileImageView.image = #imageLiteral(resourceName: "solid_on_top")
+            tileImageView.image = NSImage(named: "solid_on_top")
             tileImageView.isHidden = false
         case .slope_left: // left ◿
             tileLabel.isHidden = true
-            tileImageView.image = #imageLiteral(resourceName: "slope_left")
+            tileImageView.image = NSImage(named: "slope_left")
             tileImageView.isHidden = false
         case .slope_right: // right ◺
             tileLabel.isHidden = true
-            tileImageView.image = #imageLiteral(resourceName: "slope_right")
+            tileImageView.image = NSImage(named: "slope_right")
             tileImageView.isHidden = false
         case .pickup:
             tileLabel.isHidden = true
-            tileImageView.image = #imageLiteral(resourceName: "pickup")
+            tileImageView.image = NSImage(named: "pickup")
             tileImageView.isHidden = false
         case .player_start:
             tileLabel.isHidden = true
-            tileImageView.image = #imageLiteral(resourceName: "playerStart")
+            tileImageView.image = NSImage(named: "playerStart")
+            tileImageView.isHidden = false
+        case .piggy:
+            tileLabel.isHidden = true
+            tileImageView.image = NSImage(named: "piggy")
             tileImageView.isHidden = false
         default:
             break

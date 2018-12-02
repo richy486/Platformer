@@ -20,6 +20,7 @@
 		B91F1105217F694900F15EA6 /* SpriteFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91F1104217F694900F15EA6 /* SpriteFactory.swift */; };
 		B93B4DC021A670AD00A442EF /* ActorCarrier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93B4DBF21A670AD00A442EF /* ActorCarrier.swift */; };
 		B93B4DD021B376E900A442EF /* Droppable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93B4DCF21B376E900A442EF /* Droppable.swift */; };
+		B93B4DD221B38FA200A442EF /* Piggy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93B4DD121B38FA200A442EF /* Piggy.swift */; };
 		B949B3FA216051B000DFA633 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = B949B3F9216051B000DFA633 /* Player.swift */; };
 		B949B3FC21605ABA00DFA633 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B949B3FB21605ABA00DFA633 /* Constants.swift */; };
 		B950B5B1216F9C420011A44B /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950B5B0216F9C420011A44B /* Direction.swift */; };
@@ -57,6 +58,7 @@
 		B91F1104217F694900F15EA6 /* SpriteFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteFactory.swift; sourceTree = "<group>"; };
 		B93B4DBF21A670AD00A442EF /* ActorCarrier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorCarrier.swift; sourceTree = "<group>"; };
 		B93B4DCF21B376E900A442EF /* Droppable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Droppable.swift; sourceTree = "<group>"; };
+		B93B4DD121B38FA200A442EF /* Piggy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Piggy.swift; sourceTree = "<group>"; };
 		B949B3F8215FD28600DFA633 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		B949B3F9216051B000DFA633 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		B949B3FB21605ABA00DFA633 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 				B949B3F9216051B000DFA633 /* Player.swift */,
 				B91F1100217D8B0600F15EA6 /* Camera.swift */,
 				B98C7D892187F44400E935CD /* Pickup.swift */,
+				B93B4DD121B38FA200A442EF /* Piggy.swift */,
 			);
 			path = GameState;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 				B91F10F9217D76B500F15EA6 /* GameManager.swift in Sources */,
 				B9B6469A2156EA1C00AE3A1A /* FirstResponderWindow.swift in Sources */,
 				B9C905F121508E5B007BCF00 /* CGHelpers.swift in Sources */,
+				B93B4DD221B38FA200A442EF /* Piggy.swift in Sources */,
 				B9B6469521553D5500AE3A1A /* TileItem.swift in Sources */,
 				B91F10FD217D7B3300F15EA6 /* ControlCommands.swift in Sources */,
 				B914DB66214C867300628D23 /* SliderView.swift in Sources */,

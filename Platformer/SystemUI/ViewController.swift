@@ -16,10 +16,11 @@ var basicTileTypes: [TileTypeFlag] = [
     .solid_on_top,
     [.breakable, .solid],
     [.powerup, .solid],
-    .slope_left,    // ◿
-    .slope_right,   // ◺
-    .pickup,
-    .player_start
+    .slope_left,            // ◿
+    .slope_right,           // ◺
+    .pickup,                // 🎁
+    .piggy,                 // 🐷
+    .player_start           // 🚩
 ]
 
 // View Controller is origin bottom left

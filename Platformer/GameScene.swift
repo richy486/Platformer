@@ -419,7 +419,22 @@ class GameScene: SKScene {
             }
             
             // Update actors
-            spriteNodes[uuid]?.position = actor.f
+            guard let node = spriteNodes[uuid] else {
+                print("Couldn't update node for UUID: \(uuid)")
+                continue
+            }
+            node.position = actor.f
+            
+            if let spriteNode = node as? SKSpriteNode {
+                if actor.direction.contains(.right) {
+                    spriteNode.anchorPoint.x = 0
+                    spriteNode.xScale = 1
+                } else {
+                    spriteNode.anchorPoint.x = 1
+                    spriteNode.xScale = -1
+                }
+            }
+//            node.xScale = actor.direction.contains(.right) ? 1 : -1
         }
         
         

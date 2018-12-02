@@ -24,6 +24,7 @@ struct TileTypeFlag: OptionSet {
     
     static let pickup = TileTypeFlag(rawValue: 1 << 8)
     static let player_start = TileTypeFlag(rawValue: 1 << 9)
+    static let piggy = TileTypeFlag(rawValue: 1 << 10)
     
     // 0000
     // 1010
