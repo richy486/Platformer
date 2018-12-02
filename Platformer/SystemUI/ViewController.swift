@@ -147,11 +147,11 @@ class ViewController: NSViewController {
 }
 
 extension ViewController: GameSceneDelegate {
-    func keysUpdated(keysDown: [KeyCode: Bool], oldKeysDown: [KeyCode: Bool]) {
-        leftLabel.backgroundColor = keysDown[.left] == true ? .red : .lightGray
-        rightLabel.backgroundColor = keysDown[.right] == true ? .red : .lightGray
-        jumpLabel.backgroundColor = keysDown[.a] == true ? .red : .lightGray
-        runLabel.backgroundColor = keysDown[.shift] == true ? .red : .lightGray
+    func controlsUpdated(controls: Controls) {
+        leftLabel.backgroundColor = controls.player.left ? .red : .lightGray
+        rightLabel.backgroundColor = controls.player.right ? .red : .lightGray
+        jumpLabel.backgroundColor = controls.player.jump ? .red : .lightGray
+        runLabel.backgroundColor = controls.player.turbo ? .red : .lightGray
     }
     func cameraModeUpdated(cameraMode: CameraMode) {
         leftOfLabel.backgroundColor = cameraMode == .lockLeftOfPlayer ? .red : .lightGray
@@ -164,7 +164,9 @@ extension ViewController: GameSceneDelegate {
         let velNorm = player.vel.normalized
         let normalRad = velNorm.radians
         
-        velocityLabel.stringValue = String(format: "Velocity: %.02f,%.02f, norm: %.02f,%.02f (%.02fn %.02f) ",
+        let dirStr = player.direction.contains(.left) ? "<-" : "->"
+        
+        velocityLabel.stringValue = String(format: "Velocity: %.02f,%.02f  \(dirStr)   , norm: %.02f,%.02f (%.02fn %.02f) ",
                                            player.vel.x, player.vel.y,
                                            velNorm.x, velNorm.y,
                                            normalRad, velRad)
@@ -230,12 +232,4 @@ extension ViewController: NSCollectionViewDataSource {
         
         return tileItem
     }
-    
-    
-    
-    
-    
-    
-    
-    
 }

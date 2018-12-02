@@ -21,6 +21,7 @@ protocol CollisionObject: class {
     var slopesBelow: (left: TileTypeFlag?, right: TileTypeFlag?) { get set }
     var lastGroundPosition: Int { get set }
     var size: IntSize { get }
+    var direction: Direction { get set }
     
     func update(currentTime: TimeInterval, level: Level) -> Level
 }
@@ -45,6 +46,34 @@ extension CollisionObject where Self: Collision, Self: CollisionHorizontal {
         get {
             return _i
         }
+    }
+    
+    private func updateDirection() {
+        
+        var direction: Direction = []
+        if vel.x > 0.0 {
+            direction = direction.union(.right)
+        } else if vel.x < 0.0 {
+            direction = direction.union(.left)
+        } else {
+            // Keep last X direction
+            direction = self.direction.intersection([.left, .right])
+        }
+        
+        // Always has to have a direction.
+        // Although before the first frame finishes this check wont be called
+        // Face the right for right to left levels
+        if direction.contains(.right) == false && direction.contains(.left) == false {
+            direction = direction.union(.right)
+        }
+        
+        if vel.y < 0.0 {
+            direction = direction.union(.up)
+        } else if vel.y > 0.0 {
+            direction = direction.union(.down)
+        }
+        
+        self.direction = direction
     }
     
     func cap(fallingVelocity velY: CGFloat) -> CGFloat {
@@ -236,6 +265,8 @@ extension CollisionObject where Self: Collision, Self: CollisionHorizontal {
                 }
             }
         }
+        
+        updateDirection()
         
         return level
     }

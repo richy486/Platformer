@@ -19,6 +19,7 @@ class Player: CollisionObject, ActorCarrier {
     internal(set) var inAir = false
     internal(set) var lastSlopeTilePoint: IntPoint?
     internal(set) var size = IntSize(width: 22, height: 25)
+    internal(set) var direction: Direction = []
     
     internal var actors: [UUID: Actor] = [:]
     

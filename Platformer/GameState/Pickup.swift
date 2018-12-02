@@ -18,6 +18,7 @@ class Pickup: CollisionObject {
     internal(set) var inAir = true
     internal(set) var lastSlopeTilePoint: IntPoint?
     internal(set) var size = IntSize(width: 30, height: 30)
+    internal(set) var direction: Direction = []
     
     func update(currentTime: TimeInterval, level: Level) -> Level {
         
@@ -34,9 +35,9 @@ class Pickup: CollisionObject {
     
     func kick(by object: Actor) {
         if object.f.x <= f.x {
-            vel.x = 5.0
+            vel.x = AppState.shared.VELKICK
         } else if object.f.x > f.x {
-            vel.x = -5.0
+            vel.x = -AppState.shared.VELKICK
         }
     }
     func stop() {
@@ -77,7 +78,7 @@ extension Pickup: Collision {
                     } else if abs(player.vel.x) > AppState.shared.VELMOVING {
                         // Stopped & player running
                         
-                        print("below: kick")
+                        print("below: attach")
                         return .attach
                     } else {
                         // Stopped
@@ -99,5 +100,22 @@ extension Pickup: CollisionHorizontal {
         var vel = vel
         vel.x = vel.x * -1.0
         return vel
+    }
+}
+
+extension Pickup: Droppable {
+    func drop(by actor: Actor) {
+
+        if actor.direction.contains(.right) {
+            print("drop right")
+            f.x = actor.f.x + CGFloat(actor.size.width) + 1
+            f.y = actor.f.y + CGFloat(actor.size.height) - CGFloat(size.height) - 1
+            vel.x = AppState.shared.VELKICK
+        } else if actor.direction.contains(.left) {
+            print("drop left")
+            f.x = actor.f.x - CGFloat(size.width) - 1
+            f.y = actor.f.y + CGFloat(actor.size.height) - CGFloat(size.height) - 1
+            vel.x = -AppState.shared.VELKICK
+        }
     }
 }

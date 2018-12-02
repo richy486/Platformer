@@ -48,14 +48,8 @@ let COLLISION_GIVE = CGFloat(0.2) // Move back by this amount when colliding
 let BOUNCESTRENGTH = CGFloat(0.5)
 let MAXVELY = CGFloat(20.0)
 
-
-
-
-
-
-
 protocol GameSceneDelegate {
-    func keysUpdated(keysDown: [KeyCode: Bool], oldKeysDown: [KeyCode: Bool])
+    func controlsUpdated(controls: Controls)
     func cameraModeUpdated(cameraMode: CameraMode)
     func playerStateUpdated(player: Player)
     func setDebugModeUI(_ debugUI: Bool)
@@ -273,34 +267,20 @@ class GameScene: SKScene {
     
     override func keyDown(with event: NSEvent) {
         
-        let oldKeysDown = keysDown
-        let oldHash = keysDown.hashValue
-        
         if let keyCode = KeyCode(rawValue: Int(event.keyCode)) {
             keysDown[keyCode] = true
         } else {
             print("unused key code: \(event.keyCode)")
         }
         setModifierKeysDown(event.modifierFlags)
-        
-        if keysDown.hashValue != oldHash {
-            gameSceneDelegate?.keysUpdated(keysDown: keysDown, oldKeysDown: oldKeysDown)
-        }
     }
     
     override func keyUp(with event: NSEvent) {
-        
-        let oldKeysDown = keysDown
-        let oldHash = keysDown.hashValue
         
         if let keyCode = KeyCode(rawValue: Int(event.keyCode)) {
             keysDown[keyCode] = false
         }
         setModifierKeysDown(event.modifierFlags)
-        
-        if keysDown.hashValue != oldHash {
-            gameSceneDelegate?.keysUpdated(keysDown: keysDown, oldKeysDown: oldKeysDown)
-        }
     }
     
     override func mouseDown(with event: NSEvent) {
@@ -409,10 +389,11 @@ class GameScene: SKScene {
         
         let controls = Controls(player: ControlCommands(left: keysDown[.left] == true,
                                                         right: keysDown[.right] == true,
-                                                        jump: keysDown[.a] == true,
-                                                        turbo: keysDown[.shift] == true))
+                                                        jump: keysDown[.z] == true,
+                                                        turbo: keysDown[.a] == true))
         
         gameManager.update(currentTime: currentTime, controls: controls)
+        gameSceneDelegate?.controlsUpdated(controls: controls)
         
         // After update
 

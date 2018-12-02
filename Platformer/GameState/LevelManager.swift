@@ -40,6 +40,8 @@ class LevelManager: ActorCarrier {
             }
         }
         
+        // Camera
+        
         if let player = player {
             camera.update(currentTime: currentTime, targetObject: player)
         }
@@ -47,7 +49,9 @@ class LevelManager: ActorCarrier {
         // Updated Actors vs Actors
         // handleP2ObjCollisions();
         // handleObj2ObjCollisions();
-        var attachmentUUIDsToAttach: [(attach: UUID, to: UUID)] = []
+        
+//        var attachmentUUIDsToAttach: [(attach: UUID, to: UUID)] = []
+        var attachmentActorsToAttach: [(attach: (uuid: UUID, actor: Actor), from: ActorCarrier, to: ActorCarrier)] = []
         for a in actors {
             for b in actors {
                 guard a.key != b.key else {
@@ -58,25 +62,63 @@ class LevelManager: ActorCarrier {
                 switch collisionResult {
                 case .attach:
                     // a will attach to b
-                    attachmentUUIDsToAttach.append((attach: a.key, to: b.key))
+//                    attachmentUUIDsToAttach.append((attach: a.key, to: b.key))
+                    
+                    if let newCarrier = b.value as? ActorCarrier {
+                        let uuidActor = (uuid: a.key, actor: a.value)
+                        attachmentActorsToAttach.append((attach: uuidActor, from: self, to: newCarrier))
+                    }
                 default:
                     break
                 }
                 
             }
         }
-        for attachmentUUIDs in attachmentUUIDsToAttach {
-            guard var carrier = actors[attachmentUUIDs.to] as? ActorCarrier else {
-                print("Attampting to attach \(attachmentUUIDs.attach) to non-attachable carrier: \(attachmentUUIDs.to)")
+        
+        // Drop all carried objects if not in turbo
+        if let player = player, controls.player.turbo == false {
+            for a in player.actors {
+                let uuidActor = (uuid: a.key, actor: a.value)
+                attachmentActorsToAttach.append((attach: uuidActor, from: player, to: self))
+            }
+        }
+        
+        for attachments in attachmentActorsToAttach {
+            let uuid = attachments.attach.uuid
+            var from = attachments.from
+            var to = attachments.to
+            
+            guard let attachable = from.actors.removeValue(forKey: uuid) else {
+                print("No attachment actor for UUID: \(uuid)")
                 continue
             }
-            guard let attachedObject = actors.removeValue(forKey: attachmentUUIDs.attach) else {
-                print("No attachment actor for UUID: \(attachmentUUIDs.attach)")
-                return
+            
+            to.actors[uuid] = attachable
+            
+            if let dropableAttachable = attachable as? Droppable,
+                let dropper = from as? Actor,
+                to is LevelManager {
+//                let levelManager = to as? LevelManager,
+//                levelManager == self {
+                
+                dropableAttachable.drop(by: dropper)
             }
-            carrier.actors[attachmentUUIDs.attach] = attachedObject
             
         }
+        
+        
+//        for attachmentUUIDs in attachmentUUIDsToAttach {
+//            guard var carrier = actors[attachmentUUIDs.to] as? ActorCarrier else {
+//                print("Attampting to attach \(attachmentUUIDs.attach) to non-attachable carrier: \(attachmentUUIDs.to)")
+//                continue
+//            }
+//            guard let attachedObject = actors.removeValue(forKey: attachmentUUIDs.attach) else {
+//                print("No attachment actor for UUID: \(attachmentUUIDs.attach)")
+//                return
+//            }
+//            carrier.actors[attachmentUUIDs.attach] = attachedObject
+//
+//        }
         
         // Other Updates
         // game_values.gamemode->think();

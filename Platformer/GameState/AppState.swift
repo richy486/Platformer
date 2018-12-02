@@ -64,6 +64,7 @@ struct AppState : Codable {
     var VELMOVINGADD = CGFloat(0.5)
     var VELMOVING = CGFloat(4.0)        //velocity (speed) for moving left, right
     var VELTURBOMOVING = CGFloat(5.5)
+    var VELKICK = CGFloat(5.0)
     
     var VELJUMP = CGFloat(9.0)          //velocity for jumping
     var VELSTOPJUMP = CGFloat(5.0)
