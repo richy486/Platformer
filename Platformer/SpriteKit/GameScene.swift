@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import PlatformerSystem
 
 enum KeyCode: Int, CaseIterable {
     case left = 123
@@ -41,12 +42,6 @@ enum KeyCode: Int, CaseIterable {
     case greaterThan = 47
     
 }
-
-let VELMOVINGFRICTION = CGFloat(0.2)
-let TILESIZE = Int(32)
-let COLLISION_GIVE = CGFloat(0.2) // Move back by this amount when colliding
-let BOUNCESTRENGTH = CGFloat(0.5)
-let MAXVELY = CGFloat(20.0)
 
 protocol GameSceneDelegate {
     func controlsUpdated(controls: Controls)

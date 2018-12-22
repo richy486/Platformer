@@ -674,7 +674,7 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Platformer" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Platformer_iOS" customModuleProvider="target"/>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -684,7 +684,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="Platformer" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="IQv-IB-iLA" customClass="FirstResponderWindow" customModule="Platformer" customModuleProvider="target">
+                    <window key="window" title="Platformer" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="IQv-IB-iLA" customClass="FirstResponderWindow" customModule="Platformer_iOS" customModuleProvider="target">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="480" height="270"/>
@@ -704,7 +704,7 @@
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="Platformer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="Platformer_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -924,7 +924,7 @@
                                                     <rect key="frame" x="0.0" y="-229" width="310" height="424"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <subviews>
-                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="e2t-eS-Hko" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
+                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="e2t-eS-Hko" customClass="SliderView" customModule="Platformer_iOS" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="378" width="310" height="46"/>
                                                             <subviews>
                                                                 <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="IwX-4h-IfS">
@@ -973,7 +973,7 @@
                                                                 <outlet property="titleLabel" destination="mdP-Wu-Bdz" id="hlu-pK-ZIG"/>
                                                             </connections>
                                                         </customView>
-                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="tXX-98-tff" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
+                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="tXX-98-tff" customClass="SliderView" customModule="Platformer_iOS" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="324" width="310" height="46"/>
                                                             <subviews>
                                                                 <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="eoE-Qb-SAk">
@@ -1022,7 +1022,7 @@
                                                                 <outlet property="titleLabel" destination="Idn-Ik-503" id="jxG-j0-l1l"/>
                                                             </connections>
                                                         </customView>
-                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="ZXz-PT-BPa" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
+                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="ZXz-PT-BPa" customClass="SliderView" customModule="Platformer_iOS" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="270" width="310" height="46"/>
                                                             <subviews>
                                                                 <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="d6a-oF-RkU">
@@ -1071,7 +1071,7 @@
                                                                 <outlet property="titleLabel" destination="viX-Mq-z8a" id="7So-Vn-28V"/>
                                                             </connections>
                                                         </customView>
-                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="2rI-EL-6MU" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
+                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="2rI-EL-6MU" customClass="SliderView" customModule="Platformer_iOS" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="216" width="310" height="46"/>
                                                             <subviews>
                                                                 <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="0dr-jl-0A0">
@@ -1120,7 +1120,7 @@
                                                                 <outlet property="titleLabel" destination="mxf-Dn-4zc" id="fk1-mt-Ean"/>
                                                             </connections>
                                                         </customView>
-                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="e34-Tg-u1h" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
+                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="e34-Tg-u1h" customClass="SliderView" customModule="Platformer_iOS" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="162" width="310" height="46"/>
                                                             <subviews>
                                                                 <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="rnI-wn-vwh">
@@ -1169,7 +1169,7 @@
                                                                 <outlet property="titleLabel" destination="PTU-LC-KFu" id="Ijg-qJ-KzA"/>
                                                             </connections>
                                                         </customView>
-                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="Xys-6x-xVR" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
+                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="Xys-6x-xVR" customClass="SliderView" customModule="Platformer_iOS" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="108" width="310" height="46"/>
                                                             <subviews>
                                                                 <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="FE5-ZP-0zL">
@@ -1218,7 +1218,7 @@
                                                                 <outlet property="titleLabel" destination="o60-Cr-rcU" id="HE9-Ac-MTx"/>
                                                             </connections>
                                                         </customView>
-                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="zrs-qP-7EE" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
+                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="zrs-qP-7EE" customClass="SliderView" customModule="Platformer_iOS" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="54" width="310" height="46"/>
                                                             <subviews>
                                                                 <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="eLJ-ED-XIm">
@@ -1267,7 +1267,7 @@
                                                                 <outlet property="titleLabel" destination="p37-VZ-s4r" id="vi8-M3-yn3"/>
                                                             </connections>
                                                         </customView>
-                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="H0E-hj-q5Q" customClass="SliderView" customModule="Platformer" customModuleProvider="target">
+                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="H0E-hj-q5Q" customClass="SliderView" customModule="Platformer_iOS" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="0.0" width="310" height="46"/>
                                                             <subviews>
                                                                 <box boxType="custom" borderType="line" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="vzp-yO-oDY">
@@ -1355,7 +1355,7 @@
                                             <rect key="frame" x="1" y="1" width="50" height="98"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <collectionView selectable="YES" id="DFh-oj-NtQ" customClass="UnselectorCollectionView" customModule="Platformer" customModuleProvider="target">
+                                                <collectionView selectable="YES" id="DFh-oj-NtQ" customClass="UnselectorCollectionView" customModule="Platformer_iOS" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="98"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                                     <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="syV-Mh-bOj">

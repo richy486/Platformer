@@ -8,6 +8,10 @@
 
 import Foundation
 
-struct Controls {
-    let player: ControlCommands
+public struct Controls {
+    public let player: ControlCommands
+    
+    public init(player: ControlCommands) {
+        self.player = player
+    }
 }

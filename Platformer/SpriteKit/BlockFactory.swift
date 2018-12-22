@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import PlatformerSystem
 
 class BlockFactory {
     static func blockNode(forTileType tileType: TileTypeFlag) -> SKNode? {

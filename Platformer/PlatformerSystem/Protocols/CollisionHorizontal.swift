@@ -8,6 +8,6 @@
 
 import Foundation
 
-protocol CollisionHorizontal {
+public protocol CollisionHorizontal {
     func collisionHorizontalResponse(vel: CGPoint) -> CGPoint
 }

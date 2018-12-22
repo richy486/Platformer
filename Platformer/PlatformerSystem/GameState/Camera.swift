@@ -8,14 +8,14 @@
 
 import Foundation
 
-enum CameraMode {
+public enum CameraMode {
     case center
     case lockLeftOfPlayer
     case lockRightOfPlayer
 }
 
-class Camera {
-    var position = CGPoint.zero
+public class Camera {
+    public var position = CGPoint.zero
     private(set) var target = CGPoint.zero
     private var cameraMode = CameraMode.center
     private var lastUpdateTimeInterval: CFTimeInterval = 0

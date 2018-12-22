@@ -8,13 +8,13 @@
 
 import Foundation
 
-enum CollideResult {
+public enum CollideResult {
     case none
     case collide
     case attach
 }
 
-protocol Collision {
+public protocol Collision {
     
     func tryCollide(withObject object: Actor) -> CollideResult
 }

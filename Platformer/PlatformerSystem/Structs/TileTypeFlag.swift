@@ -8,23 +8,27 @@
 
 import Foundation
 
-struct TileTypeFlag: OptionSet {
+public struct TileTypeFlag: OptionSet {
     
-    let rawValue: Int
+    public let rawValue: Int
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
     
-    static let nonsolid = TileTypeFlag(rawValue: 1 << 0)
-    static let solid = TileTypeFlag(rawValue: 1 << 1)
-    static let solid_on_top = TileTypeFlag(rawValue: 1 << 2)
-    static let breakable = TileTypeFlag(rawValue: 1 << 3)
-    static let used = TileTypeFlag(rawValue: 1 << 4)
-    static let powerup = TileTypeFlag(rawValue: 1 << 5)
-    
-    static let slope_left = TileTypeFlag(rawValue: 1 << 6)  // ◿
-    static let slope_right = TileTypeFlag(rawValue: 1 << 7) // ◺
-    
-    static let pickup = TileTypeFlag(rawValue: 1 << 8)
-    static let player_start = TileTypeFlag(rawValue: 1 << 9)
-    static let piggy = TileTypeFlag(rawValue: 1 << 10)
+    public static let nonsolid = TileTypeFlag(rawValue: 1 << 0)
+    public static let solid = TileTypeFlag(rawValue: 1 << 1)
+    public static let solid_on_top = TileTypeFlag(rawValue: 1 << 2)
+    public static let breakable = TileTypeFlag(rawValue: 1 << 3)
+    public static let used = TileTypeFlag(rawValue: 1 << 4)
+    public static let powerup = TileTypeFlag(rawValue: 1 << 5)
+
+    public static let slope_left = TileTypeFlag(rawValue: 1 << 6)  // ◿
+    public static let slope_right = TileTypeFlag(rawValue: 1 << 7) // ◺
+
+    public static let pickup = TileTypeFlag(rawValue: 1 << 8)
+    public static let player_start = TileTypeFlag(rawValue: 1 << 9)
+    public static let piggy = TileTypeFlag(rawValue: 1 << 10)
+   
     
     // 0000
     // 1010

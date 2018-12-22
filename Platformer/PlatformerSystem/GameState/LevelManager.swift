@@ -9,12 +9,12 @@
 
 import Foundation
 
-class LevelManager: ActorCarrier {
-    var actors: [UUID: Actor] = [:]
-    let camera = Camera()
-    weak var player: Player!
+public class LevelManager: ActorCarrier {
+    public var actors: [UUID: Actor] = [:]
+    public let camera = Camera()
+    public weak var player: Player!
     
-    var level: Level
+    public var level: Level
     
     init(level: Level, player: Player) {
         self.level = level

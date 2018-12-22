@@ -8,7 +8,13 @@
 
 import Foundation
 
-struct Constants {
+public let VELMOVINGFRICTION = CGFloat(0.2)
+public let TILESIZE = Int(32)
+public let COLLISION_GIVE = CGFloat(0.2) // Move back by this amount when colliding
+public let BOUNCESTRENGTH = CGFloat(0.5)
+public let MAXVELY = CGFloat(20.0)
+
+public struct Constants {
 
     public static let kNotificationCollide = NSNotification.Name(rawValue: "kNotificationCollide")
     public static let kCollideXPosition = "kCollideXPosition"
@@ -19,7 +25,7 @@ struct Constants {
     public static let kMapChangePoint = "kMapChangePoint"
     public static let kMapChangeTileType = "kMapChangeTileType"
     
-    enum Layer: CGFloat {
+    public enum Layer: CGFloat {
         case background = 0
         case active = 20
         case debug = 100

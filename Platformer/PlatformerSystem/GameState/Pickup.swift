@@ -8,19 +8,19 @@
 
 import Foundation
 
-class Pickup: CollisionObject, UsesComponents, GravityComponent {
-    internal(set) var _i = IntPoint.zero
-    internal(set) var _f = CGPoint.zero
-    internal(set) var vel: CGPoint = CGPoint.zero //velocity on x, y axis
-    internal var fOld: CGPoint = CGPoint.zero
-    internal(set) var lastGroundPosition: Int = Int.max
-    internal(set) var slopesBelow: (left: TileTypeFlag?, right: TileTypeFlag?) = (nil, nil)
-    internal(set) var inAir = true
-    internal(set) var lastSlopeTilePoint: IntPoint?
-    internal(set) var size = IntSize(width: 30, height: 30)
-    internal(set) var direction: Direction = []
+public class Pickup: CollisionObject, UsesComponents, GravityComponent {
+    public var _i = IntPoint.zero
+    public var _f = CGPoint.zero
+    public var vel: CGPoint = CGPoint.zero //velocity on x, y axis
+    public var fOld: CGPoint = CGPoint.zero
+    public var lastGroundPosition: Int = Int.max
+    public var slopesBelow: (left: TileTypeFlag?, right: TileTypeFlag?) = (nil, nil)
+    public var inAir = true
+    public var lastSlopeTilePoint: IntPoint?
+    public var size = IntSize(width: 30, height: 30)
+    public var direction: Direction = []
     
-    func update(currentTime: TimeInterval, level: Level) -> Level {
+    public func update(currentTime: TimeInterval, level: Level) -> Level {
         
 //        // Lets add gravity here
 //        if inAir {
@@ -48,7 +48,7 @@ class Pickup: CollisionObject, UsesComponents, GravityComponent {
 }
 
 extension Pickup: Collision {
-    func tryCollide(withObject object: Actor) -> CollideResult {
+    public func tryCollide(withObject object: Actor) -> CollideResult {
         
         if collisionDetection(withObject: object) {
             
@@ -98,7 +98,7 @@ extension Pickup: Collision {
 }
 
 extension Pickup: CollisionHorizontal {
-    func collisionHorizontalResponse(vel: CGPoint) -> CGPoint {
+    public func collisionHorizontalResponse(vel: CGPoint) -> CGPoint {
         var vel = vel
         vel.x = vel.x * -1.0
         return vel

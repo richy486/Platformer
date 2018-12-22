@@ -8,4 +8,4 @@
 
 import Foundation
 
-typealias Actor = Collision & CollisionObject & CollisionHorizontal
+public typealias Actor = Collision & CollisionObject & CollisionHorizontal

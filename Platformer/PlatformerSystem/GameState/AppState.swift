@@ -8,13 +8,13 @@
 
 import Foundation
 
-enum EditMode: Codable {
+public enum EditMode: Codable {
     
     private enum CodingKeys: String, CodingKey {
         case none, paint, erase
     }
     
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
         if values.contains(.paint) {
@@ -32,7 +32,7 @@ enum EditMode: Codable {
         }
     }
     
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
         switch self {
@@ -58,22 +58,22 @@ enum EditMode: Codable {
     }
 }
 
-struct AppState : Codable {
-    static var shared = AppState()
+public struct AppState : Codable {
+    public static var shared = AppState()
     
-    var VELMOVINGADD = CGFloat(0.5)
-    var VELMOVING = CGFloat(4.0)        //velocity (speed) for moving left, right
-    var VELTURBOMOVING = CGFloat(5.5)
-    var VELKICK = CGFloat(5.0)
+    public var VELMOVINGADD = CGFloat(0.5)
+    public var VELMOVING = CGFloat(4.0)        //velocity (speed) for moving left, right
+    public var VELTURBOMOVING = CGFloat(5.5)
+    public var VELKICK = CGFloat(5.0)
     
-    var VELJUMP = CGFloat(9.0)          //velocity for jumping
-    var VELSTOPJUMP = CGFloat(5.0)
-    var VELTURBOJUMP = CGFloat(10.2)    //velocity for turbo jumping
-    var GRAVITATION = CGFloat(0.40)
+    public var VELJUMP = CGFloat(9.0)          //velocity for jumping
+    public var VELSTOPJUMP = CGFloat(5.0)
+    public var VELTURBOJUMP = CGFloat(10.2)    //velocity for turbo jumping
+    public var GRAVITATION = CGFloat(0.40)
     
-    var BLOCKSOFFCENTER = Int(-8)
+    public var BLOCKSOFFCENTER = Int(-8)
     
-    var editMode: EditMode = .none {
+    public var editMode: EditMode = .none {
         didSet {
             switch editMode {
             case .none:
@@ -86,18 +86,18 @@ struct AppState : Codable {
         }
     }
     
-    var cameraMoveSpeed = CGFloat(500)
+    public var cameraMoveSpeed = CGFloat(500)
     
-    var cameraTracking = true
-    var printCollisions = false
-    var showBlockCoords = true
+    public var cameraTracking = true
+    public var printCollisions = false
+    public var showBlockCoords = true
     
     // Stairs
     // new velocity jump: 14.901377688172044
     // new gravitation: 0.9783070116487457
     // turbo jump 17.75
     
-    var blocks = [
+    public var blocks = [
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,S],
@@ -124,7 +124,7 @@ struct AppState : Codable {
         [S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S]
     ]
     
-    static func save() {
+    public static func save() {
         
         var appState = AppState.shared
         
@@ -174,7 +174,7 @@ struct AppState : Codable {
         print("Saved! \(fileURL.absoluteString)")
     }
     
-    static func load() {
+    public static func load() {
         let jsonString: String
         let fileURL = URL(fileURLWithPath: "appState.json")
         print("loading from: \(fileURL)")

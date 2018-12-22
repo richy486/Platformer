@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import PlatformerSystem
 
 class SpriteFactory {
     static func spriteNode(forCollisionObject collisionObject: CollisionObject) -> SKNode? {

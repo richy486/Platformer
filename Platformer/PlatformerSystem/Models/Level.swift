@@ -7,9 +7,9 @@
 //
 
 import Foundation
-struct Level : Codable {
-    var name: String
-    var blocks: [[Int]]
+public struct Level : Codable {
+    public var name: String
+    public var blocks: [[Int]]
     
     init() {
         name = "Level 1"
@@ -71,7 +71,7 @@ struct Level : Codable {
         print("Loaded!")
     }
     
-    func save() {
+    public func save() {
         
         var mutableSelf = self
         
@@ -178,7 +178,7 @@ extension Level {
         return direction
     }
     
-    mutating func setMap(x: Int, y: Int, tileType: TileTypeFlag) {
+    public mutating func setMap(x: Int, y: Int, tileType: TileTypeFlag) {
         
         guard y >= 0 && y < blocks.count else {
             return
@@ -198,14 +198,14 @@ extension Level {
                                             ])
     }
     
-    func posToTilePos(_ position: CGPoint) -> (x: Int, y: Int) {
+    public func posToTilePos(_ position: CGPoint) -> (x: Int, y: Int) {
         let x = Int(position.x + 0.5) / TILESIZE
         let y = (Int(position.y + 0.5) / TILESIZE) //+ 1
         
         return (x, y)
     }
     
-    func posToTile(_ position: CGPoint) -> Int {
+    public func posToTile(_ position: CGPoint) -> Int {
         let tilePos = posToTilePos(position)
         
         return map(x: tilePos.x, y: tilePos.y)

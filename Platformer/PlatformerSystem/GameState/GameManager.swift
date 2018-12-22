@@ -10,22 +10,22 @@
 
 import Foundation
 
-class GameManager {
-    var levelManager: LevelManager
-    var player: Player
+public class GameManager {
+    public var levelManager: LevelManager
+    public var player: Player
     
-    init() {
+    public init() {
         
         player = Player()
         let level = Level()
         levelManager = LevelManager(level: level, player: player)
     }
     
-    func update(currentTime: TimeInterval, controls: Controls) {
+    public func update(currentTime: TimeInterval, controls: Controls) {
         levelManager.update(currentTime: currentTime, controls: controls)
     }
     
-    func loadLevel() {
+    public func loadLevel() {
         let level: Level
         if let loadedLevel = Level(withFilename: "Level 1") {
             level = loadedLevel

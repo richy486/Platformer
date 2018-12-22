@@ -8,21 +8,24 @@
 
 import Foundation
 
-struct Direction: OptionSet {
+public struct Direction: OptionSet {
     
-    let rawValue: Int
+    public let rawValue: Int
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
     
-    static let stationary = Direction(rawValue: 0)
-    static let up = Direction(rawValue: 1 << 0)
-    static let down = Direction(rawValue: 1 << 1)
-    static let left = Direction(rawValue: 1 << 2)
-    static let right = Direction(rawValue: 1 << 3)
-    static let upLeft = Direction(arrayLiteral: [.up, .left])
-    static let upRight = Direction(arrayLiteral: [.up, .right])
-    static let downLeft = Direction(arrayLiteral: [.down, .left])
-    static let downRight = Direction(arrayLiteral: [.down, .right])
+    public static let stationary = Direction(rawValue: 0)
+    public static let up = Direction(rawValue: 1 << 0)
+    public static let down = Direction(rawValue: 1 << 1)
+    public static let left = Direction(rawValue: 1 << 2)
+    public static let right = Direction(rawValue: 1 << 3)
+    public static let upLeft = Direction(arrayLiteral: [.up, .left])
+    public static let upRight = Direction(arrayLiteral: [.up, .right])
+    public static let downLeft = Direction(arrayLiteral: [.down, .left])
+    public static let downRight = Direction(arrayLiteral: [.down, .right])
     
-    var radians: CGFloat {
+    public var radians: CGFloat {
         
         var radians = CGFloat.zero
         
@@ -56,7 +59,7 @@ struct Direction: OptionSet {
         return radians
     }
     
-    var string: String {
+    public var string: String {
         guard self != .stationary else {
             return "Stationary"
         }

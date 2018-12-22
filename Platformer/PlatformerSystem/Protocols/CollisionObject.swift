@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol CollisionObject: class {
+public protocol CollisionObject: class {
     
     var f: CGPoint { get set }
     var i: IntPoint { get set }
@@ -26,7 +26,7 @@ protocol CollisionObject: class {
     func update(currentTime: TimeInterval, level: Level) -> Level
 }
 
-extension CollisionObject where Self: Collision, Self: CollisionHorizontal {
+public extension CollisionObject where Self: Collision, Self: CollisionHorizontal {
     
     // MARK: Helper functions and vars
     var f: CGPoint {

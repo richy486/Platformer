@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import PlatformerSystem
 
 extension NSUserInterfaceItemIdentifier {
     static let tileItem = NSUserInterfaceItemIdentifier("tileItem")

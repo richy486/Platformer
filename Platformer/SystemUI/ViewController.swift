@@ -9,6 +9,7 @@
 import Cocoa
 import SpriteKit
 import GameplayKit
+import PlatformerSystem
 
 var basicTileTypes: [TileTypeFlag] = [
     .nonsolid,

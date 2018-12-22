@@ -8,20 +8,20 @@
 
 import Foundation
 
-class Player: CollisionObject, ActorCarrier, UsesComponents, GravityComponent {
+public class Player: CollisionObject, ActorCarrier, UsesComponents, GravityComponent {
     
-    internal(set) var _i = IntPoint.zero
-    internal(set) var _f = CGPoint.zero
-    internal(set) var vel: CGPoint = CGPoint.zero //velocity on x, y axis
-    internal var fOld: CGPoint = CGPoint.zero
-    internal(set) var lastGroundPosition: Int = Int.max
-    internal(set) var slopesBelow: (left: TileTypeFlag?, right: TileTypeFlag?) = (nil, nil)
-    internal(set) var inAir = false
-    internal(set) var lastSlopeTilePoint: IntPoint?
-    internal(set) var size = IntSize(width: 22, height: 25)
-    internal(set) var direction: Direction = []
+    public var _i = IntPoint.zero
+    public var _f = CGPoint.zero
+    public var vel: CGPoint = CGPoint.zero //velocity on x, y axis
+    public var fOld: CGPoint = CGPoint.zero
+    public var lastGroundPosition: Int = Int.max
+    public var slopesBelow: (left: TileTypeFlag?, right: TileTypeFlag?) = (nil, nil)
+    public var inAir = false
+    public var lastSlopeTilePoint: IntPoint?
+    public var size = IntSize(width: 22, height: 25)
+    public var direction: Direction = []
     
-    internal var actors: [UUID: Actor] = [:]
+    public var actors: [UUID: Actor] = [:]
     
     private var lockjump = false
     
@@ -85,7 +85,7 @@ class Player: CollisionObject, ActorCarrier, UsesComponents, GravityComponent {
         return update(currentTime: currentTime, level: level)
     }
     
-    func update(currentTime: TimeInterval, level: Level) -> Level {
+    public func update(currentTime: TimeInterval, level: Level) -> Level {
         var level = level
         fOld = f
         level = collisionDetection(level: level)
@@ -164,13 +164,13 @@ class Player: CollisionObject, ActorCarrier, UsesComponents, GravityComponent {
 }
 
 extension Player: Collision {
-    func tryCollide(withObject object: Actor) -> CollideResult {
+    public func tryCollide(withObject object: Actor) -> CollideResult {
         return .none
     }
 }
 
 extension Player: CollisionHorizontal {
-    func collisionHorizontalResponse(vel: CGPoint) -> CGPoint {
+    public func collisionHorizontalResponse(vel: CGPoint) -> CGPoint {
         var vel = vel
         vel.x = 0
         return vel

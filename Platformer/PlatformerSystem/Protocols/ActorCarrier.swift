@@ -8,12 +8,12 @@
 
 import Foundation
 
-protocol ActorCarrier {
+public protocol ActorCarrier {
     var actors: [UUID: Actor] { get set }
 }
 
-extension ActorCarrier {
-    func allActorsAndSubActors() -> [UUID: Actor] {
+public extension ActorCarrier {
+    public func allActorsAndSubActors() -> [UUID: Actor] {
         var allActorsAndKeys: [UUID: Actor] = [:]
         
         for actor in actors {
