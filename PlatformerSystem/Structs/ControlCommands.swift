@@ -9,21 +9,21 @@
 import Foundation
 
 public struct ControlCommands {
-    public let left: Bool
-    public let right: Bool
-    public let jump: Bool
-    public let turbo: Bool
+  public let left: Bool
+  public let right: Bool
+  public let jump: Bool
+  public let turbo: Bool
+  
+  public init(left: Bool,
+              right: Bool,
+              jump: Bool,
+              turbo: Bool) {
     
-    public init(left: Bool,
-         right: Bool,
-         jump: Bool,
-         turbo: Bool) {
-        
-        self.left = left
-        self.right = right
-        self.jump = jump
-        self.turbo = turbo
-        
-    }
+    self.left = left
+    self.right = right
+    self.jump = jump
+    self.turbo = turbo
     
+  }
+  
 }

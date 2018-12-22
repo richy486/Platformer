@@ -9,5 +9,5 @@
 import Foundation
 
 public protocol CollisionHorizontal {
-    func collisionHorizontalResponse(vel: CGPoint) -> CGPoint
+  func collisionHorizontalResponse(vel: CGPoint) -> CGPoint
 }

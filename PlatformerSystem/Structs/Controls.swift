@@ -9,9 +9,9 @@
 import Foundation
 
 public struct Controls {
-    public let player: ControlCommands
-    
-    public init(player: ControlCommands) {
-        self.player = player
-    }
+  public let player: ControlCommands
+  
+  public init(player: ControlCommands) {
+    self.player = player
+  }
 }

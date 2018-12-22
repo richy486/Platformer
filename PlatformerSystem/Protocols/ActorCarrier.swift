@@ -9,24 +9,24 @@
 import Foundation
 
 public protocol ActorCarrier {
-    var actors: [UUID: Actor] { get set }
+  var actors: [UUID: Actor] { get set }
 }
 
 public extension ActorCarrier {
-    public func allActorsAndSubActors() -> [UUID: Actor] {
-        var allActorsAndKeys: [UUID: Actor] = [:]
-        
-        for actor in actors {
-            allActorsAndKeys[actor.key] = actor.value
-            
-            if let subActorCarrier = actor.value as? ActorCarrier {
-                let subActorsAndKeys = subActorCarrier.allActorsAndSubActors()
-                allActorsAndKeys.merge(subActorsAndKeys) { (a, _) -> Actor in
-                    return a
-                }
-            }
-            
+  public func allActorsAndSubActors() -> [UUID: Actor] {
+    var allActorsAndKeys: [UUID: Actor] = [:]
+    
+    for actor in actors {
+      allActorsAndKeys[actor.key] = actor.value
+      
+      if let subActorCarrier = actor.value as? ActorCarrier {
+        let subActorsAndKeys = subActorCarrier.allActorsAndSubActors()
+        allActorsAndKeys.merge(subActorsAndKeys) { (a, _) -> Actor in
+          return a
         }
-        return allActorsAndKeys
+      }
+      
     }
+    return allActorsAndKeys
+  }
 }

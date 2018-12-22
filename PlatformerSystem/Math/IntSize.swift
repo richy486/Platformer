@@ -9,29 +9,29 @@
 import Foundation
 
 public struct IntSize: Hashable {
-    public var width: Int
-    public var height: Int
-    public init() {
-        width = 0
-        height = 0
+  public var width: Int
+  public var height: Int
+  public init() {
+    width = 0
+    height = 0
+  }
+  public init(width: Int, height: Int) {
+    self.width = width
+    self.height = height
+  }
+  public static var zero: IntSize {
+    get {
+      return IntSize()
     }
-    public init(width: Int, height: Int) {
-        self.width = width
-        self.height = height
-    }
-    public static var zero: IntSize {
-        get {
-            return IntSize()
-        }
-    }
-    
-    var cgSize: CGSize {
-        return CGSize(width: CGFloat(width), height: CGFloat(height))
-    }
+  }
+  
+  var cgSize: CGSize {
+    return CGSize(width: CGFloat(width), height: CGFloat(height))
+  }
 }
 
 extension CGSize {
-    var intSize: IntSize {
-        return IntSize(width: Int(width), height: Int(height))
-    }
+  var intSize: IntSize {
+    return IntSize(width: Int(width), height: Int(height))
+  }
 }

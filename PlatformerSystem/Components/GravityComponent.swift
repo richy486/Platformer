@@ -9,16 +9,16 @@
 import Foundation
 
 protocol GravityComponent {
-    func updateGravityComponent(currentTime: TimeInterval, level: Level) -> Level
+  func updateGravityComponent(currentTime: TimeInterval, level: Level) -> Level
 }
 
 extension GravityComponent where Self: UsesComponents, Self: Actor {
-    func updateGravityComponent(currentTime: TimeInterval, level: Level) -> Level {
-        // Lets add gravity here
-        if inAir {
-            vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
-        }
-        
-        return level
+  func updateGravityComponent(currentTime: TimeInterval, level: Level) -> Level {
+    // Lets add gravity here
+    if inAir {
+      vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
     }
+    
+    return level
+  }
 }

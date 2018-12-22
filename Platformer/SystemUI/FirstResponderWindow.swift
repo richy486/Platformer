@@ -9,11 +9,11 @@
 import AppKit
 
 class FirstResponderWindow: NSWindow {
-    override func makeFirstResponder(_ responder: NSResponder?) -> Bool {
-        print("responder: \(String(describing: responder))")
-        
-        return super.makeFirstResponder(responder)
-    }
+  override func makeFirstResponder(_ responder: NSResponder?) -> Bool {
+    print("responder: \(String(describing: responder))")
     
-    
+    return super.makeFirstResponder(responder)
+  }
+  
+  
 }

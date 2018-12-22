@@ -9,5 +9,5 @@
 import Foundation
 
 protocol Droppable {
-    func drop(by actor: Actor)
+  func drop(by actor: Actor)
 }

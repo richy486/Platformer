@@ -10,15 +10,15 @@ import AppKit
 import SpriteKit
 
 class UnselectorCollectionView: NSCollectionView {
+  
+  weak var gameScene: SKScene!
+  
+  override func hitTest(_ point: NSPoint) -> NSView? {
+    print("hit test")
     
-    weak var gameScene: SKScene!
+    window?.makeFirstResponder(gameScene.view)
     
-    override func hitTest(_ point: NSPoint) -> NSView? {
-        print("hit test")
-        
-        window?.makeFirstResponder(gameScene.view)
-        
-        return super.hitTest(point)
-        
-    }
+    return super.hitTest(point)
+    
+  }
 }
