@@ -145,6 +145,30 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		B94575FB21CE066B00AAEE62 /* PlatformerSystem */ = {
+			isa = PBXGroup;
+			children = (
+				B9B646A2215D24CA00AE3A1A /* GameState */,
+				B93B4DD321B39A7000A442EF /* Components */,
+				B91F10FA217D7A7200F15EA6 /* Protocols */,
+				B91F10FB217D7B0B00F15EA6 /* Structs */,
+				B91F10F5217D6FED00F15EA6 /* Models */,
+				B98C7D8B218C956F00E935CD /* Math */,
+				B9B646A1215D246700AE3A1A /* CoreGraphics */,
+			);
+			path = PlatformerSystem;
+			sourceTree = "<group>";
+		};
+		B94575FC21CE06E500AAEE62 /* SpriteKit */ = {
+			isa = PBXGroup;
+			children = (
+				B95F037A212EFAA3003E84E8 /* GameScene.swift */,
+				B9B6469D215D211F00AE3A1A /* BlockFactory.swift */,
+				B91F1104217F694900F15EA6 /* SpriteFactory.swift */,
+			);
+			path = SpriteKit;
+			sourceTree = "<group>";
+		};
 		B95F0368212EFAA3003E84E8 = {
 			isa = PBXGroup;
 			children = (
@@ -164,17 +188,11 @@
 		B95F0373212EFAA3003E84E8 /* Platformer */ = {
 			isa = PBXGroup;
 			children = (
+				B94575FB21CE066B00AAEE62 /* PlatformerSystem */,
 				B9B6469F215D23FF00AE3A1A /* Scenes */,
 				B9B646A0215D242100AE3A1A /* SystemUI */,
-				B98C7D8B218C956F00E935CD /* Math */,
-				B9B646A1215D246700AE3A1A /* CoreGraphics */,
-				B9B646A2215D24CA00AE3A1A /* GameState */,
-				B93B4DD321B39A7000A442EF /* Components */,
-				B91F10FA217D7A7200F15EA6 /* Protocols */,
-				B91F10FB217D7B0B00F15EA6 /* Structs */,
-				B91F10F5217D6FED00F15EA6 /* Models */,
+				B94575FC21CE06E500AAEE62 /* SpriteKit */,
 				B95F0374212EFAA3003E84E8 /* AppDelegate.swift */,
-				B95F037A212EFAA3003E84E8 /* GameScene.swift */,
 				B95F037E212EFAA5003E84E8 /* Assets.xcassets */,
 				B95F0380212EFAA5003E84E8 /* Main.storyboard */,
 				B95F0383212EFAA5003E84E8 /* Info.plist */,
@@ -218,8 +236,6 @@
 		B9B646A1215D246700AE3A1A /* CoreGraphics */ = {
 			isa = PBXGroup;
 			children = (
-				B9B6469D215D211F00AE3A1A /* BlockFactory.swift */,
-				B91F1104217F694900F15EA6 /* SpriteFactory.swift */,
 				B9C905F021508E5B007BCF00 /* CGHelpers.swift */,
 			);
 			path = CoreGraphics;
