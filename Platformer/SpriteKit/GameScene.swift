@@ -56,7 +56,7 @@ class GameScene: SKScene {
   
   private var lastUpdateTimeInterval: CFTimeInterval = 0
   
-  private var gameManager = GameManager()
+  private(set) var gameManager = GameManager()
   
   private var blockNodes: [IntPoint: SKNode] = [:]
   private var spriteNodes: [UUID: SKNode] = [:]

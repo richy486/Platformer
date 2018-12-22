@@ -10,6 +10,7 @@ import Cocoa
 import SpriteKit
 import GameplayKit
 import PlatformerSystem
+import JavaScriptCore
 
 var basicTileTypes: [TileTypeFlag] = [
   .nonsolid,
@@ -60,6 +61,8 @@ class ViewController: NSViewController {
   @IBOutlet weak var tileCollectionView: UnselectorCollectionView!
   @IBOutlet weak var rotateCircle: NSImageView!
   
+  @IBOutlet weak var jsTextField: NSTextField!
+  @IBOutlet weak var jsRunButton: NSButton!
   
   weak var gameScene: SKScene!
   
@@ -106,6 +109,8 @@ class ViewController: NSViewController {
     //        velocitySlider.minValue = -Double.pi
     //        velocitySlider.maxValue = Double.pi
     
+  
+    
     updateUI()
   }
   
@@ -125,6 +130,30 @@ class ViewController: NSViewController {
     if let gameScene = gameScene as? GameScene {
       gameScene.setupBlocks()
     }
+  }
+  @IBAction func jsRunScript(_ sender: Any) {
+    
+    let context = JSContext()
+    
+    let jump: @convention(block) () -> Void = {
+      let player = (self.gameScene as! GameScene).gameManager.player
+      player.vel.y = -AppState.shared.VELTURBOJUMP
+    }
+    context?.setObject(unsafeBitCast(jump, to: AnyObject.self), forKeyedSubscript: "jump" as NSCopying & NSObjectProtocol)
+    
+    let right: @convention(block) () -> Void = {
+      let player = (self.gameScene as! GameScene).gameManager.player
+      player.vel.x += AppState.shared.VELMOVINGADD * 10
+    }
+    context?.setObject(unsafeBitCast(right, to: AnyObject.self), forKeyedSubscript: "right" as NSCopying & NSObjectProtocol)
+    
+    let left: @convention(block) () -> Void = {
+      let player = (self.gameScene as! GameScene).gameManager.player
+      player.vel.x += -AppState.shared.VELMOVINGADD * 10
+    }
+    context?.setObject(unsafeBitCast(left, to: AnyObject.self), forKeyedSubscript: "left" as NSCopying & NSObjectProtocol)
+
+    context?.evaluateScript(jsTextField.stringValue)
   }
   
   private func updateUI() {

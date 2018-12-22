@@ -31,3 +31,4 @@ This is similar to the solution found on [this](https://forums.tigsource.com/ind
 - http://danjb.com/blog/tilebased_platformer_slopes
 - https://forums.tigsource.com/index.php?topic=47713.0
 - https://www.lexaloffle.com/bbs/?tid=28793
+- https://nshipster.com/javascriptcore/
