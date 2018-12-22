@@ -313,9 +313,10 @@
 		B95F0368212EFAA3003E84E8 = {
 			isa = PBXGroup;
 			children = (
-				B95F0373212EFAA3003E84E8 /* Platformer */,
+				B94575FB21CE066B00AAEE62 /* PlatformerSystem */,
 				B945760321CE08AD00AAEE62 /* System iOS */,
 				B945761021CE08D500AAEE62 /* System macOS */,
+				B95F0373212EFAA3003E84E8 /* Platformer */,
 				B945766921CE0BAB00AAEE62 /* Platformer_iOS */,
 				B95F0372212EFAA3003E84E8 /* Products */,
 			);
@@ -335,7 +336,6 @@
 		B95F0373212EFAA3003E84E8 /* Platformer */ = {
 			isa = PBXGroup;
 			children = (
-				B94575FB21CE066B00AAEE62 /* PlatformerSystem */,
 				B9B6469F215D23FF00AE3A1A /* Scenes */,
 				B9B646A0215D242100AE3A1A /* SystemUI */,
 				B94575FC21CE06E500AAEE62 /* SpriteKit */,
