@@ -65,6 +65,10 @@ class TileItem: NSCollectionViewItem {
       tileLabel.isHidden = true
       tileImageView.image = NSImage(named: "piggy")
       tileImageView.isHidden = false
+    case .jsItem:
+      tileLabel.isHidden = true
+      tileImageView.image = NSImage(named: "item")
+      tileImageView.isHidden = false
     default:
       break
     }

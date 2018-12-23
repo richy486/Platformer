@@ -170,6 +170,15 @@ public class LevelManager: ActorCarrier {
           piggy.f = CGPoint(x: x*TILESIZE,
                             y: y*TILESIZE)
         }
+        if tileType.contains(.jsItem) {
+          // Create a Pickup actor
+          
+          let jsItem = JSItem()
+          actors[UUID()] = jsItem
+          
+          jsItem.f = CGPoint(x: x*TILESIZE,
+                             y: y*TILESIZE)
+        }
         
       }
     }

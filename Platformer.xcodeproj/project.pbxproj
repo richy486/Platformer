@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		B914DB66214C867300628D23 /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B914DB65214C867300628D23 /* SliderView.swift */; };
 		B91F1105217F694900F15EA6 /* SpriteFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91F1104217F694900F15EA6 /* SpriteFactory.swift */; };
+		B944659821CF0C8B0037CF1B /* JSItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B944659621CF0BD70037CF1B /* JSItem.swift */; };
+		B944659921CF0C8B0037CF1B /* JSItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B944659621CF0BD70037CF1B /* JSItem.swift */; };
+		B944659C21CF13360037CF1B /* ActorJS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B944659A21CF11300037CF1B /* ActorJS.swift */; };
+		B944659D21CF13370037CF1B /* ActorJS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B944659A21CF11300037CF1B /* ActorJS.swift */; };
 		B945760621CE08AD00AAEE62 /* System_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = B945760421CE08AD00AAEE62 /* System_iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B945761321CE08D500AAEE62 /* System_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = B945761121CE08D500AAEE62 /* System_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B945761621CE08D500AAEE62 /* PlatformerSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B945760F21CE08D500AAEE62 /* PlatformerSystem.framework */; };
@@ -141,6 +145,11 @@
 		B93B4DD421B39A9400A442EF /* GravityComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravityComponent.swift; sourceTree = "<group>"; };
 		B93B4DD621B39AC100A442EF /* Actor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actor.swift; sourceTree = "<group>"; };
 		B93B4DD821B39B8000A442EF /* UsesComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsesComponents.swift; sourceTree = "<group>"; };
+		B944659621CF0BD70037CF1B /* JSItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSItem.swift; sourceTree = "<group>"; };
+		B944659A21CF11300037CF1B /* ActorJS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorJS.swift; sourceTree = "<group>"; };
+		B944659E21CF1A940037CF1B /* CGInt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CGInt.h; sourceTree = "<group>"; };
+		B944659F21CF1A940037CF1B /* CGInt.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CGInt.m; sourceTree = "<group>"; };
+		B94465A421CF1ABD0037CF1B /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		B945760221CE08AD00AAEE62 /* PlatformerSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PlatformerSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B945760421CE08AD00AAEE62 /* System_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = System_iOS.h; sourceTree = "<group>"; };
 		B945760521CE08AD00AAEE62 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -398,6 +407,11 @@
 				B91F1100217D8B0600F15EA6 /* Camera.swift */,
 				B98C7D892187F44400E935CD /* Pickup.swift */,
 				B93B4DD121B38FA200A442EF /* Piggy.swift */,
+				B944659621CF0BD70037CF1B /* JSItem.swift */,
+				B944659A21CF11300037CF1B /* ActorJS.swift */,
+				B944659E21CF1A940037CF1B /* CGInt.h */,
+				B944659F21CF1A940037CF1B /* CGInt.m */,
+				B94465A421CF1ABD0037CF1B /* BridgingHeader.h */,
 			);
 			path = GameState;
 			sourceTree = "<group>";
@@ -510,9 +524,11 @@
 				TargetAttributes = {
 					B945760121CE08AD00AAEE62 = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1010;
 					};
 					B945760E21CE08D500AAEE62 = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1010;
 					};
 					B945764F21CE0A4C00AAEE62 = {
 						CreatedOnToolsVersion = 10.0;
@@ -592,6 +608,7 @@
 				B945762021CE096200AAEE62 /* Camera.swift in Sources */,
 				B945761C21CE096200AAEE62 /* AppState.swift in Sources */,
 				B945762121CE096200AAEE62 /* Pickup.swift in Sources */,
+				B944659C21CF13360037CF1B /* ActorJS.swift in Sources */,
 				B945762221CE096200AAEE62 /* Piggy.swift in Sources */,
 				B945762321CE096200AAEE62 /* UsesComponents.swift in Sources */,
 				B945763221CE096200AAEE62 /* IntSize.swift in Sources */,
@@ -600,6 +617,7 @@
 				B945762D21CE096200AAEE62 /* TileTypeFlag.swift in Sources */,
 				B945761E21CE096200AAEE62 /* LevelManager.swift in Sources */,
 				B945762821CE096200AAEE62 /* Droppable.swift in Sources */,
+				B944659821CF0C8B0037CF1B /* JSItem.swift in Sources */,
 				B945761D21CE096200AAEE62 /* GameManager.swift in Sources */,
 				B945763321CE096200AAEE62 /* CGHelpers.swift in Sources */,
 				B945762621CE096200AAEE62 /* CollisionObject.swift in Sources */,
@@ -623,6 +641,7 @@
 				B945763821CE096300AAEE62 /* Camera.swift in Sources */,
 				B945763421CE096300AAEE62 /* AppState.swift in Sources */,
 				B945763921CE096300AAEE62 /* Pickup.swift in Sources */,
+				B944659D21CF13370037CF1B /* ActorJS.swift in Sources */,
 				B945763A21CE096300AAEE62 /* Piggy.swift in Sources */,
 				B945763B21CE096300AAEE62 /* UsesComponents.swift in Sources */,
 				B945764A21CE096300AAEE62 /* IntSize.swift in Sources */,
@@ -631,6 +650,7 @@
 				B945764521CE096300AAEE62 /* TileTypeFlag.swift in Sources */,
 				B945763621CE096300AAEE62 /* LevelManager.swift in Sources */,
 				B945764021CE096300AAEE62 /* Droppable.swift in Sources */,
+				B944659921CF0C8B0037CF1B /* JSItem.swift in Sources */,
 				B945763521CE096300AAEE62 /* GameManager.swift in Sources */,
 				B945764B21CE096300AAEE62 /* CGHelpers.swift in Sources */,
 				B945763E21CE096300AAEE62 /* CollisionObject.swift in Sources */,
@@ -715,6 +735,7 @@
 		B945760821CE08AD00AAEE62 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -736,6 +757,8 @@
 				PRODUCT_NAME = PlatformerSystem;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = PlatformerSystem/GameState/BridgingHeader.h;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -746,6 +769,7 @@
 		B945760921CE08AD00AAEE62 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -767,6 +791,7 @@
 				PRODUCT_NAME = PlatformerSystem;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = PlatformerSystem/GameState/BridgingHeader.h;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -778,6 +803,7 @@
 		B945761921CE08D500AAEE62 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -798,6 +824,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.richardadem.System-macOS";
 				PRODUCT_NAME = PlatformerSystem;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = PlatformerSystem/GameState/BridgingHeader.h;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -807,6 +835,7 @@
 		B945761A21CE08D500AAEE62 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -827,6 +856,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.richardadem.System-macOS";
 				PRODUCT_NAME = PlatformerSystem;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = PlatformerSystem/GameState/BridgingHeader.h;
 				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";

@@ -22,7 +22,8 @@ var basicTileTypes: [TileTypeFlag] = [
   .slope_right,           // ◺
   .pickup,                // 🎁
   .piggy,                 // 🐷
-  .player_start           // 🚩
+  .player_start,          // 🚩
+  .jsItem,                // 💎
 ]
 
 // View Controller is origin bottom left
