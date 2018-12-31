@@ -66,6 +66,7 @@ class ViewController: NSViewController {
   @IBOutlet weak var jsRunButton: NSButton!
   
   weak var gameScene: SKScene!
+  weak var player: Player?
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -136,23 +137,26 @@ class ViewController: NSViewController {
     
     let context = JSContext()
     
-    let jump: @convention(block) () -> Void = {
-      let player = (self.gameScene as! GameScene).gameManager.player
-      player.vel.y = -AppState.shared.VELTURBOJUMP
-    }
-    context?.setObject(unsafeBitCast(jump, to: AnyObject.self), forKeyedSubscript: "jump" as NSCopying & NSObjectProtocol)
+    if let player = player {
     
-    let right: @convention(block) () -> Void = {
-      let player = (self.gameScene as! GameScene).gameManager.player
-      player.vel.x += AppState.shared.VELMOVINGADD * 10
+      let jump: @convention(block) () -> Void = {
+//        let player = (self.gameScene as! GameScene).gameManager.player
+        player.vel.y = -AppState.shared.VELTURBOJUMP
+      }
+      context?.setObject(unsafeBitCast(jump, to: AnyObject.self), forKeyedSubscript: "jump" as NSCopying & NSObjectProtocol)
+      
+      let right: @convention(block) () -> Void = {
+//        let player = (self.gameScene as! GameScene).gameManager.player
+        player.vel.x += AppState.shared.VELMOVINGADD * 10
+      }
+      context?.setObject(unsafeBitCast(right, to: AnyObject.self), forKeyedSubscript: "right" as NSCopying & NSObjectProtocol)
+      
+      let left: @convention(block) () -> Void = {
+//        let player = (self.gameScene as! GameScene).gameManager.player
+        player.vel.x += -AppState.shared.VELMOVINGADD * 10
+      }
+      context?.setObject(unsafeBitCast(left, to: AnyObject.self), forKeyedSubscript: "left" as NSCopying & NSObjectProtocol)
     }
-    context?.setObject(unsafeBitCast(right, to: AnyObject.self), forKeyedSubscript: "right" as NSCopying & NSObjectProtocol)
-    
-    let left: @convention(block) () -> Void = {
-      let player = (self.gameScene as! GameScene).gameManager.player
-      player.vel.x += -AppState.shared.VELMOVINGADD * 10
-    }
-    context?.setObject(unsafeBitCast(left, to: AnyObject.self), forKeyedSubscript: "left" as NSCopying & NSObjectProtocol)
 
     context?.evaluateScript(jsTextField.stringValue)
   }
@@ -192,6 +196,8 @@ extension ViewController: GameSceneDelegate {
   }
   
   func playerStateUpdated(player: Player) {
+    self.player = player
+    
     let velRad = player.vel.radians
     let velNorm = player.vel.normalized
     let normalRad = velNorm.radians

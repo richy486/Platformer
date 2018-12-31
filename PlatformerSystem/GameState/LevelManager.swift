@@ -9,12 +9,12 @@
 
 import Foundation
 
-public class LevelManager: ActorCarrier {
-  public var actors: [UUID: Actor] = [:]
-  public let camera = Camera()
-  public weak var player: Player!
+class LevelManager: ActorCarrier {
+  var actors: [UUID: Actor] = [:]
+  let camera = Camera()
+  weak var player: Player!
   
-  public var level: Level
+  var level: Level
   
   init(level: Level, player: Player) {
     self.level = level
@@ -96,35 +96,12 @@ public class LevelManager: ActorCarrier {
       to.actors[uuid] = attachable
       
       if let dropableAttachable = attachable as? Droppable,
-        let dropper = from as? Actor,
-        to is LevelManager {
-        //                let levelManager = to as? LevelManager,
-        //                levelManager == self {
+         let dropper = from as? Actor,
+         to is LevelManager {
         
         dropableAttachable.drop(by: dropper)
       }
-      
     }
-    
-    
-    //        for attachmentUUIDs in attachmentUUIDsToAttach {
-    //            guard var carrier = actors[attachmentUUIDs.to] as? ActorCarrier else {
-    //                print("Attampting to attach \(attachmentUUIDs.attach) to non-attachable carrier: \(attachmentUUIDs.to)")
-    //                continue
-    //            }
-    //            guard let attachedObject = actors.removeValue(forKey: attachmentUUIDs.attach) else {
-    //                print("No attachment actor for UUID: \(attachmentUUIDs.attach)")
-    //                return
-    //            }
-    //            carrier.actors[attachmentUUIDs.attach] = attachedObject
-    //
-    //        }
-    
-    // Other Updates
-    // game_values.gamemode->think();
-    //  Update gametimer etc.
-    // g_map->update();
-    //  warps, animated tiles
   }
   
   func restart() {

@@ -146,6 +146,9 @@ class GameScene: SKScene {
     return node
   }()
   
+  // ---------------------------------------------------------------------------
+  // Setup
+  // ---------------------------------------------------------------------------
   
   override func didMove(to view: SKView) {
     super.didMove(to: view)
@@ -158,7 +161,7 @@ class GameScene: SKScene {
     
     gameManager.loadLevel()
     setupBlocks()
-    resetCamera()
+//    resetCamera()
     
     addChild(selectedBlockNode)
     addChild(collideXBlockNode)
@@ -260,6 +263,10 @@ class GameScene: SKScene {
     }
   }
   
+  // ---------------------------------------------------------------------------
+  // Input
+  // ---------------------------------------------------------------------------
+  
   override func keyDown(with event: NSEvent) {
     
     if let keyCode = KeyCode(rawValue: Int(event.keyCode)) {
@@ -280,10 +287,10 @@ class GameScene: SKScene {
   
   override func mouseDown(with event: NSEvent) {
     
-    var level = gameManager.levelManager.level
+//    var level = gameManager.levelManager.level
     let location = event.location(in: self)
-    let tile = level.posToTile(location)
-    let tilePos = level.posToTilePos(location)
+    let tile = gameManager.posToTile(location)
+    let tilePos = gameManager.posToTilePos(location)
     
     print("location: \(location) tile: \(tile) - (\(tilePos.x), \(tilePos.y))")
     
@@ -293,16 +300,21 @@ class GameScene: SKScene {
     switch AppState.shared.editMode {
     case .paint(let tileType):
       print("type type: \(tileType)")
-      level.setMap(x: tilePos.x, y: tilePos.y, tileType: tileType)
+      gameManager.setMap(x: tilePos.x, y: tilePos.y, tileType: tileType)
     case .erase:
-      level.setMap(x: tilePos.x, y: tilePos.y, tileType: .nonsolid)
+      gameManager.setMap(x: tilePos.x, y: tilePos.y, tileType: .nonsolid)
     default:
       break
     }
     
-    gameManager.levelManager.level = level
+//    gameManager.levelManager.level = level
+//    gameManager.setLevel(level)
     
   }
+  
+  // ---------------------------------------------------------------------------
+  // Update
+  // ---------------------------------------------------------------------------
   
   override func update(_ currentTime: TimeInterval) {
     
@@ -332,20 +344,20 @@ class GameScene: SKScene {
     if keysDown[.s] == true {
       keysDown[.s] = false
       AppState.save()
-      gameManager.levelManager.level.save()
+      gameManager.saveLevel()
     }
     if keysDown[.d] == true {
       keysDown[.d] = false
       AppState.load()
       gameManager.loadLevel()
       setupBlocks()
-      resetCamera()
+//      resetCamera()
     }
     
     if keysDown[.r] == true {
       keysDown[.r] = false
       setupBlocks()
-      resetCamera()
+//      resetCamera()
     }
     
     if keysDown[.tab] == true {
@@ -380,7 +392,7 @@ class GameScene: SKScene {
       keysDown[key] = value
     }
     
-    // Update Game
+    // Update Game System
     
     let controls = Controls(player: ControlCommands(left: keysDown[.left] == true,
                                                     right: keysDown[.right] == true,
@@ -392,7 +404,7 @@ class GameScene: SKScene {
     
     // After update
     
-    let allActorsAndKeys = gameManager.levelManager.allActorsAndSubActors()
+    let allActorsAndKeys = gameManager.allActors()
     
     // Remove old actors
     let removedUUIDs = Set(spriteNodes.keys).subtracting(Set(allActorsAndKeys.keys))
@@ -403,8 +415,11 @@ class GameScene: SKScene {
       removedNode.removeFromParent()
     }
     
+    var player: Player?
+    
     for (uuid, actor) in allActorsAndKeys {
-      // create new actors
+      
+      // Create new actors
       if spriteNodes[uuid] == nil {
         guard let node = SpriteFactory.spriteNode(forCollisionObject: actor) else {
           continue
@@ -420,6 +435,11 @@ class GameScene: SKScene {
       }
       node.position = actor.f
       
+      
+      if let playerActor = actor as? Player {
+        player = playerActor
+      }
+      
       if let spriteNode = node as? SKSpriteNode {
         if actor.direction.contains(.right) {
           spriteNode.anchorPoint.x = 0
@@ -429,18 +449,16 @@ class GameScene: SKScene {
           spriteNode.xScale = -1
         }
       }
-      //            node.xScale = actor.direction.contains(.right) ? 1 : -1
     }
     
-    
-    
-    gameSceneDelegate?.playerStateUpdated(player: gameManager.player)
+    // Delegate for debug UI
+    if let player = player {
+      gameSceneDelegate?.playerStateUpdated(player: player)
+    }
     
     // Camera
-    localCamera.position = gameManager.levelManager.camera.position
+    localCamera.position = gameManager.cameraPosition()
     
-    
-    //                []        *
     cameraMoveBox.position = CGPoint(x: localCamera.position.x - cameraMoveBox.frame.width/2,
                                      y: localCamera.position.y - cameraMoveBox.frame.height/2)
     forwardFocusBox.position = CGPoint(x: localCamera.position.x - forwardFocusBox.frame.width/2,
@@ -448,20 +466,7 @@ class GameScene: SKScene {
     cameraCenter.position = CGPoint(x: localCamera.position.x,
                                     y: localCamera.position.y)
     
-    //        if keysDown[.shift] == true {
-    //            playerNode.fillColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
-    //        } else {
-    //            playerNode.fillColor = #colorLiteral(red: 0.7054507506, green: 0.07813194169, blue: 0, alpha: 1)
-    //        }
-    //        
-    //        if player.inAir {
-    //            playerNode.strokeColor = #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)
-    //        } else if player.lastSlopeTilePoint != nil {
-    //            playerNode.strokeColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
-    //        } else {
-    //            playerNode.strokeColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-    //        }        
-    
+    // Time
     lastUpdateTimeInterval = currentTime
   }
   
@@ -478,13 +483,13 @@ class GameScene: SKScene {
     
   }
   
-  private func resetCamera() {
-    let player = gameManager.player
-    
-    localCameraTarget.x = player.f.x + CGFloat(player.size.width)/2
-    localCameraTarget.y = player.f.y + CGFloat(player.size.height) + CGFloat(AppState.shared.BLOCKSOFFCENTER * TILESIZE)
-    localCamera.position = localCameraTarget
-  }
+//  private func resetCamera() {
+//    //let player = gameManager.player
+//
+//    localCameraTarget.x = player.f.x + CGFloat(player.size.width)/2
+//    localCameraTarget.y = player.f.y + CGFloat(player.size.height) + CGFloat(AppState.shared.BLOCKSOFFCENTER * TILESIZE)
+//    localCamera.position = localCameraTarget
+//  }
   
   func setupBlocks() {
     blockNodes.forEach { (arg0) in
@@ -495,7 +500,7 @@ class GameScene: SKScene {
     
     // Blocks
     
-    for (y, xBlocks) in gameManager.levelManager.level.blocks.enumerated() {
+    for (y, xBlocks) in gameManager.allBlocks().enumerated() {
       for (x, blockVal) in xBlocks.enumerated() {
         
         let tileType = TileTypeFlag(rawValue: blockVal)

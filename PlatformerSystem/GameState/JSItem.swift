@@ -141,10 +141,6 @@ public class JSItem: CollisionObject, UsesComponents, GravityComponent {
     level = collisionDetection(level: level)
     return level
   }
-  
-  
-  
-  
 }
 
 extension JSItem: Collision {

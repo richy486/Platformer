@@ -11,7 +11,7 @@
 import Foundation
 
 public class GameManager {
-  public var levelManager: LevelManager
+  var levelManager: LevelManager
   public var player: Player
   
   public init() {
@@ -25,6 +25,8 @@ public class GameManager {
     levelManager.update(currentTime: currentTime, controls: controls)
   }
   
+  // Level I/O
+  
   public func loadLevel() {
     let level: Level
     if let loadedLevel = Level(withFilename: "Level 1") {
@@ -36,5 +38,39 @@ public class GameManager {
     levelManager = LevelManager(level: level, player: player)
     
     player.restart()
+  }
+  
+  public func setLevel(_ level: Level) {
+    levelManager.level = level
+  }
+  
+  public func saveLevel() {
+      levelManager.level.save()
+  }
+  
+  // Level elements
+  
+  public func allBlocks() -> [[Int]] {
+    return levelManager.level.blocks
+  }
+  
+  public func allActors() -> [UUID : Actor] {
+    return levelManager.allActorsAndSubActors()
+  }
+  
+  public func cameraPosition() -> CGPoint {
+    return levelManager.camera.position
+  }
+  
+  public func posToTile(_ position: CGPoint) -> Int {
+    return levelManager.level.posToTile(position)
+  }
+  
+  public func posToTilePos(_ position: CGPoint) -> (x: Int, y: Int) {
+    return levelManager.level.posToTilePos(position)
+  }
+  
+  public func setMap(x: Int, y: Int, tileType: TileTypeFlag) {
+    levelManager.level.setMap(x: x, y: y, tileType: tileType)
   }
 }
