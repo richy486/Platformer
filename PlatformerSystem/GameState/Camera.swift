@@ -6,7 +6,8 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-import Foundation
+import CoreGraphics
+import UIKit
 
 public enum CameraMode {
   case center

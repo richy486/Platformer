@@ -6,7 +6,8 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-import Foundation
+import CoreGraphics
+import UIKit
 
 public class Piggy: CollisionObject, UsesComponents, GravityComponent {
   public var _i = IntPoint.zero

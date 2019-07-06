@@ -8,6 +8,8 @@
 
 import Foundation
 import JavaScriptCore
+import CoreGraphics
+import UIKit
 
 let script =
 """

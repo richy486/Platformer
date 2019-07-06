@@ -6,7 +6,8 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-import Foundation
+import CoreGraphics
+import UIKit
 
 public let VELMOVINGFRICTION = CGFloat(0.2)
 public let TILESIZE = Int(32)

@@ -7,5 +7,7 @@
 //
 
 import Foundation
+import CoreGraphics
+import UIKit
 
 public typealias Actor = Collision & CollisionObject & CollisionHorizontal

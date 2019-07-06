@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import CoreGraphics
+import UIKit
 
 protocol GravityComponent {
   func updateGravityComponent(currentTime: TimeInterval, level: Level) -> Level

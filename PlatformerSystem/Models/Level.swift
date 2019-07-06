@@ -6,7 +6,9 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-import Foundation
+import CoreGraphics
+import UIKit
+
 public struct Level : Codable {
   public var name: String
   public var blocks: [[Int]]
