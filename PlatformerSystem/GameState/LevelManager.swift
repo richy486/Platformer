@@ -8,7 +8,8 @@
 //  This class manages the game logic of a level
 
 import CoreGraphics
-import UIKit
+//import UIKit
+import Foundation
 
 class LevelManager: ActorCarrier {
   var actors: [UUID: Actor] = [:]

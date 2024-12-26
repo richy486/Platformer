@@ -7,7 +7,9 @@
 //
 
 import CoreGraphics
-import UIKit
+//import UIKit
+import Foundation
+
 
 public let VELMOVINGFRICTION = CGFloat(0.2)
 public let TILESIZE = Int(32)

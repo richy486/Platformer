@@ -7,7 +7,8 @@
 //
 
 import CoreGraphics
-import UIKit
+//import UIKit
+import Foundation
 
 public protocol CollisionObject: class {
   

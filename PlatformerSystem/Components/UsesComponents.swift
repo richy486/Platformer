@@ -8,7 +8,9 @@
 
 import Foundation
 import CoreGraphics
-import UIKit
+//import UIKit
+import Foundation
+
 
 protocol UsesComponents {
   func updateComponents(currentTime: TimeInterval, level: Level) -> Level

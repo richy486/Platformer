@@ -9,7 +9,9 @@
 import Foundation
 import JavaScriptCore
 import CoreGraphics
-import UIKit
+//import UIKit
+import Foundation
+
 
 //public struct CGInt {
 //

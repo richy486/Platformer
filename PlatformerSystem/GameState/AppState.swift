@@ -7,7 +7,11 @@
 //
 
 import CoreGraphics
-import UIKit
+
+//#if !os(macOS)
+//import UIKit
+import Foundation
+
 
 public enum EditMode: Codable {
   

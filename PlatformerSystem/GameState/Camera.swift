@@ -7,7 +7,9 @@
 //
 
 import CoreGraphics
-import UIKit
+//import UIKit
+import Foundation
+
 
 public enum CameraMode {
   case center

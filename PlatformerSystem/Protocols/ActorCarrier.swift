@@ -8,7 +8,7 @@
 
 import Foundation
 import CoreGraphics
-import UIKit
+//import UIKit
 
 public protocol ActorCarrier {
   var actors: [UUID: Actor] { get set }

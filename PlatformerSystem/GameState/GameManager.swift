@@ -9,7 +9,9 @@
 //
 
 import CoreGraphics
-import UIKit
+//import UIKit
+import Foundation
+
 
 public class GameManager {
   var levelManager: LevelManager

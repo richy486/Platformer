@@ -8,6 +8,8 @@
 
 import Foundation
 import CoreGraphics
-import UIKit
+//import UIKit
+import Foundation
+
 
 public typealias Actor = Collision & CollisionObject & CollisionHorizontal
