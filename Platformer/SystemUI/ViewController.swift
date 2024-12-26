@@ -20,6 +20,7 @@ var basicTileTypes: [TileTypeFlag] = [
   [.powerup, .solid],
   .slope_left,            // ◿
   .slope_right,           // ◺
+  .pickAxe,               // ⛏️
   .pickup,                // 🎁
   .piggy,                 // 🐷
   .player_start,          // 🚩
@@ -104,7 +105,9 @@ class ViewController: NSViewController {
     
     if #available(OSX 10.13, *) {
       if let contentSize = tileCollectionView.collectionViewLayout?.collectionViewContentSize {
-        tileCollectionView.setFrameSize(contentSize)
+        var size: NSSize = contentSize
+        size.height = size.width * CGFloat(basicTileTypes.count * 2)
+        tileCollectionView.setFrameSize(size)
       }
     }
     

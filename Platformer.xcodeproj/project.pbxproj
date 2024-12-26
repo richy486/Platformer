@@ -83,6 +83,8 @@
 		B9B6469A2156EA1C00AE3A1A /* FirstResponderWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B646992156EA1C00AE3A1A /* FirstResponderWindow.swift */; };
 		B9B6469C2156ED1A00AE3A1A /* UnselectorCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B6469B2156ED1A00AE3A1A /* UnselectorCollectionView.swift */; };
 		B9B6469E215D211F00AE3A1A /* BlockFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B6469D215D211F00AE3A1A /* BlockFactory.swift */; };
+		B9B92C072D1DB84C008DD831 /* PickAxe.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B92C062D1DB84C008DD831 /* PickAxe.swift */; };
+		B9B92C082D1DB84C008DD831 /* PickAxe.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B92C062D1DB84C008DD831 /* PickAxe.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -186,6 +188,7 @@
 		B9B646992156EA1C00AE3A1A /* FirstResponderWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstResponderWindow.swift; sourceTree = "<group>"; };
 		B9B6469B2156ED1A00AE3A1A /* UnselectorCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnselectorCollectionView.swift; sourceTree = "<group>"; };
 		B9B6469D215D211F00AE3A1A /* BlockFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockFactory.swift; sourceTree = "<group>"; };
+		B9B92C062D1DB84C008DD831 /* PickAxe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickAxe.swift; sourceTree = "<group>"; };
 		B9C905F021508E5B007BCF00 /* CGHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGHelpers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -408,6 +411,7 @@
 				B98C7D892187F44400E935CD /* Pickup.swift */,
 				B93B4DD121B38FA200A442EF /* Piggy.swift */,
 				B944659621CF0BD70037CF1B /* JSItem.swift */,
+				B9B92C062D1DB84C008DD831 /* PickAxe.swift */,
 				B944659A21CF11300037CF1B /* ActorJS.swift */,
 				B944659E21CF1A940037CF1B /* CGInt.h */,
 				B944659F21CF1A940037CF1B /* CGInt.m */,
@@ -613,6 +617,7 @@
 				B945762221CE096200AAEE62 /* Piggy.swift in Sources */,
 				B945762321CE096200AAEE62 /* UsesComponents.swift in Sources */,
 				B945763221CE096200AAEE62 /* IntSize.swift in Sources */,
+				B9B92C072D1DB84C008DD831 /* PickAxe.swift in Sources */,
 				B945762C21CE096200AAEE62 /* Direction.swift in Sources */,
 				B945762B21CE096200AAEE62 /* Constants.swift in Sources */,
 				B945762D21CE096200AAEE62 /* TileTypeFlag.swift in Sources */,
@@ -646,6 +651,7 @@
 				B945763A21CE096300AAEE62 /* Piggy.swift in Sources */,
 				B945763B21CE096300AAEE62 /* UsesComponents.swift in Sources */,
 				B945764A21CE096300AAEE62 /* IntSize.swift in Sources */,
+				B9B92C082D1DB84C008DD831 /* PickAxe.swift in Sources */,
 				B945764421CE096300AAEE62 /* Direction.swift in Sources */,
 				B945764321CE096300AAEE62 /* Constants.swift in Sources */,
 				B945764521CE096300AAEE62 /* TileTypeFlag.swift in Sources */,

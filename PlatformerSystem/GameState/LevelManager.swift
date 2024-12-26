@@ -158,7 +158,17 @@ class LevelManager: ActorCarrier {
           jsItem.f = CGPoint(x: x*TILESIZE,
                              y: y*TILESIZE)
         }
-        
+        if tileType.contains(.pickAxe) {
+          // Create a Pickup actor
+
+          // TODO: Pick Axe
+          let pickAxe = PickAxe()
+          actors[UUID()] = pickAxe
+
+          pickAxe.f = CGPoint(x: x*TILESIZE,
+                            y: y*TILESIZE)
+        }
+
       }
     }
   }

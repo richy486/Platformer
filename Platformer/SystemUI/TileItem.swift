@@ -69,6 +69,10 @@ class TileItem: NSCollectionViewItem {
       tileLabel.isHidden = true
       tileImageView.image = NSImage(named: "item")
       tileImageView.isHidden = false
+    case .pickAxe:
+      tileLabel.isHidden = true
+      tileImageView.image = NSImage(named: "pickAxe")
+      tileImageView.isHidden = false
     default:
       break
     }
