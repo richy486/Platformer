@@ -21,6 +21,7 @@ var basicTileTypes: [TileTypeFlag] = [
   .slope_left,            // ◿
   .slope_right,           // ◺
   .pickAxe,               // ⛏️
+  .door,                  // 🚪
   .pickup,                // 🎁
   .piggy,                 // 🐷
   .player_start,          // 🚩

@@ -30,6 +30,7 @@ public struct TileTypeFlag: OptionSet {
   public static let piggy = TileTypeFlag(rawValue: 1 << 10)
   public static let jsItem = TileTypeFlag(rawValue: 1 << 11)
   public static let pickAxe = TileTypeFlag(rawValue: 1 << 12)
+  public static let door = TileTypeFlag(rawValue: 1 << 13)
 
   // 0000
   // 1010

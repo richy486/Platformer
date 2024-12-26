@@ -108,6 +108,13 @@ class BlockFactory {
       blockNode.alpha = 0.25
       return blockNode
 
+    } else if tileType.intersection(.door).rawValue != 0 {
+      let blockNode = SKSpriteNode(imageNamed: "door")
+      blockNode.anchorPoint = CGPoint(x: 0, y: 1)
+      blockNode.yScale = -1
+      blockNode.zPosition = Constants.Layer.background.rawValue
+      return blockNode
+
     } else {
       print("Unhandled block: \(tileType), \(String(tileType.rawValue, radix: 2))")
       // Unhandled blocks
