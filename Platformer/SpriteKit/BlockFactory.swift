@@ -100,7 +100,7 @@ class BlockFactory {
       blockNode.alpha = 0.25
       return blockNode
       
-    } else if tileType.intersection(.piggy).rawValue != 0 {
+    } else if tileType.intersection(.pickAxe).rawValue != 0 {
       let blockNode = SKSpriteNode(imageNamed: "pickAxe")
       blockNode.anchorPoint = CGPoint(x: 0, y: 1)
       blockNode.yScale = -1
