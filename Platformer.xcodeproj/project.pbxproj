@@ -9,10 +9,6 @@
 /* Begin PBXBuildFile section */
 		B914DB66214C867300628D23 /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B914DB65214C867300628D23 /* SliderView.swift */; };
 		B91F1105217F694900F15EA6 /* SpriteFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91F1104217F694900F15EA6 /* SpriteFactory.swift */; };
-		B944659821CF0C8B0037CF1B /* JSItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B944659621CF0BD70037CF1B /* JSItem.swift */; };
-		B944659921CF0C8B0037CF1B /* JSItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B944659621CF0BD70037CF1B /* JSItem.swift */; };
-		B944659C21CF13360037CF1B /* ActorJS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B944659A21CF11300037CF1B /* ActorJS.swift */; };
-		B944659D21CF13370037CF1B /* ActorJS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B944659A21CF11300037CF1B /* ActorJS.swift */; };
 		B945760621CE08AD00AAEE62 /* System_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = B945760421CE08AD00AAEE62 /* System_iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B945761321CE08D500AAEE62 /* System_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = B945761121CE08D500AAEE62 /* System_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B945761621CE08D500AAEE62 /* PlatformerSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B945760F21CE08D500AAEE62 /* PlatformerSystem.framework */; };
@@ -41,13 +37,6 @@
 		B945763121CE096200AAEE62 /* IntPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98C7D8C218C95B200E935CD /* IntPoint.swift */; };
 		B945763221CE096200AAEE62 /* IntSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98C7D8E218C95D100E935CD /* IntSize.swift */; };
 		B945763321CE096200AAEE62 /* CGHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C905F021508E5B007BCF00 /* CGHelpers.swift */; };
-		B945763421CE096300AAEE62 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95F038A212FB84C003E84E8 /* AppState.swift */; };
-		B945763521CE096300AAEE62 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91F10F8217D76B500F15EA6 /* GameManager.swift */; };
-		B945763621CE096300AAEE62 /* LevelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91F10F3217D6E6300F15EA6 /* LevelManager.swift */; };
-		B945763721CE096300AAEE62 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = B949B3F9216051B000DFA633 /* Player.swift */; };
-		B945763821CE096300AAEE62 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91F1100217D8B0600F15EA6 /* Camera.swift */; };
-		B945763921CE096300AAEE62 /* Pickup.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98C7D892187F44400E935CD /* Pickup.swift */; };
-		B945763A21CE096300AAEE62 /* Piggy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93B4DD121B38FA200A442EF /* Piggy.swift */; };
 		B945763B21CE096300AAEE62 /* UsesComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93B4DD821B39B8000A442EF /* UsesComponents.swift */; };
 		B945763C21CE096300AAEE62 /* GravityComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93B4DD421B39A9400A442EF /* GravityComponent.swift */; };
 		B945763D21CE096300AAEE62 /* Actor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93B4DD621B39AC100A442EF /* Actor.swift */; };
@@ -78,13 +67,20 @@
 		B95F037D212EFAA3003E84E8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95F037C212EFAA3003E84E8 /* ViewController.swift */; };
 		B95F037F212EFAA5003E84E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B95F037E212EFAA5003E84E8 /* Assets.xcassets */; };
 		B95F0382212EFAA5003E84E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B95F0380212EFAA5003E84E8 /* Main.storyboard */; };
+		B9AA4EF52D21D55C009C3DA7 /* PickAxe.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B92C062D1DB84C008DD831 /* PickAxe.swift */; };
+		B9AA4EF62D21D55C009C3DA7 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91F1100217D8B0600F15EA6 /* Camera.swift */; };
+		B9AA4EF72D21D55C009C3DA7 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95F038A212FB84C003E84E8 /* AppState.swift */; };
+		B9AA4EF82D21D55C009C3DA7 /* Piggy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93B4DD121B38FA200A442EF /* Piggy.swift */; };
+		B9AA4EF92D21D55C009C3DA7 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91F10F8217D76B500F15EA6 /* GameManager.swift */; };
+		B9AA4EFA2D21D55C009C3DA7 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = B949B3F9216051B000DFA633 /* Player.swift */; };
+		B9AA4EFB2D21D55C009C3DA7 /* Pickup.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98C7D892187F44400E935CD /* Pickup.swift */; };
+		B9AA4EFC2D21D55C009C3DA7 /* LevelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91F10F3217D6E6300F15EA6 /* LevelManager.swift */; };
 		B9B6469521553D5500AE3A1A /* TileItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B6469321553D5500AE3A1A /* TileItem.swift */; };
 		B9B6469621553D5500AE3A1A /* TileItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = B9B6469421553D5500AE3A1A /* TileItem.xib */; };
 		B9B6469A2156EA1C00AE3A1A /* FirstResponderWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B646992156EA1C00AE3A1A /* FirstResponderWindow.swift */; };
 		B9B6469C2156ED1A00AE3A1A /* UnselectorCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B6469B2156ED1A00AE3A1A /* UnselectorCollectionView.swift */; };
 		B9B6469E215D211F00AE3A1A /* BlockFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B6469D215D211F00AE3A1A /* BlockFactory.swift */; };
 		B9B92C072D1DB84C008DD831 /* PickAxe.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B92C062D1DB84C008DD831 /* PickAxe.swift */; };
-		B9B92C082D1DB84C008DD831 /* PickAxe.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B92C062D1DB84C008DD831 /* PickAxe.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -370,6 +366,15 @@
 			path = Math;
 			sourceTree = "<group>";
 		};
+		B9AA4EF42D21D529009C3DA7 /* JS */ = {
+			isa = PBXGroup;
+			children = (
+				B944659621CF0BD70037CF1B /* JSItem.swift */,
+				B944659A21CF11300037CF1B /* ActorJS.swift */,
+			);
+			path = JS;
+			sourceTree = "<group>";
+		};
 		B9B6469F215D23FF00AE3A1A /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
@@ -410,9 +415,8 @@
 				B91F1100217D8B0600F15EA6 /* Camera.swift */,
 				B98C7D892187F44400E935CD /* Pickup.swift */,
 				B93B4DD121B38FA200A442EF /* Piggy.swift */,
-				B944659621CF0BD70037CF1B /* JSItem.swift */,
 				B9B92C062D1DB84C008DD831 /* PickAxe.swift */,
-				B944659A21CF11300037CF1B /* ActorJS.swift */,
+				B9AA4EF42D21D529009C3DA7 /* JS */,
 				B944659E21CF1A940037CF1B /* CGInt.h */,
 				B944659F21CF1A940037CF1B /* CGInt.m */,
 				B94465A421CF1ABD0037CF1B /* BridgingHeader.h */,
@@ -613,7 +617,6 @@
 				B945762021CE096200AAEE62 /* Camera.swift in Sources */,
 				B945761C21CE096200AAEE62 /* AppState.swift in Sources */,
 				B945762121CE096200AAEE62 /* Pickup.swift in Sources */,
-				B944659C21CF13360037CF1B /* ActorJS.swift in Sources */,
 				B945762221CE096200AAEE62 /* Piggy.swift in Sources */,
 				B945762321CE096200AAEE62 /* UsesComponents.swift in Sources */,
 				B945763221CE096200AAEE62 /* IntSize.swift in Sources */,
@@ -623,7 +626,6 @@
 				B945762D21CE096200AAEE62 /* TileTypeFlag.swift in Sources */,
 				B945761E21CE096200AAEE62 /* LevelManager.swift in Sources */,
 				B945762821CE096200AAEE62 /* Droppable.swift in Sources */,
-				B944659821CF0C8B0037CF1B /* JSItem.swift in Sources */,
 				B945761D21CE096200AAEE62 /* GameManager.swift in Sources */,
 				B945763321CE096200AAEE62 /* CGHelpers.swift in Sources */,
 				B945762621CE096200AAEE62 /* CollisionObject.swift in Sources */,
@@ -641,28 +643,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B945763721CE096300AAEE62 /* Player.swift in Sources */,
 				B945763C21CE096300AAEE62 /* GravityComponent.swift in Sources */,
 				B945764921CE096300AAEE62 /* IntPoint.swift in Sources */,
-				B945763821CE096300AAEE62 /* Camera.swift in Sources */,
-				B945763421CE096300AAEE62 /* AppState.swift in Sources */,
-				B945763921CE096300AAEE62 /* Pickup.swift in Sources */,
-				B944659D21CF13370037CF1B /* ActorJS.swift in Sources */,
-				B945763A21CE096300AAEE62 /* Piggy.swift in Sources */,
 				B945763B21CE096300AAEE62 /* UsesComponents.swift in Sources */,
 				B945764A21CE096300AAEE62 /* IntSize.swift in Sources */,
-				B9B92C082D1DB84C008DD831 /* PickAxe.swift in Sources */,
 				B945764421CE096300AAEE62 /* Direction.swift in Sources */,
 				B945764321CE096300AAEE62 /* Constants.swift in Sources */,
 				B945764521CE096300AAEE62 /* TileTypeFlag.swift in Sources */,
-				B945763621CE096300AAEE62 /* LevelManager.swift in Sources */,
 				B945764021CE096300AAEE62 /* Droppable.swift in Sources */,
-				B944659921CF0C8B0037CF1B /* JSItem.swift in Sources */,
-				B945763521CE096300AAEE62 /* GameManager.swift in Sources */,
 				B945764B21CE096300AAEE62 /* CGHelpers.swift in Sources */,
 				B945763E21CE096300AAEE62 /* CollisionObject.swift in Sources */,
 				B945764221CE096300AAEE62 /* ActorCarrier.swift in Sources */,
 				B945764821CE096300AAEE62 /* Level.swift in Sources */,
+				B9AA4EF52D21D55C009C3DA7 /* PickAxe.swift in Sources */,
+				B9AA4EF62D21D55C009C3DA7 /* Camera.swift in Sources */,
+				B9AA4EF72D21D55C009C3DA7 /* AppState.swift in Sources */,
+				B9AA4EF82D21D55C009C3DA7 /* Piggy.swift in Sources */,
+				B9AA4EF92D21D55C009C3DA7 /* GameManager.swift in Sources */,
+				B9AA4EFA2D21D55C009C3DA7 /* Player.swift in Sources */,
+				B9AA4EFB2D21D55C009C3DA7 /* Pickup.swift in Sources */,
+				B9AA4EFC2D21D55C009C3DA7 /* LevelManager.swift in Sources */,
 				B945763F21CE096300AAEE62 /* Collision.swift in Sources */,
 				B945764121CE096300AAEE62 /* CollisionHorizontal.swift in Sources */,
 				B945764721CE096300AAEE62 /* Controls.swift in Sources */,

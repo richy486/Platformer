@@ -1,0 +1,5 @@
+name=Platformer
+author=RichyAndGeorge
+description=An example Playdate game built using PlaydateKit
+bundleID=com.richy486.platformer
+imagePath=

@@ -70,14 +70,14 @@ class SpriteFactory {
       return blockNode
     }
     
-    if collisionObject is JSItem {
-      let blockNode = SKSpriteNode(imageNamed: "item")
-      blockNode.anchorPoint = CGPoint(x: 0, y: 1)
-      blockNode.yScale = -1
-      blockNode.zPosition = Constants.Layer.active.rawValue
-      
-      return blockNode
-    }
+//    if collisionObject is JSItem {
+//      let blockNode = SKSpriteNode(imageNamed: "item")
+//      blockNode.anchorPoint = CGPoint(x: 0, y: 1)
+//      blockNode.yScale = -1
+//      blockNode.zPosition = Constants.Layer.active.rawValue
+//      
+//      return blockNode
+//    }
 
     if collisionObject is PickAxe {
       let blockNode = SKSpriteNode(imageNamed: "pickAxe")
