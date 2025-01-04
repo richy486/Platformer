@@ -14,7 +14,7 @@
 
 //public typealias Actor = Collision & CollisionObject & CollisionHorizontal
 
-public class Actor: Collision, CollisionObject, CollisionHorizontal {
+public class Actor: Collision, CollisionObject, CollisionHorizontal, ActorCarrier {
   public init () {}
 
   public func tryCollide(withObject object: Actor) -> CollideResult {
@@ -37,8 +37,13 @@ public class Actor: Collision, CollisionObject, CollisionHorizontal {
   public var lastGroundPosition: Int = .max
   public var size: IntSize = .zero
   public var direction: Direction = []
+  public var actors: [UUID: Actor] = [:]
 
   public func update(currentTime: TimeInterval, level: Level) -> Level {
     return level
+  }
+
+  public func drop(by actor: Actor) {
+
   }
 }

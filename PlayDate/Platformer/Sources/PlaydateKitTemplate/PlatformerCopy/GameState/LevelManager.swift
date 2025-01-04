@@ -67,14 +67,10 @@ class LevelManager: ActorCarrier {
           // a will attach to b
           //                    attachmentUUIDsToAttach.append((attach: a.key, to: b.key))
 
-            // Disabled in embedded.
-            break
-            /*
           if let newCarrier = b.value as? ActorCarrier {
             let uuidActor = (uuid: a.key, actor: a.value)
             attachmentActorsToAttach.append((attach: uuidActor, from: self, to: newCarrier))
           }
-             */
 
         default:
           break
@@ -86,11 +82,8 @@ class LevelManager: ActorCarrier {
     // Drop all carried objects if not in turbo
     if let player = player, controls.player.turbo == false {
       for a in player.actors {
-        // Disabled in embedded.
-        /*
         let uuidActor = (uuid: a.key, actor: a.value)
         attachmentActorsToAttach.append((attach: uuidActor, from: player, to: self))
-         */
       }
     }
     
@@ -98,8 +91,6 @@ class LevelManager: ActorCarrier {
       let uuid = attachments.attach.uuid
       var from = attachments.from
       var to = attachments.to
-      // Disabled in embedded.
-      /*
       guard let attachable = from.actors.removeValue(forKey: uuid) else {
         print("No attachment actor for UUID: \(uuid)")
         continue
@@ -107,13 +98,13 @@ class LevelManager: ActorCarrier {
 
       to.actors[uuid] = attachable
       
-      if let dropableAttachable = attachable as? Droppable,
+      if /*let dropableAttachable = attachable as? Droppable,*/
          let dropper = from as? Actor,
          to is LevelManager {
         
-        dropableAttachable.drop(by: dropper)
+        //dropableAttachable.drop(by: dropper)
+        attachable.drop(by: dropper)
       }
-       */
     }
   }
   
@@ -127,10 +118,7 @@ class LevelManager: ActorCarrier {
         if tileType.contains(.player_start) {
           
           if actors.contains(where: { $0.value is Player }) == false {
-            // Disabled in embedded.
-            /*
             actors[UUID()] = player
-             */
           }
           
           

@@ -24,6 +24,7 @@ public class PickAxe: Actor, UsesComponents, GravityComponent {
     lastSlopeTilePoint = nil
     size = IntSize(width: 28, height: 22)
     direction = []
+    actors = [:]
   }
 
   public override func update(currentTime: TimeInterval, level: Level) -> Level {
@@ -105,11 +106,8 @@ public class PickAxe: Actor, UsesComponents, GravityComponent {
     vel.x = vel.x * -1.0
     return vel
   }
-}
+  public override func drop(by actor: Actor) {
 
-extension PickAxe: Droppable {
-  func drop(by actor: Actor) {
-    
     if actor.direction.contains(.right) {
       print("drop right")
       f.x = actor.f.x + Double(actor.size.width) + 1

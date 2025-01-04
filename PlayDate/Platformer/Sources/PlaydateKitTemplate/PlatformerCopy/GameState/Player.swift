@@ -11,7 +11,7 @@
 // import Foundation
 
 
-public class Player: Actor, ActorCarrier, UsesComponents, GravityComponent {
+public class Player: Actor, UsesComponents, GravityComponent {
 
   public override init() {
     super.init()
@@ -25,9 +25,10 @@ public class Player: Actor, ActorCarrier, UsesComponents, GravityComponent {
     lastSlopeTilePoint = nil
     size = IntSize(width: 22, height: 25)
     direction = []
+    actors = [:]
   }
 
-  public var actors: [UUID: Actor] = [:]
+//  public var actors: [UUID: Actor] = [:]
   
   private var lockjump = false
   
@@ -176,4 +177,6 @@ public class Player: Actor, ActorCarrier, UsesComponents, GravityComponent {
     vel.x = 0
     return vel
   }
+
+  public override func drop(by actor: Actor) {}
 }

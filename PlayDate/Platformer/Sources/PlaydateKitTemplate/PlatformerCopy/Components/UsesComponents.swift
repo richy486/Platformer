@@ -18,14 +18,13 @@ protocol UsesComponents {
 
 extension UsesComponents where Self: Actor {
   func updateComponents(currentTime: TimeInterval, level: Level) -> Level {
-    var level = level
-    // Disabled in embedded.
-    /*
-    if let gravityAffected = self as? GravityComponent {
-      level = gravityAffected.updateGravityComponent(currentTime: currentTime, level: level)
-    }
-     */
+//    var level = level
+    // TODO: Check if `GravityComponent.updateComponents(currentTime:level:)` is called instead
+//    if let gravityAffected = self as? GravityComponent {
+//      level = gravityAffected.updateGravityComponent(currentTime: currentTime, level: level)
+//    }
 
+//
     return level
     
   }

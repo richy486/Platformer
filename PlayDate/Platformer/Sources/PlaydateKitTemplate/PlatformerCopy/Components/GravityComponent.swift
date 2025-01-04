@@ -27,4 +27,10 @@ extension GravityComponent where Self: UsesComponents, Self: Actor {
     
     return level
   }
+
+  func updateComponents(currentTime: TimeInterval, level: Level) -> Level {
+    var level = level
+    level = updateGravityComponent(currentTime: currentTime, level: level)
+    return level
+  }
 }

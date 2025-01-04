@@ -22,22 +22,32 @@ public protocol ActorCarrier: AnyObject {
 }
 
 public extension ActorCarrier {
+//  func allActorsAndSubActors() -> [UUID: Actor] {
+//    var allActorsAndKeys: [UUID: Actor] = [:]
+//    
+//    for actor in actors {
+//      allActorsAndKeys[actor.key] = actor.value
+//
+////      if let subActorCarrier = actor.value as? ActorCarrier {
+////        let subActorsAndKeys = subActorCarrier.allActorsAndSubActors()
+//      let subActorsAndKeys = actor.value.allActorsAndSubActors()
+//      allActorsAndKeys.merge(subActorsAndKeys) { (a, _) -> Actor in
+//        return a
+//      }
+////      }
+//    }
+//    return allActorsAndKeys
+//  }
   func allActorsAndSubActors() -> [UUID: Actor] {
     var allActorsAndKeys: [UUID: Actor] = [:]
-    
+
     for actor in actors {
       allActorsAndKeys[actor.key] = actor.value
 
-      // Disabled in embedded.
-      /*
-      if let subActorCarrier = actor.value as? ActorCarrier {
-        let subActorsAndKeys = subActorCarrier.allActorsAndSubActors()
-        allActorsAndKeys.merge(subActorsAndKeys) { (a, _) -> Actor in
-          return a
-        }
+      let subActorsAndKeys = actor.value.allActorsAndSubActors()
+      for (key, value) in subActorsAndKeys {
+        allActorsAndKeys[key] = value
       }
-       */
-
     }
     return allActorsAndKeys
   }
