@@ -13,7 +13,10 @@
 
 
 //public typealias Actor = Collision & CollisionObject & CollisionHorizontal
+
 public class Actor: Collision, CollisionObject, CollisionHorizontal {
+  public init () {}
+
   public func tryCollide(withObject object: Actor) -> CollideResult {
     return .none
 
@@ -38,5 +41,4 @@ public class Actor: Collision, CollisionObject, CollisionHorizontal {
   public func update(currentTime: TimeInterval, level: Level) -> Level {
     return level
   }
-  init () {}
 }

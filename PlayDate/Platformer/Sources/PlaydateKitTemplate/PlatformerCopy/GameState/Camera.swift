@@ -17,7 +17,7 @@ public enum CameraMode {
   case lockRightOfPlayer
 }
 
-public class Camera {
+public final class Camera {
   public var position = Point.zero
   private(set) var target = Point.zero
   private var cameraMode = CameraMode.center
