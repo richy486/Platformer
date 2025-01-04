@@ -1,5 +1,5 @@
 import PlaydateKit
-import PlatformerSystem
+//import PlatformerSystem
 
 // MARK: - Game
 
@@ -8,6 +8,7 @@ final class Game: PlaydateGame {
 
     init() {
         logo.addToDisplayList()
+//      AppState.shared
     }
 
     // MARK: Internal

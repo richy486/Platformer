@@ -1,6 +1,6 @@
 // swift-tools-version: 6.0
 
-import Foundation
+// import Foundation
 import PackageDescription
 
 
@@ -13,18 +13,18 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/finnvoor/PlaydateKit.git", branch: "main"),
-        .package(path: "../../PlatformerSystem")
+//        .package(path: "../../PlatformerSystem/Sources")
     ],
     targets: [
         .target(
             name: "Platformer",
             dependencies: [
                 .product(name: "PlaydateKit", package: "PlaydateKit"),
-                .product(name: "PlatformerSystem", package: "PlatformerSystem")
+//                .product(name: "PlatformerSystem", package: "PlatformerSystem"),
             ],
             // path: "Sources",
             swiftSettings: swiftSettings
-        ),
+        )
         // .target(name: "PlatformerSystem", path: "../../PlatformerSystem/*")
     ],
     swiftLanguageModes: [.v6]
@@ -42,6 +42,8 @@ var swiftSettings: [SwiftSetting] {[
         "-Xfrontend", "-disable-stack-protector",
         "-Xfrontend", "-function-sections",
         "-Xfrontend", "-gline-tables-only",
+//        "-Xfrontend", "-strict-concurrency=targeted",
+//        "-Xfrontend", "-warn-concurrency",
         "-Xcc", "-DTARGET_EXTENSION",
         "-Xcc", "-I", "-Xcc", "\(gccIncludePrefix)/include",
         "-Xcc", "-I", "-Xcc", "\(gccIncludePrefix)/include-fixed",
