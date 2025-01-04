@@ -10,7 +10,7 @@ final class Game: PlaydateGame {
   // MARK: Lifecycle
 
   init() {
-    logo.addToDisplayList()
+//    logo.addToDisplayList()
 
 //    AppState.load()
     gameManager.loadLevel()
@@ -23,7 +23,7 @@ final class Game: PlaydateGame {
 
   // MARK: Internal
 
-  let logo = Logo()
+//  let logo = Logo()
 
   func update() -> Bool {
     Sprite.updateAndDrawDisplayListSprites()

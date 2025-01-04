@@ -12,7 +12,7 @@ class Logo: Sprite.Sprite {
 
   override init() {
     super.init()
-    //        image = try! Graphics.Bitmap(path: "logo.png")
+            image = try! Graphics.Bitmap(path: "logo.png")
     bounds = .init(x: 0, y: 0, width: 400, height: 240)
   }
 
