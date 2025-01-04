@@ -4,42 +4,35 @@ import PlaydateKit
 // MARK: - Game
 
 final class Game: PlaydateGame {
-    // MARK: Lifecycle
+  private(set) var gameManager = GameManager()
+  let background: Background
 
-    init() {
-        logo.addToDisplayList()
-//      AppState.shared
-    }
+  // MARK: Lifecycle
 
-    // MARK: Internal
+  init() {
+    logo.addToDisplayList()
 
-    let logo = Logo()
+//    AppState.load()
+    gameManager.loadLevel()
+//    setupBlocks()
 
-    func update() -> Bool {
-        Sprite.updateAndDrawDisplayListSprites()
-        System.drawFPS()
-        return true
-    }
+    background = Background(allBlocks: gameManager.allBlocks())
 
-    func gameWillPause() {
-        print("Paused!")
-    }
+    background.addToDisplayList()
+  }
+
+  // MARK: Internal
+
+  let logo = Logo()
+
+  func update() -> Bool {
+    Sprite.updateAndDrawDisplayListSprites()
+    System.drawFPS()
+    return true
+  }
+  
+  func gameWillPause() {
+    print("Paused!")
+  }
 }
 
-// MARK: - Logo
-
-class Logo: Sprite.Sprite {
-    // MARK: Lifecycle
-
-    override init() {
-        super.init()
-//        image = try! Graphics.Bitmap(path: "logo.png")
-        bounds = .init(x: 0, y: 0, width: 400, height: 240)
-    }
-
-    // MARK: Internal
-
-    override func update() {
-        moveBy(dx: 0, dy: sinf(System.elapsedTime * 4))
-    }
-}
