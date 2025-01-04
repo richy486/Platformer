@@ -67,10 +67,12 @@ class LevelManager: ActorCarrier {
           // a will attach to b
           //                    attachmentUUIDsToAttach.append((attach: a.key, to: b.key))
 
-          if let newCarrier = b.value as? ActorCarrier {
-            let uuidActor = (uuid: a.key, actor: a.value)
-            attachmentActorsToAttach.append((attach: uuidActor, from: self, to: newCarrier))
-          }
+//          if let newCarrier = b.value as? ActorCarrier {
+//            let uuidActor = (uuid: a.key, actor: a.value)
+//            attachmentActorsToAttach.append((attach: uuidActor, from: self, to: newCarrier))
+//          }
+          let uuidActor = (uuid: a.key, actor: a.value)
+          attachmentActorsToAttach.append((attach: uuidActor, from: self, to: b.value))
 
         default:
           break
