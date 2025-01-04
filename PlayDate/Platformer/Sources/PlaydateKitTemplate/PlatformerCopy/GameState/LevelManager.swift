@@ -60,8 +60,8 @@ class LevelManager: ActorCarrier {
           continue
         }
 
-//        let collisionResult = a.value.tryCollide(withObject: b.value)
-        let collisionResult = collide(a: a.value, b: b.value)
+        let collisionResult = a.value.tryCollide(withObject: b.value)
+//        let collisionResult = collide(a: a.value, b: b.value)
         switch collisionResult {
         case .attach:
           // a will attach to b
@@ -149,8 +149,8 @@ class LevelManager: ActorCarrier {
           // Create a Pickup actor
           
           let pickup = Pickup()
-//          actors[UUID()] = pickup
-          addActor(pickup)
+          actors[UUID()] = pickup
+//          addActor(pickup)
 
           pickup.f = Point(x: x*TILESIZE,
                              y: y*TILESIZE)

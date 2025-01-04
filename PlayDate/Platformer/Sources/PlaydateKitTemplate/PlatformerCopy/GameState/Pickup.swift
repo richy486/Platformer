@@ -11,20 +11,23 @@
 // import Foundation
 
 
-public class Pickup: CollisionObject, UsesComponents, GravityComponent {
-  public var _i = IntPoint.zero
-  public var _f = Point.zero
-  public var vel: Point = Point.zero //velocity on x, y axis
-  public var fOld: Point = Point.zero
-  public var lastGroundPosition: Int = Int.max
-  public var slopesBelow: (left: TileTypeFlag?, right: TileTypeFlag?) = (nil, nil)
-  public var inAir = true
-  public var lastSlopeTilePoint: IntPoint?
-  public var size = IntSize(width: 30, height: 30)
-  public var direction: Direction = []
-  
-  public func update(currentTime: TimeInterval, level: Level) -> Level {
-    
+public class Pickup: Actor, UsesComponents, GravityComponent {
+  public override init() {
+    super.init()
+    _i = IntPoint.zero
+    _f = Point.zero
+    vel = Point.zero //velocity on x, y axis
+    fOld = Point.zero
+    lastGroundPosition = Int.max
+    slopesBelow = (nil, nil)
+    inAir = true
+    lastSlopeTilePoint = nil
+    size = IntSize(width: 30, height: 30)
+    direction = []
+  }
+
+  public override func update(currentTime: TimeInterval, level: Level) -> Level {
+
     //        // Lets add gravity here
     //        if inAir {
     //            vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
@@ -48,11 +51,9 @@ public class Pickup: CollisionObject, UsesComponents, GravityComponent {
   func stop() {
     vel.x = 0
   }
-}
 
-extension Pickup: Collision {
-  public func tryCollide(withObject object: Actor) -> CollideResult {
-    
+  public override func tryCollide(withObject object: Actor) -> CollideResult {
+
     if collisionDetection(withObject: object) {
       
       if let player = object as? Player {
@@ -98,10 +99,7 @@ extension Pickup: Collision {
     }
     return .none
   }
-}
-
-extension Pickup: CollisionHorizontal {
-  public func collisionHorizontalResponse(vel: Point) -> Point {
+  public override func collisionHorizontalResponse(vel: Point) -> Point {
     var vel = vel
     vel.x = vel.x * -1.0
     return vel

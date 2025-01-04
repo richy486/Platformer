@@ -10,16 +10,10 @@
 //import CoreGraphics
 //import UIKit
 
-class ActorHolder<A: Actor> {
-  let actor: A
-  init(actor: A) {
-    self.actor = actor
-  }
-}
-
-func collide<A: Collision, B: Actor>(a: A, b: B) -> CollideResult {
-  return a.tryCollide(withObject: b)
-}
+//
+//func collide<A: Collision, B: Actor>(a: A, b: B) -> CollideResult {
+//  return a.tryCollide(withObject: b)
+//}
 
 
 public protocol ActorCarrier: AnyObject {
@@ -55,10 +49,10 @@ public extension ActorCarrier {
 //    actors.updateValue(actor, forKey: uuid)
 //  }
 
-  func addActor(_ actor: some Actor) {
-    let uuid = UUID()
-//    actors[uuid] = actor
-    let actorHolder = ActorHolder(actor: actor)
-    actors.updateValue(actor, forKey: uuid)
-  }
+//  func addActor(_ actor: some Actor) {
+//    let uuid = UUID()
+////    actors[uuid] = actor
+//    let actorHolder = ActorHolder(actor: actor)
+//    actors.updateValue(actor, forKey: uuid)
+//  }
 }
