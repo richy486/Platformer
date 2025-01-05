@@ -12,7 +12,15 @@
 //import UIKit
 // import Foundation
 
-import PlaydateKit
+//#if PLAYDATE
+//import PlaydateKit
+////#endif
+////
+////#if ITSANAPPLEPLATFORM
+////
+////#else
+////import Foundation
+//#endif
 
 
 public class GameManager {
@@ -20,7 +28,13 @@ public class GameManager {
   public var player: Player
   
   public init() {
-    
+
+#if PLAYDATE
+    print("!!! play date build")
+#else
+    print("!!! Another type of build")
+#endif
+
     player = Player()
     let level = Level()
     levelManager = LevelManager(level: level, player: player)

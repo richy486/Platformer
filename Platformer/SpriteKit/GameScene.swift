@@ -288,7 +288,8 @@ class GameScene: SKScene {
   override func mouseDown(with event: NSEvent) {
     
 //    var level = gameManager.levelManager.level
-    let location = event.location(in: self)
+    let eventLocation = event.location(in: self)
+    let location: Point = Point(x: Double(eventLocation.x), y: Double(eventLocation.y))
     let tile = gameManager.posToTile(location)
     let tilePos = gameManager.posToTilePos(location)
     
@@ -433,8 +434,8 @@ class GameScene: SKScene {
         print("Couldn't update node for UUID: \(uuid)")
         continue
       }
-      node.position = actor.f
-      
+      node.position = actor.f.cgPoint
+
       
       if let playerActor = actor as? Player {
         player = playerActor
@@ -457,8 +458,8 @@ class GameScene: SKScene {
     }
     
     // Camera
-    localCamera.position = gameManager.cameraPosition()
-    
+    localCamera.position = gameManager.cameraPosition().cgPoint
+
     cameraMoveBox.position = CGPoint(x: localCamera.position.x - cameraMoveBox.frame.width/2,
                                      y: localCamera.position.y - cameraMoveBox.frame.height/2)
     forwardFocusBox.position = CGPoint(x: localCamera.position.x - forwardFocusBox.frame.width/2,

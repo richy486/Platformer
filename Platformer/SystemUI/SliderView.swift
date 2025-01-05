@@ -28,7 +28,7 @@ class SliderView: NSView {
     }
   }
   
-  var appStateKeyPath: WritableKeyPath<AppState, CGFloat>? = nil {
+  var appStateKeyPath: WritableKeyPath<AppState, Double>? = nil {
     didSet {
       if let appStateKeyPath = appStateKeyPath {
         value = AppState.shared[keyPath: appStateKeyPath]

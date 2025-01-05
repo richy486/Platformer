@@ -11,8 +11,11 @@
 
 // MARK: Lerpable protocol
 
-// import Foundation
+//#if PLAYDATE
 import PlaydateKit
+//#else
+//import Foundation
+//#endif
 
 public protocol Lerpable {
   func lerp(min: Self, max: Self) -> Self

@@ -7,10 +7,10 @@ let package = Package(
   name: "PlatformerSystem",
   platforms: [
     // Add support for all platforms starting from a specific version.
-    .macOS(.v14),
-    .iOS(.v13),
-    .watchOS(.v9),
-    .tvOS(.v16)
+    .macOS(.v11),
+//    .iOS(.v13),
+//    .watchOS(.v9),
+//    .tvOS(.v16)
   ],
   products: [
     // Products define the executables and libraries a package produces, making them visible to other packages.
