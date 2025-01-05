@@ -40,3 +40,4 @@ public struct TileTypeFlag: OptionSet {
 let S = TileTypeFlag.solid.rawValue
 let T = TileTypeFlag.solid_on_top.rawValue
 let B = TileTypeFlag.breakable.rawValue
+let P = TileTypeFlag.player_start.rawValue

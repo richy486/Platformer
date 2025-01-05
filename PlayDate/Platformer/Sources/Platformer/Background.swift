@@ -10,22 +10,12 @@ let None = -3
 
 final class Background: Sprite.Sprite {
 
-  private static let height: Int = 16
   let table: Graphics.BitmapTable
-
-
   var map: [[Int]]
 
-
-  init(allBlocks: [[Int]]) {
+  init( table: Graphics.BitmapTable, allBlocks: [[Int]]) {
     map = allBlocks
-    do {
-      // 5 x 3 * 16px x 16px
-      table = try Graphics.BitmapTable(path: "blocks")
-    } catch {
-      print("Fatal Error loading bitmap: \(error)")
-      fatalError()
-    }
+    self.table = table
     super.init()
 
     bounds = Rect(
@@ -34,8 +24,6 @@ final class Background: Sprite.Sprite {
       width: Display.width,
       height: Display.height
     )
-
-    
   }
 
   override func update() {
@@ -46,8 +34,6 @@ final class Background: Sprite.Sprite {
     Graphics.fillRect(bounds, color: .white)
     Graphics.drawRect(bounds)
 
-//    print("draw rect: \(Int(drawRect.x)) \(Int(drawRect.y)) \(Int(drawRect.width)) \(Int(drawRect.height))")
-
     for y in 0..<map.count {
       for x in 0..<map[y].count {
         let tileType = map[y][x]
@@ -57,11 +43,13 @@ final class Background: Sprite.Sprite {
           case S: tile = 0
           case T: tile = 1
           case B: tile = 2
+          case P: tile = 11
           default: tile = None
         }
 
         if let bitmap = table.bitmap(at: tile) {
-          Graphics.drawBitmap(bitmap, at: PlaydateKit.Point(x: x * Self.height, y: y * Self.height))
+          Graphics.drawBitmap(bitmap, at: PlaydateKit.Point(x: Float(Double(x) * GlobalConstants.tileSize.width),
+                                                            y: Float(Double(y) * GlobalConstants.tileSize.height)))
         }
 
       }
