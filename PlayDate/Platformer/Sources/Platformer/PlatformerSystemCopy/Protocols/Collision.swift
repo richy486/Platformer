@@ -202,7 +202,7 @@ extension Collision where Self: CollisionHorizontal {
                               unAlignedBlockX: Int,
                               unAlignedBlockFX: Double,
                               level: Level) -> (position: Point, collide: Bool, inAir: Bool, groundPosition: Int, level: Level) {
-    
+    print("position \(Int(position.x)) \(Int(position.y))")
     var position = position
     var level = level
     
@@ -229,6 +229,8 @@ extension Collision where Self: CollisionHorizontal {
       if AppState.shared.printCollisions {
         print(" | d: \(IntPoint(x: txl, y: ty))")
       }
+      print(" | l: \(Int(txl)), \(Int(ty))")
+
       // Disabled in embedded.
       /*
       NotificationCenter.default.post(name: Constants.kNotificationCollide,
@@ -241,6 +243,7 @@ extension Collision where Self: CollisionHorizontal {
       if AppState.shared.printCollisions {
         print(" | d: \(IntPoint(x: txr, y: ty))")
       }
+      print(" | r: \(Int(txr)), \(Int(ty))")
       // Disabled in embedded.
       /*
       NotificationCenter.default.post(name: Constants.kNotificationCollide,

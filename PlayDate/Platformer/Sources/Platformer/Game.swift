@@ -56,6 +56,7 @@ final class Game: PlaydateGame {
                                                     turbo: System.buttonState.current.contains(.b)))
 
     let seconds: Double = Double(timeIntervalMilliseconds) / 1000
+//    print("Milliseconds: \(timeIntervalMilliseconds)")
     gameManager.update(currentTime: seconds, controls: controls)
 
     // After update

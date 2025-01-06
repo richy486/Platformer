@@ -40,10 +40,10 @@ public final class Camera {
     case .center:
       
       if targetObject.f.x - position.x > Double(3*TILESIZE) {
-        print("switch to lock left of targetObject")
+//        print("switch to lock left of targetObject")
         cameraMode = .lockLeftOfPlayer
       } else if targetObject.f.x - position.x < -Double(3*TILESIZE) {
-        print("switch to lock right of targetObject")
+//        print("switch to lock right of targetObject")
         cameraMode = .lockRightOfPlayer
       }
     case .lockLeftOfPlayer:

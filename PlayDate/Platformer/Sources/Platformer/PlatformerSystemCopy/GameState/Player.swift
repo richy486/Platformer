@@ -15,8 +15,8 @@ public class Player: Actor, UsesComponents, GravityComponent {
 
   public override init() {
     super.init()
-    _i = IntPoint.zero
-    _f = Point.zero
+//    _i = IntPoint.zero
+//    _f = Point.zero
     vel = Point.zero //velocity on x, y axis
     fOld = Point.zero
     lastGroundPosition = Int.max

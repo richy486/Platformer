@@ -46,7 +46,7 @@ class GameSprite: Sprite.Sprite {
                                  y: position.y - Float(GlobalConstants.tileSize.height)/2)
       Graphics.drawBitmap(bitmap, at: at)
 //      Graphics.fillRect(bounds)
-      print("player \(Int(self.position.x)) \(Int(self.position.y))")
+//      print("player \(Int(self.position.x)) \(Int(self.position.y))")
     }
   }
 }

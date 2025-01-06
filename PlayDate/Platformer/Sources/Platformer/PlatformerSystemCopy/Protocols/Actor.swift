@@ -27,8 +27,8 @@ public class Actor: Collision, CollisionObject, CollisionHorizontal, ActorCarrie
 
   public var f: Point = .zero
   public var i: IntPoint = .zero
-  public var _f: Point = .zero
-  public var _i: IntPoint = .zero
+//  public var _f: Point = .zero
+//  public var _i: IntPoint = .zero
   public var fOld: Point = .zero
   public var vel: Point = .zero
   public var inAir: Bool = false

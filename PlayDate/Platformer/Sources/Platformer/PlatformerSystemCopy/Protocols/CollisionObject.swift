@@ -10,12 +10,12 @@
 //import UIKit
 // import Foundation
 
-public protocol CollisionObject: class {
+public protocol CollisionObject: AnyObject {
   
   var f: Point { get set }
-  var i: IntPoint { get set }
-  var _f: Point { get set }
-  var _i: IntPoint { get set }
+//  var i: IntPoint { get set }
+//  var _f: Point { get set }
+//  var _i: IntPoint { get set }
   var fOld: Point { get set }
   var vel: Point { get set }
   var inAir: Bool { get set }
@@ -31,25 +31,31 @@ public protocol CollisionObject: class {
 public extension CollisionObject where Self: Collision, Self: CollisionHorizontal {
   
   // MARK: Helper functions and vars
-  var f: Point {
-    set {
-      _f = newValue
-      _i = newValue.intPoint
-    }
-    get {
-      return _f
-    }
+//  var f: Point {
+//    set {
+//      print("set f \(Int(newValue.x)) \(Int(newValue.y))")
+//      _f = newValue
+//      _i = newValue.intPoint
+//    }
+//    get {
+//      return _f
+//    }
+//  }
+//  var i: IntPoint { //x, y coordinate (top left of the player rectangle)
+//    set {
+//      print("set i \(newValue.x) \(newValue.y)")
+//      _f = newValue.cgPoint
+//      _i = newValue
+//    }
+//    get {
+//      return _i
+//    }
+//  }
+
+  var i: IntPoint {
+    return f.intPoint
   }
-  var i: IntPoint { //x, y coordinate (top left of the player rectangle)
-    set {
-      _f = newValue.cgPoint
-      _i = newValue
-    }
-    get {
-      return _i
-    }
-  }
-  
+
   private func updateDirection() {
     
     var direction: Direction = []
@@ -189,7 +195,10 @@ public extension CollisionObject where Self: Collision, Self: CollisionHorizonta
       let iPlayerL = i.x / TILESIZE
       let iPlayerC = (i.x + (size.width/2)) / TILESIZE
       let iPlayerR = (i.x + size.width) / TILESIZE
-      
+      print("f \(Int(f.x)) \(Int(f.y))")
+      print("i \(i.x) \(i.y)")
+      print("iPlayerL: \(iPlayerL), iPlayerC: \(iPlayerC), iPlayerR: \(iPlayerR)")
+
       let txl = slopesBelow.left == nil ? iPlayerL : iPlayerC
       let txc = iPlayerC
       let txr = slopesBelow.right == nil ? iPlayerR : iPlayerC
@@ -258,6 +267,8 @@ public extension CollisionObject where Self: Collision, Self: CollisionHorizonta
           inAir = result.inAir
           groundPosition = result.groundPosition
           level = result.level
+
+          print("moving down: collide \(collide), inAir \(inAir)")
         }
         self.f = potentialPosition
         self.inAir = inAir
