@@ -89,7 +89,7 @@ final class Game: PlaydateGame {
         print("Couldn't update node for UUID: \(uuid)")
         continue
       }
-      node.position = actor.f.playDatePoint
+      node.position = PlaydateKit.Point(x: Float(actor.f.x)/2, y: Float(actor.f.y)/2) //actor.f.playDatePoint
 
 //      if let playerActor = actor as? Player {
 //        player = playerActor

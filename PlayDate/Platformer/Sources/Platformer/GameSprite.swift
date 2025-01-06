@@ -33,10 +33,20 @@ class GameSprite: Sprite.Sprite {
     )
   }
 
-  override func draw(bounds: Rect, drawRect: Rect) {
-    if let bitmap = table.bitmap(at: tile) {
-      Graphics.drawBitmap(bitmap, at: self.position)
+//  override func update() {
+//    markDirty()
+//  }
 
+  override func draw(bounds: Rect, drawRect: Rect) {
+//    Graphics.fillRect(bounds, color: .white)
+//    Graphics.drawRect(bounds)
+
+    if let bitmap = table.bitmap(at: tile) {
+      let at = PlaydateKit.Point(x: position.x - Float(GlobalConstants.tileSize.width)/2,
+                                 y: position.y - Float(GlobalConstants.tileSize.height)/2)
+      Graphics.drawBitmap(bitmap, at: at)
+//      Graphics.fillRect(bounds)
+      print("player \(Int(self.position.x)) \(Int(self.position.y))")
     }
   }
 }
