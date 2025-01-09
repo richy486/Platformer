@@ -26,9 +26,9 @@ final class Background: Sprite.Sprite {
     )
   }
 
-  override func update() {
-    markDirty()
-  }
+//  override func update() {
+//    markDirty()
+//  }
 
   override func draw(bounds: Rect, drawRect: Rect) {
     Graphics.fillRect(bounds, color: .white)
@@ -55,5 +55,16 @@ final class Background: Sprite.Sprite {
       }
     }
 
+  }
+
+  func mapChange(point: IntPoint, tileType: TileTypeFlag) {
+    guard map.count > point.y else {
+      return
+    }
+    guard map[point.y].count > point.x else {
+      return
+    }
+    map[point.y][point.x] = tileType.rawValue
+    markDirty()
   }
 }

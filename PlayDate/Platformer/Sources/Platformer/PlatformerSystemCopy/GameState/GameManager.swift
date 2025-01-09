@@ -26,7 +26,8 @@
 public class GameManager {
   var levelManager: LevelManager
   public var player: Player
-  
+  public let observer = Observer()
+
   public init() {
 
 #if PLAYDATE
@@ -36,8 +37,10 @@ public class GameManager {
 #endif
 
     player = Player()
-    let level = Level()
+    let level = Level(observer: observer)
     levelManager = LevelManager(level: level, player: player)
+
+
   }
   
   public func update(currentTime: TimeInterval, controls: Controls) {

@@ -1,10 +1,6 @@
 import PlaydateKit
 
 
-
-
-
-
 // MARK: - Game
 
 final class Game: PlaydateGame {
@@ -28,11 +24,28 @@ final class Game: PlaydateGame {
     self.table = table
 
     // AppState.load()
+
     gameManager.loadLevel()
 
     background = Background(table: table, allBlocks: gameManager.allBlocks())
 
     background.addToDisplayList()
+
+    gameManager.observer.doUpdate(from: self) { package, aSelf in
+      print(package.message)
+      switch package.message {
+        case Constants.kNotificationMapChange:
+          guard let point = package.point else {
+            break
+          }
+          guard let tileType = package.tileType else {
+            break
+          }
+          aSelf.background.mapChange(point: point, tileType: tileType)
+        default: break
+
+      }
+    }
   }
 
   // MARK: Internal

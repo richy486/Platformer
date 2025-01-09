@@ -20,13 +20,13 @@ public let MAXVELY = Double(20.0)
 public struct Constants {
 
   // Disabled in embedded.
-//  public static let kNotificationCollide = NSNotification.Name(rawValue: "kNotificationCollide")
+  public static let kNotificationCollide = "kNotificationCollide" // NSNotification.Name(rawValue: "kNotificationCollide")
   public static let kCollideXPosition = "kCollideXPosition"
   public static let kCollideYLeftPosition = "kCollideYLeftPosition"
   public static let kCollideYRightPosition = "kCollideYRightPosition"
 
   // Disabled in embedded.
-//  public static let kNotificationMapChange = NSNotification.Name(rawValue: "kNotificationMapChange")
+  public static let kNotificationMapChange = "kNotificationMapChange" // NSNotification.Name(rawValue: "kNotificationMapChange")
   public static let kMapChangePoint = "kMapChangePoint"
   public static let kMapChangeTileType = "kMapChangeTileType"
   

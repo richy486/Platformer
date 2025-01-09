@@ -195,9 +195,9 @@ public extension CollisionObject where Self: Collision, Self: CollisionHorizonta
       let iPlayerL = i.x / TILESIZE
       let iPlayerC = (i.x + (size.width/2)) / TILESIZE
       let iPlayerR = (i.x + size.width) / TILESIZE
-      print("f \(Int(f.x)) \(Int(f.y))")
-      print("i \(i.x) \(i.y)")
-      print("iPlayerL: \(iPlayerL), iPlayerC: \(iPlayerC), iPlayerR: \(iPlayerR)")
+//      print("f \(Int(f.x)) \(Int(f.y))")
+//      print("i \(i.x) \(i.y)")
+//      print("iPlayerL: \(iPlayerL), iPlayerC: \(iPlayerC), iPlayerR: \(iPlayerR)")
 
       let txl = slopesBelow.left == nil ? iPlayerL : iPlayerC
       let txc = iPlayerC
@@ -268,7 +268,7 @@ public extension CollisionObject where Self: Collision, Self: CollisionHorizonta
           groundPosition = result.groundPosition
           level = result.level
 
-          print("moving down: collide \(collide), inAir \(inAir)")
+//          print("moving down: collide \(collide), inAir \(inAir)")
         }
         self.f = potentialPosition
         self.inAir = inAir
