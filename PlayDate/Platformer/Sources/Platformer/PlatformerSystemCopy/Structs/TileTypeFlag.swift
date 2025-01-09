@@ -41,3 +41,4 @@ let S = TileTypeFlag.solid.rawValue
 let T = TileTypeFlag.solid_on_top.rawValue
 let B = TileTypeFlag.breakable.rawValue | TileTypeFlag.solid.rawValue
 let P = TileTypeFlag.player_start.rawValue
+let Q = TileTypeFlag.powerup.rawValue | TileTypeFlag.solid.rawValue

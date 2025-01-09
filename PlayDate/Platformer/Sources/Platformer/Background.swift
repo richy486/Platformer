@@ -39,12 +39,27 @@ final class Background: Sprite.Sprite {
         let tileType = map[y][x]
         let tile: Int
 
-        switch tileType {
-          case S: tile = 0
-          case T: tile = 1
-          case B: tile = 2
-          case P: tile = 11
-          default: tile = None
+        if tileType & TileTypeFlag.solid_on_top.rawValue == TileTypeFlag.solid_on_top.rawValue {
+          tile = 1
+        } else if tileType & TileTypeFlag.breakable.rawValue == TileTypeFlag.breakable.rawValue {
+          if tileType & TileTypeFlag.used.rawValue == TileTypeFlag.used.rawValue {
+            tile = None
+          } else {
+            tile = 2
+          }
+        } else if tileType & TileTypeFlag.powerup.rawValue == TileTypeFlag.powerup.rawValue {
+          if tileType & TileTypeFlag.used.rawValue == TileTypeFlag.used.rawValue {
+            tile = 3
+          } else {
+            tile = 4
+          }
+        } else if tileType & TileTypeFlag.player_start.rawValue == TileTypeFlag.player_start.rawValue {
+          tile = 11
+        } else if tileType & TileTypeFlag.solid.rawValue == TileTypeFlag.solid.rawValue {
+          // Regular solid, not or-ed with anything else.
+          tile = 0
+        } else {
+          tile = None
         }
 
         if let bitmap = table.bitmap(at: tile) {

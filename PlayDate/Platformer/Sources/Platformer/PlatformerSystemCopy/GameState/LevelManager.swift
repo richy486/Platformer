@@ -91,8 +91,8 @@ class LevelManager: ActorCarrier {
     
     for attachments in attachmentActorsToAttach {
       let uuid = attachments.attach.uuid
-      var from = attachments.from
-      var to = attachments.to
+      let from = attachments.from
+      let to = attachments.to
       guard let attachable = from.actors.removeValue(forKey: uuid) else {
         print("No attachment actor for UUID: \(uuid)")
         continue

@@ -41,6 +41,8 @@ final class Game: PlaydateGame {
           guard let tileType = package.tileType else {
             break
           }
+          let str = String(tileType.rawValue, radix: 2)
+          print(str)
           aSelf.background.mapChange(point: point, tileType: tileType)
         default: break
 
