@@ -13,7 +13,7 @@ final class Background: Sprite.Sprite {
   let table: Graphics.BitmapTable
   var map: [[Int]]
 
-  init( table: Graphics.BitmapTable, allBlocks: [[Int]]) {
+  init(table: Graphics.BitmapTable, allBlocks: [[Int]]) {
     map = allBlocks
     self.table = table
     super.init()
@@ -73,10 +73,10 @@ final class Background: Sprite.Sprite {
   }
 
   func mapChange(point: IntPoint, tileType: TileTypeFlag) {
-    guard map.count > point.y else {
+    guard point.y < map.count && point.y >= 0  else {
       return
     }
-    guard map[point.y].count > point.x else {
+    guard point.x < map[point.y].count && point.x >= 0  else {
       return
     }
     map[point.y][point.x] = tileType.rawValue

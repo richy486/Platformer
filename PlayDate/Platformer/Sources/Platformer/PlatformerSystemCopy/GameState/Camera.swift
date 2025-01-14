@@ -24,6 +24,7 @@ public final class Camera {
   private var lastUpdateTimeInterval: TimeInterval = 0
   
   func update<C: CollisionObject>(currentTime: TimeInterval, targetObject: C) {
+    print(" Camera update")
     if lastUpdateTimeInterval == 0 {
       lastUpdateTimeInterval = currentTime
     }
@@ -35,7 +36,7 @@ public final class Camera {
     
     // Camera X
     
-    // Update to the corrent mode
+    // Update to the correct mode
     switch cameraMode {
     case .center:
       
@@ -71,25 +72,30 @@ public final class Camera {
     if cameraMode == .lockLeftOfPlayer || cameraMode == .lockRightOfPlayer {
       
       let distance = abs(position.x - target.x)
-      let percent = (AppState.shared.cameraMoveSpeed / distance) * Double(delta)
+      let percent = distance == 0 ? 0 : (AppState.shared.cameraMoveSpeed / distance) * Double(delta)
       let posX = percent
         .clamp(min: 0, max: 1)
         .lerp(min: position.x, max: target.x)
       position.x = posX
       
     }
-    
+    print(" Camera w x position: \(position)")
+
     // Camera Y
     if targetObject.lastGroundPosition >= 0 && targetObject.lastGroundPosition < AppState.shared.blocks.count {
       target.y = Double((targetObject.lastGroundPosition + AppState.shared.BLOCKSOFFCENTER) * TILESIZE)
       let distance = abs(position.y - target.y)
-      let percent = (AppState.shared.cameraMoveSpeed / distance) * Double(delta)
+      print(" Camera distance: \(Int(distance))")
+      let percent = distance == 0 ? 0 : (AppState.shared.cameraMoveSpeed / distance) * Double(delta)
       let posY = percent
         .clamp(min: 0, max: 1)
         .lerp(min: position.y, max: target.y)
+      print(" Camera posY: \(Int(posY))")
       position.y = posY
     }
-    
+    print(" Camera w y position: \(position)")
+
     lastUpdateTimeInterval = currentTime
+    print(" Camera update end")
   }
 }

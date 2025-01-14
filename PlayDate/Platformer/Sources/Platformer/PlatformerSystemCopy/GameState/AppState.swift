@@ -97,9 +97,10 @@ public struct AppState {
       }
     }
   }
-  
-  public var cameraMoveSpeed = Double(500)
-  
+
+  /// TODO: make this customisable or fix up the ratio to the update time.
+  public var cameraMoveSpeed = Double(500) * 10
+
   public var cameraTracking = true
   public var printCollisions = false
   public var showBlockCoords = true

@@ -83,7 +83,13 @@ public class GameManager {
   }
   
   public func cameraPosition() -> Point {
-    return levelManager.camera.position
+    print("cameraPosition()")
+
+    let camera = levelManager.camera
+    print("camera: \(camera)")
+    let position = camera.position
+    print("position: \(position)")
+    return position
   }
   
   public func posToTile(_ position: Point) -> Int {

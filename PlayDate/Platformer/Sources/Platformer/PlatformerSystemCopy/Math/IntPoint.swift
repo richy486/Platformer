@@ -36,3 +36,10 @@ extension Point {
     return IntPoint(x: Int(x), y: Int(y))
   }
 }
+
+func / (left: IntPoint, right: IntPoint) -> IntPoint {
+  IntPoint(x: left.x / right.x, y: left.y / right.y)
+}
+func / (left: IntPoint, right: Int) -> IntPoint {
+  IntPoint(x: left.x / right, y: left.y / right)
+}

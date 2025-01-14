@@ -24,6 +24,18 @@ extension Point {
   }
 }
 
+extension Point: CustomStringConvertible {
+  public var description: String {
+    doubleFormat(double: x) + ", " + doubleFormat(double: y)
+  }
+}
+
+func doubleFormat(double: Double) -> String {
+    let int = Int(double)
+    let frac = Int((double - Double(int)) * 100)
+    return "\(int).\(frac)"
+}
+
 public struct Size {
   public var width: Double
   public var height: Double
