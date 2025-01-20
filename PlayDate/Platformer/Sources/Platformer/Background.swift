@@ -18,17 +18,18 @@ final class Background: Sprite.Sprite {
     self.table = table
     super.init()
 
-    bounds = Rect(
-      x: 0,
-      y: 0,
-      width: Display.width,
-      height: Display.height
-    )
+    
+    let height = map.count
+    if height > 0 {
+      let width = map[0].count
+      bounds = Rect(
+        x: 0,
+        y: 0,
+        width: width * Int(GlobalConstants.tileSize.width),
+        height: height * Int(GlobalConstants.tileSize.height)
+      )
+    }
   }
-
-//  override func update() {
-//    markDirty()
-//  }
 
   override func draw(bounds: Rect, drawRect: Rect) {
     Graphics.fillRect(bounds, color: .white)
