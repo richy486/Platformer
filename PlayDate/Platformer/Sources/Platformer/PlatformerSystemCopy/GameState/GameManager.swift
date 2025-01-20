@@ -83,12 +83,12 @@ public class GameManager {
   }
   
   public func cameraPosition() -> Point {
-    print("cameraPosition()")
+//    print("cameraPosition()")
 
     let camera = levelManager.camera
-    print("camera: \(camera)")
+//    print("camera: \(camera)")
     let position = camera.position
-    print("position: \(position)")
+//    print("position: \(position)")
     return position
   }
   

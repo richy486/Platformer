@@ -26,7 +26,13 @@ public class Actor: Collision, CollisionObject, CollisionHorizontal, ActorCarrie
   }
 
   public var f: Point = .zero
-  public var i: IntPoint = .zero
+//  public var i: IntPoint = .zero
+
+  public var i: IntPoint {
+    return f.intPoint
+  }
+
+
 //  public var _f: Point = .zero
 //  public var _i: IntPoint = .zero
   public var fOld: Point = .zero

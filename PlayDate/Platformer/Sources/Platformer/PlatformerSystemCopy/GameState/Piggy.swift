@@ -14,8 +14,6 @@
 public class Piggy: Actor, UsesComponents, GravityComponent {
   public override init() {
     super.init()
-//    _i = IntPoint.zero
-//    _f = Point.zero
     vel = Point.zero //velocity on x, y axis
     fOld = Point.zero
     lastGroundPosition = Int.max
@@ -61,12 +59,13 @@ public class Piggy: Actor, UsesComponents, GravityComponent {
     if collisionDetection(withObject: object) {
       
       if let player = object as? Player {
-        
+
         //player->fOldY + PH <= iy && player->iy + PH >= iy
-        if player.fOld.y + Double(player.size.height) <= Double(i.y) && player.i.y + player.size.height >= i.y {
+        if player.fOld.y + Double(player.size.height) <= Double(i.y)
+           && player.i.y + player.size.height >= i.y {
           // was hit on top
-          
-          
+
+
           if vel.x != 0.0 {
             // Moving
             print("top: stop")
@@ -80,10 +79,13 @@ public class Piggy: Actor, UsesComponents, GravityComponent {
           }
         } else {
           // was hit below
-          
+
+          print("self i, \(i.x) \(i.y) -- player i, \(player.i.x) \(player.i.y)")
+          print("self f, \(Int(f.x)) \(Int(f.y)) -- player i, \(Int(player.f.x)) \(Int(player.f.y))")
+
           if vel.x != 0.0 {
             // Moving
-            print("below: kick")
+            print("below: kick (Moving) - \(Int(vel.x))")
             kick(by: player)
           } else if abs(player.vel.x) > AppState.shared.VELMOVING {
             // Stopped & player running
@@ -93,7 +95,7 @@ public class Piggy: Actor, UsesComponents, GravityComponent {
           } else {
             // Stopped
             
-            print("below: kick")
+            print("below: kick (Stopped)")
             kick(by: player)
           }
           

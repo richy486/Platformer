@@ -24,7 +24,7 @@ public final class Camera {
   private var lastUpdateTimeInterval: TimeInterval = 0
   
   func update<C: CollisionObject>(currentTime: TimeInterval, targetObject: C) {
-    print(" Camera update")
+//    print(" Camera update")
     if lastUpdateTimeInterval == 0 {
       lastUpdateTimeInterval = currentTime
     }
@@ -79,23 +79,23 @@ public final class Camera {
       position.x = posX
       
     }
-    print(" Camera w x position: \(position)")
+//    print(" Camera w x position: \(position)")
 
     // Camera Y
     if targetObject.lastGroundPosition >= 0 && targetObject.lastGroundPosition < AppState.shared.blocks.count {
       target.y = Double((targetObject.lastGroundPosition + AppState.shared.BLOCKSOFFCENTER) * TILESIZE)
       let distance = abs(position.y - target.y)
-      print(" Camera distance: \(Int(distance))")
+//      print(" Camera distance: \(Int(distance))")
       let percent = distance == 0 ? 0 : (AppState.shared.cameraMoveSpeed / distance) * Double(delta)
       let posY = percent
         .clamp(min: 0, max: 1)
         .lerp(min: position.y, max: target.y)
-      print(" Camera posY: \(Int(posY))")
+//      print(" Camera posY: \(Int(posY))")
       position.y = posY
     }
-    print(" Camera w y position: \(position)")
+//    print(" Camera w y position: \(position)")
 
     lastUpdateTimeInterval = currentTime
-    print(" Camera update end")
+//    print(" Camera update end")
   }
 }

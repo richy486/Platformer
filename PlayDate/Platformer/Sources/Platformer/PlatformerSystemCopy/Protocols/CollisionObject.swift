@@ -13,7 +13,7 @@
 public protocol CollisionObject: AnyObject {
   
   var f: Point { get set }
-//  var i: IntPoint { get set }
+  var i: IntPoint { get }
 //  var _f: Point { get set }
 //  var _i: IntPoint { get set }
   var fOld: Point { get set }
@@ -52,9 +52,9 @@ public extension CollisionObject where Self: Collision, Self: CollisionHorizonta
 //    }
 //  }
 
-  var i: IntPoint {
-    return f.intPoint
-  }
+//  var i: IntPoint {
+//    return f.intPoint
+//  }
 
   private func updateDirection() {
     

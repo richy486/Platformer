@@ -124,25 +124,25 @@ final class Game: PlaydateGame {
     }
 
     // Camera
-    print("-- update camera --")
+//    print("-- update camera --")
     let cameraPositionPoint = gameManager.cameraPosition()
-    print("got point \(cameraPositionPoint.description)")
+//    print("got point \(cameraPositionPoint.description)")
     let cameraPosition = cameraPositionPoint.intPoint
-    print("camera: \(cameraPosition.x), \(cameraPosition.y)")
+//    print("camera: \(cameraPosition.x), \(cameraPosition.y)")
     if cameraStart.x == -9999 && cameraStart.y == -9999 {
       cameraStart = cameraPosition
 
 
     }
-    if let player {
-      print("player position: \(player.f.intPoint.x), \(player.f.intPoint.y)")
-    }
+//    if let player {
+//      print("player position: \(player.f.intPoint.x), \(player.f.intPoint.y)")
+//    }
 
 //    Graphics.setDrawOffset(dx: Display.width/2 - cameraStart.x - cameraPosition.x,
 //                           dy: Display.height/2 - cameraStart.y - cameraPosition.y)
     let dx = Display.width/2 - cameraPosition.x/2
     let dy = /*Display.height/2 - */cameraStart.y - cameraPosition.y/2 + Display.height/2
-    print("d: \(dx), \(dy)")
+//    print("d: \(dx), \(dy)")
     Graphics.setDrawOffset(dx: dx, dy: dy)
 //    if let player {
 //      cameraStart.x = Display.width/2 - player.f.intPoint.x/2
@@ -165,7 +165,7 @@ final class Game: PlaydateGame {
     System.drawFPS()
 
     lastCurrentTimeMilliseconds = System.currentTimeMilliseconds
-    print("-----")
+//    print("-----")
     return true
   }
 
