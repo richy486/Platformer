@@ -171,66 +171,28 @@ class GameScene: SKScene {
     addChild(cameraMoveBox)
     addChild(forwardFocusBox)
     addChild(cameraCenter)
-    
-    
-    NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: Constants.kNotificationMapChange),
-                                           object: nil,//gameManager.player,
-    queue: OperationQueue.main) { notification in
-      guard let point = notification.userInfo?[Constants.kMapChangePoint] as? IntPoint else {
-        return
+
+    gameManager.observer.doUpdate(from: self) { package, aSelf in
+      print(package.message)
+      switch package.message {
+        case Constants.kNotificationMapChange:
+          guard let point = package.point else {
+            break
+          }
+          guard let tileType = package.tileType else {
+            break
+          }
+          let str = String(tileType.rawValue, radix: 2)
+          print("map change: tile type \(str)")
+          aSelf.mapChange(point: point, tileType: tileType)
+        case Constants.kNotificationCollide:
+          // TODO: add this from the notification below.
+          break
+        default: break
       }
-      guard let tileType = notification.userInfo?[Constants.kMapChangeTileType] as? TileTypeFlag else {
-        return
-      }
-      
-      // Replace the block graphic
-      let replaceBlock = {
-        if let currentBlockNode = self.blockNodes[point] {
-          currentBlockNode.removeFromParent()
-        }
-        
-        guard let blockNode = BlockFactory.blockNode(forTileType: tileType) else {
-          return
-        }
-        
-        if AppState.shared.showBlockCoords {
-          let coordNode = SKLabelNode(text: "\(point.x), \(point.y)")
-          coordNode.fontColor = tileType.contains(.solid_on_top) ? #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-          coordNode.fontSize = 10
-          coordNode.position = CGPoint(x: TILESIZE/2, y: TILESIZE/2 - TILESIZE)
-          coordNode.zPosition = Constants.Layer.debug.rawValue
-          blockNode.addChild(coordNode)
-        }
-        
-        blockNode.position = CGPoint(x: point.x * TILESIZE, y: point.y * TILESIZE)
-        self.addChild(blockNode)
-        self.blockNodes[point] = blockNode
-      }
-      
-      // If there is no current block then just add the graphic
-      guard let currentBLockNode = self.blockNodes[point] else {
-        replaceBlock()
-        return
-      }
-      
-      // Check the tile type and do an appropriate graphic effect before
-      // replacing the graphic
-      if tileType.contains(.powerup) {
-        let moveUp = SKAction.moveBy(x: 0.0,
-                                     y: -10.0,
-                                     duration: 0.1)
-        let moveDown = SKAction.moveBy(x: 0.0,
-                                       y: 10.0,
-                                       duration: 0.1)
-        let runBlock = SKAction.run(replaceBlock)
-        
-        let sequence = SKAction.sequence([moveUp, moveDown, runBlock])
-        currentBLockNode.run(sequence)
-      } else {
-        replaceBlock()
-      }
-      
     }
+
+
     NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: Constants.kNotificationCollide),
                                            object: nil,//gameManager.player,
     queue: OperationQueue.main) { notification in
@@ -483,7 +445,57 @@ class GameScene: SKScene {
     keysDown[.function] = modifierFlags.contains(.function)
     
   }
-  
+
+  func mapChange(point: IntPoint, tileType: TileTypeFlag) {
+
+    // Replace the block graphic
+    let replaceBlock = {
+      if let currentBlockNode = self.blockNodes[point] {
+        currentBlockNode.removeFromParent()
+      }
+
+      guard let blockNode = BlockFactory.blockNode(forTileType: tileType) else {
+        return
+      }
+
+      if AppState.shared.showBlockCoords {
+        let coordNode = SKLabelNode(text: "\(point.x), \(point.y)")
+        coordNode.fontColor = tileType.contains(.solid_on_top) ? #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        coordNode.fontSize = 10
+        coordNode.position = CGPoint(x: TILESIZE/2, y: TILESIZE/2 - TILESIZE)
+        coordNode.zPosition = Constants.Layer.debug.rawValue
+        blockNode.addChild(coordNode)
+      }
+
+      blockNode.position = CGPoint(x: point.x * TILESIZE, y: point.y * TILESIZE)
+      self.addChild(blockNode)
+      self.blockNodes[point] = blockNode
+    }
+
+    // If there is no current block then just add the graphic
+    guard let currentBLockNode = self.blockNodes[point] else {
+      replaceBlock()
+      return
+    }
+
+    // Check the tile type and do an appropriate graphic effect before
+    // replacing the graphic
+    if tileType.contains(.powerup) {
+      let moveUp = SKAction.moveBy(x: 0.0,
+                                   y: -10.0,
+                                   duration: 0.1)
+      let moveDown = SKAction.moveBy(x: 0.0,
+                                     y: 10.0,
+                                     duration: 0.1)
+      let runBlock = SKAction.run(replaceBlock)
+
+      let sequence = SKAction.sequence([moveUp, moveDown, runBlock])
+      currentBLockNode.run(sequence)
+    } else {
+      replaceBlock()
+    }
+  }
+
 //  private func resetCamera() {
 //    //let player = gameManager.player
 //
