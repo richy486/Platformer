@@ -59,8 +59,8 @@ class GameScene: SKScene {
   private(set) var gameManager = GameManager()
   
   private var blockNodes: [IntPoint: SKNode] = [:]
-  private var spriteNodes: [UUID: SKNode] = [:]
-  
+  private var spriteNodes: [PlatformerSystem.UUID: SKNode] = [:]
+
   private let localCamera = SKCameraNode()
   private var localCameraTarget = CGPoint.zero
   private var localCameraMode = CameraMode.center
@@ -173,7 +173,7 @@ class GameScene: SKScene {
     addChild(cameraCenter)
     
     
-    NotificationCenter.default.addObserver(forName: Constants.kNotificationMapChange,
+    NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: Constants.kNotificationMapChange),
                                            object: nil,//gameManager.player,
     queue: OperationQueue.main) { notification in
       guard let point = notification.userInfo?[Constants.kMapChangePoint] as? IntPoint else {
@@ -231,7 +231,7 @@ class GameScene: SKScene {
       }
       
     }
-    NotificationCenter.default.addObserver(forName: Constants.kNotificationCollide,
+    NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: Constants.kNotificationCollide),
                                            object: nil,//gameManager.player,
     queue: OperationQueue.main) { notification in
       

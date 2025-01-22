@@ -31,48 +31,9 @@ public enum EditMode {
   }
 }
 
-/*
-extension EditMode: Codable {
-  private enum CodingKeys: String, CodingKey {
-    case none, paint, erase
-  }
-
-  public init(from decoder: Decoder) throws {
-    let values = try decoder.container(keyedBy: CodingKeys.self)
-
-    if values.contains(.paint) {
-      let value: TileTypeFlag
-      value = TileTypeFlag(rawValue: try values.decode(Int.self, forKey: .paint))
-
-      self = .paint(tileType: value)
-    } else if values.contains(.none) {
-      self = .none
-    } else if values.contains(.erase) {
-      self = .erase
-    } else {
-      print("Error decoding EditMode: \(decoder)")
-      self = .none
-    }
-  }
-
-  public func encode(to encoder: Encoder) throws {
-    var container = encoder.container(keyedBy: CodingKeys.self)
-
-    switch self {
-    case .paint(let value):
-      try container.encode(value.rawValue, forKey: CodingKeys.paint)
-    case .none:
-      try container.encode(true, forKey: CodingKeys.none)
-    case .erase:
-      try container.encode(true, forKey: CodingKeys.erase)
-    }
-  }
-}
-*/
-
 public struct AppState {
-  nonisolated(unsafe) public static let shared = AppState()
-  
+  nonisolated(unsafe) public static var shared = AppState()
+
   public var VELMOVINGADD = Double(0.5)
   public var VELMOVING = Double(4.0)        //velocity (speed) for moving left, right
   public var VELTURBOMOVING = Double(5.5)
@@ -136,88 +97,7 @@ public struct AppState {
     [S,S,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S]
   ]
-  
 
+  /// Explicit init for extensions.
+  public init() {}
 }
-/*
-extension AppState: Codable {
-  public static func save() {
-
-    var appState = AppState.shared
-
-    // Reset any run time changes
-    for (y, xBlocks) in appState.blocks.enumerated() {
-      for (x, blockVal) in xBlocks.enumerated() {
-
-        let tileType = TileTypeFlag(rawValue: blockVal)
-
-        if tileType.intersection(.used) == .used {
-
-          // Remove used
-          var updatedTile = tileType.symmetricDifference(.used)
-
-          // Re add solid if breakable
-          if tileType.contains(.breakable) {
-            updatedTile = updatedTile.union(.solid)
-          }
-
-          appState.blocks[y][x] = updatedTile.rawValue
-        }
-      }
-    }
-
-
-
-    let jsonEncoder = JSONEncoder()
-    let jsonData: Data
-    do {
-      jsonData = try jsonEncoder.encode(appState)
-    } catch {
-      print("Error encoding: \(error)")
-      return
-    }
-    guard let jsonString = String(data: jsonData, encoding: .utf8) else {
-      print("Error json stat to string")
-      return
-    }
-
-    let fileURL = URL(fileURLWithPath: "appState.json")
-    do {
-      try jsonString.write(to: fileURL, atomically: true, encoding: .utf8)
-    } catch {
-      print("Error writing: \(error)")
-      return
-    }
-    print("Saved! \(fileURL.absoluteString)")
-  }
-
-  public static func load() {
-    let jsonString: String
-    let fileURL = URL(fileURLWithPath: "appState.json")
-    print("loading from: \(fileURL)")
-    do {
-      jsonString = try String(contentsOf: fileURL, encoding: .utf8)
-    } catch {
-      print("Error loading: \(error)")
-      return
-    }
-
-    guard let jsonData = jsonString.data(using: .utf8) else {
-      print("Error string to data")
-      return
-    }
-
-    let jsonDecoder = JSONDecoder()
-    let appState: AppState
-    do {
-      appState = try jsonDecoder.decode(AppState.self, from: jsonData)
-    } catch {
-      print("Error decoding: \(error)")
-      return
-    }
-
-    AppState.shared = appState
-    print("Loaded!")
-  }
-}
-*/
