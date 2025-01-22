@@ -7,7 +7,7 @@
 //
 
 //import CoreGraphics
-import Foundation
+// import Foundation
 
 public struct IntSize: Hashable {
   public var width: Int

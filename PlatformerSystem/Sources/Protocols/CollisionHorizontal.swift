@@ -7,7 +7,7 @@
 //
 
 //import CoreGraphics
-import Foundation
+// import Foundation
 
 public protocol CollisionHorizontal {
   func collisionHorizontalResponse(vel: Point) -> Point

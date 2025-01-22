@@ -11,7 +11,15 @@
 
 // MARK: Lerpable protocol
 
+//#if PLAYDATE
+#if os(macOS)
 import Foundation
+#else
+import PlaydateKit
+#endif
+//#else
+//import Foundation
+//#endif
 
 public protocol Lerpable {
   func lerp(min: Self, max: Self) -> Self
@@ -33,18 +41,19 @@ public protocol Vector {
 // MARK: - Double
 func round(_ value: Double, tollerence: Double) -> Double {
   if abs(value).truncatingRemainder(dividingBy: 1.0) < tollerence || abs(value).truncatingRemainder(dividingBy: 1.0) > 1.0 - tollerence {
-    return round(value)
+    return value.rounded()//round(value)
   }
   return value
 }
 
 extension Double {
-  public static var zero: Double = Double(0)
+  public static let zero: Double = Double(0)
 }
 
 extension Double {
   func format(_ f: String) -> String {
-    return String(format: "%\(f)f", self)
+//    return String(format: "%\(f)f", self)
+    fatalError("Not supported in embedded mode")
   }
 }
 
@@ -147,7 +156,8 @@ func abs(_ value: Point) -> Point {
 
 extension Point {
   func format(_ f: String) -> String {
-    return String(format: "(%\(f)f, %\(f)f)", self.x, self.y)
+//    return String(format: "(%\(f)f, %\(f)f)", self.x, self.y)
+    fatalError("Not implemented")
   }
   
   func offsetX(x: Double) -> Point {

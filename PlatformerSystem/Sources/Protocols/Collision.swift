@@ -8,7 +8,8 @@
 
 //import CoreGraphics
 //import UIKit
-import Foundation
+// import Foundation
+
 
 
 public enum CollideResult {
@@ -116,18 +117,23 @@ extension Collision where Self: CollisionHorizontal {
       if AppState.shared.printCollisions {
         print("--: \(IntPoint(x: tx, y: ty))")
       }
+      // Disabled in embedded.
+      /*
       NotificationCenter.default.post(name: Constants.kNotificationCollide,
                                       object: self,
                                       userInfo: [Constants.kCollideXPosition: Point(x: tx * TILESIZE, y: ty * TILESIZE)])
-      
+      */
     } else if level.collide(atPoint: bottomTilePoint, tileType: [.solid], direction: direction == 1 ? .left : .right) {
       collide = true
       if AppState.shared.printCollisions {
         print("--: \(IntPoint(x: tx, y: ty2))")
       }
+      // Disabled in embedded.
+      /*
       NotificationCenter.default.post(name: Constants.kNotificationCollide,
                                       object: self,
                                       userInfo: [Constants.kCollideXPosition: Point(x: tx * TILESIZE, y: ty2 * TILESIZE)])
+       */
     }
     
     if collide {
@@ -196,7 +202,7 @@ extension Collision where Self: CollisionHorizontal {
                               unAlignedBlockX: Int,
                               unAlignedBlockFX: Double,
                               level: Level) -> (position: Point, collide: Bool, inAir: Bool, groundPosition: Int, level: Level) {
-    
+//    print("position \(Int(position.x)) \(Int(position.y))")
     var position = position
     var level = level
     
@@ -223,18 +229,27 @@ extension Collision where Self: CollisionHorizontal {
       if AppState.shared.printCollisions {
         print(" | d: \(IntPoint(x: txl, y: ty))")
       }
+//      print(" | l: \(Int(txl)), \(Int(ty))")
+
+      // Disabled in embedded.
+      /*
       NotificationCenter.default.post(name: Constants.kNotificationCollide,
                                       object: self,
                                       userInfo: [Constants.kCollideYLeftPosition: Point(x: txl * TILESIZE, y: ty * TILESIZE)])
+       */
     }
     
     if fSolidTileUnderPlayerRight || fSolidOnTopUnderPlayerRight {
       if AppState.shared.printCollisions {
         print(" | d: \(IntPoint(x: txr, y: ty))")
       }
+//      print(" | r: \(Int(txr)), \(Int(ty))")
+      // Disabled in embedded.
+      /*
       NotificationCenter.default.post(name: Constants.kNotificationCollide,
                                       object: self,
                                       userInfo: [Constants.kCollideYRightPosition: Point(x: txr * TILESIZE, y: ty * TILESIZE)])
+       */
     }
     
     let inAir: Bool

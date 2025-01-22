@@ -10,18 +10,37 @@
 
 //import CoreGraphics
 //import UIKit
-import Foundation
+// import Foundation
+
+//#if PLAYDATE
+//import PlaydateKit
+////#endif
+////
+////#if ITSANAPPLEPLATFORM
+////
+////#else
+////import Foundation
+//#endif
 
 
 public class GameManager {
   var levelManager: LevelManager
   public var player: Player
-  
+  public let observer = Observer()
+
   public init() {
-    
+
+#if PLAYDATE
+    print("!!! play date build")
+#else
+    print("!!! Another type of build")
+#endif
+
     player = Player()
-    let level = Level()
+    let level = Level(observer: observer)
     levelManager = LevelManager(level: level, player: player)
+
+
   }
   
   public func update(currentTime: TimeInterval, controls: Controls) {
@@ -31,16 +50,17 @@ public class GameManager {
   // Level I/O
   
   public func loadLevel() {
-    let level: Level
-    if let loadedLevel = Level(withFilename: "Level 1") {
-      level = loadedLevel
-    } else {
-      level = Level()
-    }
-    
-    levelManager = LevelManager(level: level, player: player)
-    
-    player.restart()
+    // Disabled in embedded.
+//    let level: Level
+//    if let loadedLevel = Level(withFilename: "Level 1") {
+//      level = loadedLevel
+//    } else {
+//      level = Level()
+//    }
+//    
+//    levelManager = LevelManager(level: level, player: player)
+//    
+//    player.restart()
   }
   
   public func setLevel(_ level: Level) {
@@ -48,7 +68,8 @@ public class GameManager {
   }
   
   public func saveLevel() {
-      levelManager.level.save()
+    // Disabled in embedded.
+//      levelManager.level.save()
   }
   
   // Level elements
@@ -62,7 +83,13 @@ public class GameManager {
   }
   
   public func cameraPosition() -> Point {
-    return levelManager.camera.position
+//    print("cameraPosition()")
+
+    let camera = levelManager.camera
+//    print("camera: \(camera)")
+    let position = camera.position
+//    print("position: \(position)")
+    return position
   }
   
   public func posToTile(_ position: Point) -> Int {

@@ -9,12 +9,12 @@
 
 //import CoreGraphics
 //import UIKit
-import Foundation
+// import Foundation
 
 class LevelManager: ActorCarrier {
   var actors: [UUID: Actor] = [:]
   let camera = Camera()
-  weak var player: Player!
+  /*weak */var player: Player!
   
   var level: Level
   
@@ -59,17 +59,21 @@ class LevelManager: ActorCarrier {
         guard a.key != b.key else {
           continue
         }
-        
+
         let collisionResult = a.value.tryCollide(withObject: b.value)
+//        let collisionResult = collide(a: a.value, b: b.value)
         switch collisionResult {
         case .attach:
           // a will attach to b
           //                    attachmentUUIDsToAttach.append((attach: a.key, to: b.key))
-          
-          if let newCarrier = b.value as? ActorCarrier {
-            let uuidActor = (uuid: a.key, actor: a.value)
-            attachmentActorsToAttach.append((attach: uuidActor, from: self, to: newCarrier))
-          }
+
+//          if let newCarrier = b.value as? ActorCarrier {
+//            let uuidActor = (uuid: a.key, actor: a.value)
+//            attachmentActorsToAttach.append((attach: uuidActor, from: self, to: newCarrier))
+//          }
+          let uuidActor = (uuid: a.key, actor: a.value)
+          attachmentActorsToAttach.append((attach: uuidActor, from: self, to: b.value))
+
         default:
           break
         }
@@ -87,21 +91,21 @@ class LevelManager: ActorCarrier {
     
     for attachments in attachmentActorsToAttach {
       let uuid = attachments.attach.uuid
-      var from = attachments.from
-      var to = attachments.to
-      
+      let from = attachments.from
+      let to = attachments.to
       guard let attachable = from.actors.removeValue(forKey: uuid) else {
         print("No attachment actor for UUID: \(uuid)")
         continue
       }
-      
+
       to.actors[uuid] = attachable
       
-      if let dropableAttachable = attachable as? Droppable,
+      if /*let dropableAttachable = attachable as? Droppable,*/
          let dropper = from as? Actor,
          to is LevelManager {
         
-        dropableAttachable.drop(by: dropper)
+        //dropableAttachable.drop(by: dropper)
+        attachable.drop(by: dropper)
       }
     }
   }
@@ -136,7 +140,8 @@ class LevelManager: ActorCarrier {
           
           let pickup = Pickup()
           actors[UUID()] = pickup
-          
+//          addActor(pickup)
+
           pickup.f = Point(x: x*TILESIZE,
                              y: y*TILESIZE)
         }

@@ -6,29 +6,63 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-import Foundation
+// import Foundation
 //import CoreGraphics
 //import UIKit
 
-public protocol ActorCarrier {
+//
+//func collide<A: Collision, B: Actor>(a: A, b: B) -> CollideResult {
+//  return a.tryCollide(withObject: b)
+//}
+
+
+public protocol ActorCarrier: AnyObject {
   var actors: [UUID: Actor] { get set }
+
 }
 
 public extension ActorCarrier {
-  public func allActorsAndSubActors() -> [UUID: Actor] {
+//  func allActorsAndSubActors() -> [UUID: Actor] {
+//    var allActorsAndKeys: [UUID: Actor] = [:]
+//    
+//    for actor in actors {
+//      allActorsAndKeys[actor.key] = actor.value
+//
+////      if let subActorCarrier = actor.value as? ActorCarrier {
+////        let subActorsAndKeys = subActorCarrier.allActorsAndSubActors()
+//      let subActorsAndKeys = actor.value.allActorsAndSubActors()
+//      allActorsAndKeys.merge(subActorsAndKeys) { (a, _) -> Actor in
+//        return a
+//      }
+////      }
+//    }
+//    return allActorsAndKeys
+//  }
+  func allActorsAndSubActors() -> [UUID: Actor] {
     var allActorsAndKeys: [UUID: Actor] = [:]
-    
+
     for actor in actors {
       allActorsAndKeys[actor.key] = actor.value
-      
-      if let subActorCarrier = actor.value as? ActorCarrier {
-        let subActorsAndKeys = subActorCarrier.allActorsAndSubActors()
-        allActorsAndKeys.merge(subActorsAndKeys) { (a, _) -> Actor in
-          return a
-        }
+
+      let subActorsAndKeys = actor.value.allActorsAndSubActors()
+      for (key, value) in subActorsAndKeys {
+        allActorsAndKeys[key] = value
       }
-      
     }
     return allActorsAndKeys
   }
+
+//  func addActor<A: Actor>(_ actor: A) {
+//    let uuid = UUID()
+////    actors[uuid] = actor
+////    actors.insert(actor, forKey: uuid)
+//    actors.updateValue(actor, forKey: uuid)
+//  }
+
+//  func addActor(_ actor: some Actor) {
+//    let uuid = UUID()
+////    actors[uuid] = actor
+//    let actorHolder = ActorHolder(actor: actor)
+//    actors.updateValue(actor, forKey: uuid)
+//  }
 }

@@ -6,7 +6,7 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-import Foundation
+// import Foundation
 
 public struct TileTypeFlag: OptionSet {
   
@@ -15,22 +15,22 @@ public struct TileTypeFlag: OptionSet {
     self.rawValue = rawValue
   }
   
-  public static let nonsolid = TileTypeFlag(rawValue: 1 << 0)
-  public static let solid = TileTypeFlag(rawValue: 1 << 1)
-  public static let solid_on_top = TileTypeFlag(rawValue: 1 << 2)
-  public static let breakable = TileTypeFlag(rawValue: 1 << 3)
-  public static let used = TileTypeFlag(rawValue: 1 << 4)
-  public static let powerup = TileTypeFlag(rawValue: 1 << 5)
-  
-  public static let slope_left = TileTypeFlag(rawValue: 1 << 6)  // ◿
-  public static let slope_right = TileTypeFlag(rawValue: 1 << 7) // ◺
-  
-  public static let pickup = TileTypeFlag(rawValue: 1 << 8)
-  public static let player_start = TileTypeFlag(rawValue: 1 << 9)
-  public static let piggy = TileTypeFlag(rawValue: 1 << 10)
-  public static let jsItem = TileTypeFlag(rawValue: 1 << 11)
-  public static let pickAxe = TileTypeFlag(rawValue: 1 << 12)
-  public static let door = TileTypeFlag(rawValue: 1 << 13)
+  public static var nonsolid: TileTypeFlag { TileTypeFlag(rawValue: 1 << 0) }
+  public static var solid: TileTypeFlag { TileTypeFlag(rawValue: 1 << 1) }
+  public static var solid_on_top: TileTypeFlag { TileTypeFlag(rawValue: 1 << 2) }
+  public static var breakable: TileTypeFlag { TileTypeFlag(rawValue: 1 << 3) }
+  public static var used: TileTypeFlag { TileTypeFlag(rawValue: 1 << 4) }
+  public static var powerup: TileTypeFlag { TileTypeFlag(rawValue: 1 << 5) }
+
+  public static var slope_left: TileTypeFlag { TileTypeFlag(rawValue: 1 << 6) } // ◿
+  public static var slope_right: TileTypeFlag { TileTypeFlag(rawValue: 1 << 7) } // ◺ }
+
+  public static var pickup: TileTypeFlag { TileTypeFlag(rawValue: 1 << 8) }
+  public static var player_start: TileTypeFlag { TileTypeFlag(rawValue: 1 << 9) }
+  public static var piggy: TileTypeFlag { TileTypeFlag(rawValue: 1 << 10) }
+  public static var jsItem: TileTypeFlag { TileTypeFlag(rawValue: 1 << 11) }
+  public static var pickAxe: TileTypeFlag { TileTypeFlag(rawValue: 1 << 12) }
+  public static var door: TileTypeFlag { TileTypeFlag(rawValue: 1 << 13) }
 
   // 0000
   // 1010
@@ -39,7 +39,7 @@ public struct TileTypeFlag: OptionSet {
 
 let S = TileTypeFlag.solid.rawValue
 let T = TileTypeFlag.solid_on_top.rawValue
-let B = TileTypeFlag.breakable.rawValue
+let B = TileTypeFlag.breakable.rawValue | TileTypeFlag.solid.rawValue
 let P = TileTypeFlag.player_start.rawValue
 let Q = TileTypeFlag.powerup.rawValue | TileTypeFlag.solid.rawValue
 let p = TileTypeFlag.piggy.rawValue

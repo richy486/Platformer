@@ -7,7 +7,7 @@
 //
 
 //import CoreGraphics
-import Foundation
+// import Foundation
 
 public struct Direction: OptionSet {
   
@@ -16,16 +16,16 @@ public struct Direction: OptionSet {
     self.rawValue = rawValue
   }
   
-  public static let stationary = Direction(rawValue: 0)
-  public static let up = Direction(rawValue: 1 << 0)
-  public static let down = Direction(rawValue: 1 << 1)
-  public static let left = Direction(rawValue: 1 << 2)
-  public static let right = Direction(rawValue: 1 << 3)
-  public static let upLeft = Direction(arrayLiteral: [.up, .left])
-  public static let upRight = Direction(arrayLiteral: [.up, .right])
-  public static let downLeft = Direction(arrayLiteral: [.down, .left])
-  public static let downRight = Direction(arrayLiteral: [.down, .right])
-  
+  public static var stationary: Direction { Direction(rawValue: 0) }
+  public static var up: Direction { Direction(rawValue: 1 << 0) }
+  public static var down: Direction { Direction(rawValue: 1 << 1) }
+  public static var left: Direction { Direction(rawValue: 1 << 2) }
+  public static var right: Direction { Direction(rawValue: 1 << 3) }
+  public static var upLeft: Direction { Direction(arrayLiteral: [.up, .left]) }
+  public static var upRight: Direction { Direction(arrayLiteral: [.up, .right]) }
+  public static var downLeft: Direction { Direction(arrayLiteral: [.down, .left]) }
+  public static var downRight: Direction { Direction(arrayLiteral: [.down, .right]) }
+
   public var radians: Double {
     
     var radians = Double.zero

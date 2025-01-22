@@ -10,45 +10,13 @@
 
 //#if !os(macOS)
 //import UIKit
-import Foundation
+// // import Foundation
 
 
-public enum EditMode: Codable {
+
+public enum EditMode {
   
-  private enum CodingKeys: String, CodingKey {
-    case none, paint, erase
-  }
-  
-  public init(from decoder: Decoder) throws {
-    let values = try decoder.container(keyedBy: CodingKeys.self)
-    
-    if values.contains(.paint) {
-      let value: TileTypeFlag
-      value = TileTypeFlag(rawValue: try values.decode(Int.self, forKey: .paint))
-      
-      self = .paint(tileType: value)
-    } else if values.contains(.none) {
-      self = .none
-    } else if values.contains(.erase) {
-      self = .erase
-    } else {
-      print("Error decoding EditMode: \(decoder)")
-      self = .none
-    }
-  }
-  
-  public func encode(to encoder: Encoder) throws {
-    var container = encoder.container(keyedBy: CodingKeys.self)
-    
-    switch self {
-    case .paint(let value):
-      try container.encode(value.rawValue, forKey: CodingKeys.paint)
-    case .none:
-      try container.encode(true, forKey: CodingKeys.none)
-    case .erase:
-      try container.encode(true, forKey: CodingKeys.erase)
-    }
-  }
+
   
   case none
   case paint(tileType: TileTypeFlag)
@@ -63,8 +31,47 @@ public enum EditMode: Codable {
   }
 }
 
-public struct AppState : Codable {
-  public static var shared = AppState()
+/*
+extension EditMode: Codable {
+  private enum CodingKeys: String, CodingKey {
+    case none, paint, erase
+  }
+
+  public init(from decoder: Decoder) throws {
+    let values = try decoder.container(keyedBy: CodingKeys.self)
+
+    if values.contains(.paint) {
+      let value: TileTypeFlag
+      value = TileTypeFlag(rawValue: try values.decode(Int.self, forKey: .paint))
+
+      self = .paint(tileType: value)
+    } else if values.contains(.none) {
+      self = .none
+    } else if values.contains(.erase) {
+      self = .erase
+    } else {
+      print("Error decoding EditMode: \(decoder)")
+      self = .none
+    }
+  }
+
+  public func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+
+    switch self {
+    case .paint(let value):
+      try container.encode(value.rawValue, forKey: CodingKeys.paint)
+    case .none:
+      try container.encode(true, forKey: CodingKeys.none)
+    case .erase:
+      try container.encode(true, forKey: CodingKeys.erase)
+    }
+  }
+}
+*/
+
+public struct AppState {
+  nonisolated(unsafe) public static let shared = AppState()
   
   public var VELMOVINGADD = Double(0.5)
   public var VELMOVING = Double(4.0)        //velocity (speed) for moving left, right
@@ -90,9 +97,10 @@ public struct AppState : Codable {
       }
     }
   }
-  
-  public var cameraMoveSpeed = Double(500)
-  
+
+  /// TODO: make this customisable or fix up the ratio to the update time.
+  public var cameraMoveSpeed = Double(500) * 10
+
   public var cameraTracking = true
   public var printCollisions = false
   public var showBlockCoords = true
@@ -129,33 +137,37 @@ public struct AppState : Codable {
     [S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S]
   ]
   
+
+}
+/*
+extension AppState: Codable {
   public static func save() {
-    
+
     var appState = AppState.shared
-    
+
     // Reset any run time changes
     for (y, xBlocks) in appState.blocks.enumerated() {
       for (x, blockVal) in xBlocks.enumerated() {
-        
+
         let tileType = TileTypeFlag(rawValue: blockVal)
-        
+
         if tileType.intersection(.used) == .used {
-          
+
           // Remove used
           var updatedTile = tileType.symmetricDifference(.used)
-          
+
           // Re add solid if breakable
           if tileType.contains(.breakable) {
             updatedTile = updatedTile.union(.solid)
           }
-          
+
           appState.blocks[y][x] = updatedTile.rawValue
         }
       }
     }
-    
-    
-    
+
+
+
     let jsonEncoder = JSONEncoder()
     let jsonData: Data
     do {
@@ -168,7 +180,7 @@ public struct AppState : Codable {
       print("Error json stat to string")
       return
     }
-    
+
     let fileURL = URL(fileURLWithPath: "appState.json")
     do {
       try jsonString.write(to: fileURL, atomically: true, encoding: .utf8)
@@ -178,7 +190,7 @@ public struct AppState : Codable {
     }
     print("Saved! \(fileURL.absoluteString)")
   }
-  
+
   public static func load() {
     let jsonString: String
     let fileURL = URL(fileURLWithPath: "appState.json")
@@ -189,12 +201,12 @@ public struct AppState : Codable {
       print("Error loading: \(error)")
       return
     }
-    
+
     guard let jsonData = jsonString.data(using: .utf8) else {
       print("Error string to data")
       return
     }
-    
+
     let jsonDecoder = JSONDecoder()
     let appState: AppState
     do {
@@ -203,8 +215,9 @@ public struct AppState : Codable {
       print("Error decoding: \(error)")
       return
     }
-    
+
     AppState.shared = appState
     print("Loaded!")
   }
 }
+*/

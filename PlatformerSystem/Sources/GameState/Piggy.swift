@@ -8,23 +8,25 @@
 
 //import CoreGraphics
 //import UIKit
-import Foundation
+// import Foundation
 
 
-public class Piggy: CollisionObject, UsesComponents, GravityComponent {
-  public var _i = IntPoint.zero
-  public var _f = Point.zero
-  public var vel: Point = Point.zero //velocity on x, y axis
-  public var fOld: Point = Point.zero
-  public var lastGroundPosition: Int = Int.max
-  public var slopesBelow: (left: TileTypeFlag?, right: TileTypeFlag?) = (nil, nil)
-  public var inAir = true
-  public var lastSlopeTilePoint: IntPoint?
-  public var size = IntSize(width: 28, height: 22)
-  public var direction: Direction = []
-  
-  public func update(currentTime: TimeInterval, level: Level) -> Level {
-    
+public class Piggy: Actor, UsesComponents, GravityComponent {
+  public override init() {
+    super.init()
+    vel = Point.zero //velocity on x, y axis
+    fOld = Point.zero
+    lastGroundPosition = Int.max
+    slopesBelow = (nil, nil)
+    inAir = true
+    lastSlopeTilePoint = nil
+    size = IntSize(width: 28, height: 22)
+    direction = []
+    actors = [:]
+  }
+
+  public override func update(currentTime: TimeInterval, level: Level) -> Level {
+
     
     //        // Lets add gravity here
     //        if inAir {
@@ -39,10 +41,7 @@ public class Piggy: CollisionObject, UsesComponents, GravityComponent {
   }
   
   
-}
 
-extension Piggy: Collision {
-  
   func kick(by object: Actor) {
     if object.f.x <= f.x {
       vel.x = AppState.shared.VELKICK
@@ -55,17 +54,18 @@ extension Piggy: Collision {
   }
   
   
-  public func tryCollide(withObject object: Actor) -> CollideResult {
-    
+  public override func tryCollide(withObject object: Actor) -> CollideResult {
+
     if collisionDetection(withObject: object) {
       
       if let player = object as? Player {
-        
+
         //player->fOldY + PH <= iy && player->iy + PH >= iy
-        if player.fOld.y + Double(player.size.height) <= Double(i.y) && player.i.y + player.size.height >= i.y {
+        if player.fOld.y + Double(player.size.height) <= Double(i.y)
+           && player.i.y + player.size.height >= i.y {
           // was hit on top
-          
-          
+
+
           if vel.x != 0.0 {
             // Moving
             print("top: stop")
@@ -79,10 +79,13 @@ extension Piggy: Collision {
           }
         } else {
           // was hit below
-          
+
+          print("self i, \(i.x) \(i.y) -- player i, \(player.i.x) \(player.i.y)")
+          print("self f, \(Int(f.x)) \(Int(f.y)) -- player i, \(Int(player.f.x)) \(Int(player.f.y))")
+
           if vel.x != 0.0 {
             // Moving
-            print("below: kick")
+            print("below: kick (Moving) - \(Int(vel.x))")
             kick(by: player)
           } else if abs(player.vel.x) > AppState.shared.VELMOVING {
             // Stopped & player running
@@ -92,7 +95,7 @@ extension Piggy: Collision {
           } else {
             // Stopped
             
-            print("below: kick")
+            print("below: kick (Stopped)")
             kick(by: player)
           }
           
@@ -102,19 +105,13 @@ extension Piggy: Collision {
     }
     return .none
   }
-}
-
-extension Piggy: CollisionHorizontal {
-  public func collisionHorizontalResponse(vel: Point) -> Point {
+  public override func collisionHorizontalResponse(vel: Point) -> Point {
     var vel = vel
     vel.x = vel.x * -1.0
     return vel
   }
-}
+  public override func drop(by actor: Actor) {
 
-extension Piggy: Droppable {
-  func drop(by actor: Actor) {
-    
     if actor.direction.contains(.right) {
       print("drop right")
       f.x = actor.f.x + Double(actor.size.width) + 1

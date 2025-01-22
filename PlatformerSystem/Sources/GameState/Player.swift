@@ -8,23 +8,27 @@
 
 //import CoreGraphics
 //import UIKit
-import Foundation
+// import Foundation
 
 
-public class Player: CollisionObject, ActorCarrier, UsesComponents, GravityComponent {
-  
-  public var _i = IntPoint.zero
-  public var _f = Point.zero
-  public var vel: Point = Point.zero //velocity on x, y axis
-  public var fOld: Point = Point.zero
-  public var lastGroundPosition: Int = Int.max
-  public var slopesBelow: (left: TileTypeFlag?, right: TileTypeFlag?) = (nil, nil)
-  public var inAir = false
-  public var lastSlopeTilePoint: IntPoint?
-  public var size = IntSize(width: 22, height: 25)
-  public var direction: Direction = []
-  
-  public var actors: [UUID: Actor] = [:]
+public class Player: Actor, UsesComponents, GravityComponent {
+
+  public override init() {
+    super.init()
+//    _i = IntPoint.zero
+//    _f = Point.zero
+    vel = Point.zero //velocity on x, y axis
+    fOld = Point.zero
+    lastGroundPosition = Int.max
+    slopesBelow = (nil, nil)
+    inAir = false
+    lastSlopeTilePoint = nil
+    size = IntSize(width: 22, height: 25)
+    direction = []
+    actors = [:]
+  }
+
+//  public var actors: [UUID: Actor] = [:]
   
   private var lockjump = false
   
@@ -88,7 +92,7 @@ public class Player: CollisionObject, ActorCarrier, UsesComponents, GravityCompo
     return update(currentTime: currentTime, level: level)
   }
   
-  public func update(currentTime: TimeInterval, level: Level) -> Level {
+  public override func update(currentTime: TimeInterval, level: Level) -> Level {
     var level = level
     fOld = f
     level = collisionDetection(level: level)
@@ -164,18 +168,15 @@ public class Player: CollisionObject, ActorCarrier, UsesComponents, GravityCompo
     let fallThrough = false
     return fallThrough
   }
-}
 
-extension Player: Collision {
-  public func tryCollide(withObject object: Actor) -> CollideResult {
+  public override func tryCollide(withObject object: Actor) -> CollideResult {
     return .none
   }
-}
-
-extension Player: CollisionHorizontal {
-  public func collisionHorizontalResponse(vel: Point) -> Point {
+  public override func collisionHorizontalResponse(vel: Point) -> Point {
     var vel = vel
     vel.x = 0
     return vel
   }
+
+  public override func drop(by actor: Actor) {}
 }

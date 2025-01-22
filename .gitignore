@@ -80,3 +80,4 @@ DerivedData/
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
 .netrc
 Package.resolved
+PlayDate/Platformer/Sources/Platformer/PlatformerSystem

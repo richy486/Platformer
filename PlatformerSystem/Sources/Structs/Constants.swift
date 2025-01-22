@@ -8,7 +8,7 @@
 
 //import CoreGraphics
 //import UIKit
-import Foundation
+// import Foundation
 
 
 public let VELMOVINGFRICTION = Double(0.2)
@@ -18,13 +18,15 @@ public let BOUNCESTRENGTH = Double(0.5)
 public let MAXVELY = Double(20.0)
 
 public struct Constants {
-  
-  public static let kNotificationCollide = NSNotification.Name(rawValue: "kNotificationCollide")
+
+  // Disabled in embedded.
+  public static let kNotificationCollide = "kNotificationCollide" // NSNotification.Name(rawValue: "kNotificationCollide")
   public static let kCollideXPosition = "kCollideXPosition"
   public static let kCollideYLeftPosition = "kCollideYLeftPosition"
   public static let kCollideYRightPosition = "kCollideYRightPosition"
-  
-  public static let kNotificationMapChange = NSNotification.Name(rawValue: "kNotificationMapChange")
+
+  // Disabled in embedded.
+  public static let kNotificationMapChange = "kNotificationMapChange" // NSNotification.Name(rawValue: "kNotificationMapChange")
   public static let kMapChangePoint = "kMapChangePoint"
   public static let kMapChangeTileType = "kMapChangeTileType"
   

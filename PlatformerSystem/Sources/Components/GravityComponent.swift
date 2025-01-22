@@ -6,10 +6,12 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-//import Foundation
+//// import Foundation
 //import CoreGraphics
 //import UIKit
-import Foundation
+// import Foundation
+//import CoreFoundation
+//import PlaydateKit
 
 
 protocol GravityComponent {
@@ -23,6 +25,12 @@ extension GravityComponent where Self: UsesComponents, Self: Actor {
       vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
     }
     
+    return level
+  }
+
+  func updateComponents(currentTime: TimeInterval, level: Level) -> Level {
+    var level = level
+    level = updateGravityComponent(currentTime: currentTime, level: level)
     return level
   }
 }

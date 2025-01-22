@@ -14,13 +14,13 @@ let package = Package(
         .package(url: "https://github.com/finnvoor/PlaydateKit.git", branch: "main"),
     ],
     targets: [
-        .target(
-            name: "Platformer",
-            dependencies: [
-                .product(name: "PlaydateKit", package: "PlaydateKit"),
-            ],
-            swiftSettings: swiftSettings
-        )
+      .target(
+        name: "Platformer",
+        dependencies: [
+          .product(name: "PlaydateKit", package: "PlaydateKit"),
+        ],
+        swiftSettings: swiftSettings
+      )
     ],
     swiftLanguageModes: [.v6]
 )

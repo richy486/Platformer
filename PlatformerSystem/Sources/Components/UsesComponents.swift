@@ -6,10 +6,10 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-//import Foundation
+//// import Foundation
 //import CoreGraphics
 //import UIKit
-import Foundation
+// import Foundation
 
 
 protocol UsesComponents {
@@ -18,12 +18,13 @@ protocol UsesComponents {
 
 extension UsesComponents where Self: Actor {
   func updateComponents(currentTime: TimeInterval, level: Level) -> Level {
-    var level = level
-    
-    if let gravityAffected = self as? GravityComponent {
-      level = gravityAffected.updateGravityComponent(currentTime: currentTime, level: level)
-    }
-    
+//    var level = level
+    // TODO: Check if `GravityComponent.updateComponents(currentTime:level:)` is called instead
+//    if let gravityAffected = self as? GravityComponent {
+//      level = gravityAffected.updateGravityComponent(currentTime: currentTime, level: level)
+//    }
+
+//
     return level
     
   }

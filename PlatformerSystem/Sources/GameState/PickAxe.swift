@@ -8,22 +8,26 @@
 
 //import CoreGraphics
 //import UIKit
-import Foundation
+// import Foundation
 
 
-public class PickAxe: CollisionObject, UsesComponents, GravityComponent {
-  public var _i = IntPoint.zero
-  public var _f = Point.zero
-  public var vel: Point = Point.zero //velocity on x, y axis
-  public var fOld: Point = Point.zero
-  public var lastGroundPosition: Int = Int.max
-  public var slopesBelow: (left: TileTypeFlag?, right: TileTypeFlag?) = (nil, nil)
-  public var inAir = true
-  public var lastSlopeTilePoint: IntPoint?
-  public var size = IntSize(width: 28, height: 22)
-  public var direction: Direction = []
-  
-  public func update(currentTime: TimeInterval, level: Level) -> Level {
+public class PickAxe: Actor, UsesComponents, GravityComponent {
+  public override init() {
+    super.init()
+//    _i = IntPoint.zero
+//    _f = Point.zero
+    vel = Point.zero //velocity on x, y axis
+    fOld = Point.zero
+    lastGroundPosition = Int.max
+    slopesBelow = (nil, nil)
+    inAir = true
+    lastSlopeTilePoint = nil
+    size = IntSize(width: 28, height: 22)
+    direction = []
+    actors = [:]
+  }
+
+  public override func update(currentTime: TimeInterval, level: Level) -> Level {
     
     
     //        // Lets add gravity here
@@ -37,11 +41,6 @@ public class PickAxe: CollisionObject, UsesComponents, GravityComponent {
     level = collisionDetection(level: level)
     return level
   }
-  
-  
-}
-
-extension PickAxe: Collision {
 
   func kick(by object: Actor) {
     if object.f.x <= f.x {
@@ -55,8 +54,8 @@ extension PickAxe: Collision {
   }
   
   
-  public func tryCollide(withObject object: Actor) -> CollideResult {
-    
+  public override func tryCollide(withObject object: Actor) -> CollideResult {
+
     if collisionDetection(withObject: object) {
       
       if let player = object as? Player {
@@ -102,19 +101,13 @@ extension PickAxe: Collision {
     }
     return .none
   }
-}
-
-extension PickAxe: CollisionHorizontal {
-  public func collisionHorizontalResponse(vel: Point) -> Point {
+  public override func collisionHorizontalResponse(vel: Point) -> Point {
     var vel = vel
     vel.x = vel.x * -1.0
     return vel
   }
-}
+  public override func drop(by actor: Actor) {
 
-extension PickAxe: Droppable {
-  func drop(by actor: Actor) {
-    
     if actor.direction.contains(.right) {
       print("drop right")
       f.x = actor.f.x + Double(actor.size.width) + 1
