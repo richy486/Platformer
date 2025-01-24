@@ -5,22 +5,14 @@
 //  Copyright © 2016 Richard Adem. All rights reserved.
 //
 
-// Lerp and Clamp from Daniel Clelland https://github.com/dclelland/Lerp
-
-//import CoreGraphics
-
-// MARK: Lerpable protocol
-
-//#if PLAYDATE
-#if os(macOS)
-import Foundation
-#else
+#if canImport(PlaydateKit)
 import PlaydateKit
+#else
+import Foundation
 #endif
-//#else
-//import Foundation
-//#endif
 
+// Lerp and Clamp from Daniel Clelland https://github.com/dclelland/Lerp
+// MARK: Lerpable protocol
 public protocol Lerpable {
   func lerp(min: Self, max: Self) -> Self
   func ilerp(min: Self, max: Self) -> Self
@@ -58,26 +50,26 @@ extension Double {
 }
 
 extension Double: Lerpable {
-  
+
   /// Linear interpolation
   public func lerp(min: Double, max: Double) -> Double {
     return min + (self * (max - min))
   }
-  
+
   /// Inverse linear interpolation
   public func ilerp(min: Double, max: Double) -> Double {
     return (self - min) / (max - min)
   }
-  
+
 }
 
 extension Double: Clampable {
-  
+
   /// Clamp
   public func clamp(min: Double, max: Double) -> Double {
     return Swift.min(Swift.max(self, Swift.min(min, max)), Swift.max(min, max))
   }
-  
+
 }
 
 // MARK: - Point
@@ -90,24 +82,24 @@ extension Point {
 }
 
 func + (left: Point, right: Point) -> Point {
-  
+
   return Point(x: left.x + right.x, y: left.y + right.y)
 }
 func - (left: Point, right: Point) -> Point {
-  
+
   return Point(x: left.x - right.x, y: left.y - right.y)
 }
 func * (left: Point, right: Point) -> Point {
-  
+
   return Point(x: left.x * right.x, y: left.y * right.y)
 }
 func / (left: Point, right: Point) -> Point {
-  
+
   return Point(x: left.x / right.x, y: left.y / right.y)
 }
 
 func % (left: Point, right: Point) -> Point {
-  
+
   return Point(x: left.x.truncatingRemainder(dividingBy: right.x), y: left.y.truncatingRemainder(dividingBy: right.y))
 }
 
@@ -125,19 +117,19 @@ func /= (left: inout Point, right: Point) {
 }
 
 func * (left: Point, right: Double) -> Point {
-  
+
   return Point(x: left.x * right, y: left.y * right)
 }
 func / (left: Point, right: Double) -> Point {
-  
+
   return Point(x: left.x / right, y: left.y / right)
 }
 func + (left: Point, right: Double) -> Point {
-  
+
   return Point(x: left.x + right, y: left.y + right)
 }
 func - (left: Point, right: Double) -> Point {
-  
+
   return Point(x: left.x - right, y: left.y - right)
 }
 
@@ -159,43 +151,43 @@ extension Point {
 //    return String(format: "(%\(f)f, %\(f)f)", self.x, self.y)
     fatalError("Not implemented")
   }
-  
+
   func offsetX(x: Double) -> Point {
     return Point(x: self.x + x, y: self.y)
   }
-  
+
   func offsetY(y: Double) -> Point {
     return Point(x: self.x, y: self.y + y)
   }
 }
 
 extension Point: Lerpable {
-  
+
   /// Linear interpolation
   public func lerp(min: Point, max: Point) -> Point {
     let x = self.x.lerp(min: min.x, max: max.x)
     let y = self.y.lerp(min: min.y, max: max.y)
     return Point(x: x, y: y)
   }
-  
+
   /// Inverse linear interpolation
   public func ilerp(min: Point, max: Point) -> Point {
     let x = self.x.ilerp(min: min.x, max: max.x)
     let y = self.y.ilerp(min: min.y, max: max.y)
     return Point(x: x, y: y)
   }
-  
+
 }
 
 extension Point: Clampable {
-  
+
   /// Clamp
   public func clamp(min: Point, max: Point) -> Point {
     let x = self.x.clamp(min: min.x, max: max.x)
     let y = self.y.clamp(min: min.y, max: max.y)
     return Point(x: x, y: y)
   }
-  
+
 }
 
 // MARK: Vector maths
@@ -215,39 +207,39 @@ extension Point: Vector {
   }
   public var normalized: Point {
     let length = self.length
-    
+
     guard length > 0 else {
       return Point.zero
     }
-    
+
     return Point(x: x/length, y: y/length)
   }
 }
 
 // MARK: - Size
 func + (left: Size, right: Size) -> Size {
-  
+
   return Size(width: left.width + right.width, height: left.height + right.height)
 }
 func - (left: Size, right: Size) -> Size {
-  
+
   return Size(width: left.width - right.width, height: left.height - right.height)
 }
 func * (left: Size, right: Size) -> Size {
-  
+
   return Size(width: left.width * right.width, height: left.height * right.height)
 }
 func / (left: Size, right: Size) -> Size {
-  
+
   return Size(width: left.width / right.width, height: left.height / right.height)
 }
 
 func * (left: Size, right: Double) -> Size {
-  
+
   return Size(width: left.width * right, height: left.height * right)
 }
 func / (left: Size, right: Double) -> Size {
-  
+
   return Size(width: left.width / right, height: left.height / right)
 }
 
@@ -257,47 +249,47 @@ func sizeToPoint(_ size: Size) -> Point {
 }
 
 func * (left: Point, right: Size) -> Point {
-  
+
   return Point(x: left.x * right.width, y: left.y * right.height)
 }
 func / (left: Point, right: Size) -> Point {
-  
+
   return Point(x: left.x / right.width, y: left.y / right.height)
 }
 func + (left: Point, right: Size) -> Point {
-  
+
   return Point(x: left.x + right.width, y: left.y + right.height)
 }
 func - (left: Point, right: Size) -> Point {
-  
+
   return Point(x: left.x - right.width, y: left.y - right.height)
 }
 
 extension Size: Lerpable {
-  
+
   /// Linear interpolation
   public func lerp(min: Size, max: Size) -> Size {
     let width = self.width.lerp(min: min.width, max: max.width)
     let height = self.height.lerp(min: min.height, max: max.height)
     return Size(width: width, height: height)
   }
-  
+
   /// Inverse linear interpolation
   public func ilerp(min: Size, max: Size) -> Size {
     let width = self.width.ilerp(min: min.width, max: max.width)
     let height = self.height.ilerp(min: min.height, max: max.height)
     return Size(width: width, height: height)
   }
-  
+
 }
 
 extension Size: Clampable {
-  
+
   /// Clamp
   public func clamp(min: Size, max: Size) -> Size {
     let width = self.width.clamp(min: min.width, max: max.width)
     let height = self.height.clamp(min: min.height, max: max.height)
     return Size(width: width, height: height)
   }
-  
+
 }
