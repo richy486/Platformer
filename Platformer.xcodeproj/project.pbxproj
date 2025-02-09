@@ -35,6 +35,8 @@
 		B9B6469E215D211F00AE3A1A /* BlockFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B6469D215D211F00AE3A1A /* BlockFactory.swift */; };
 		B9F296D32D2B333F008E5B82 /* PlatformerSystem in Frameworks */ = {isa = PBXBuildFile; productRef = B9F296D22D2B333F008E5B82 /* PlatformerSystem */; };
 		B9F296D52D2B33F3008E5B82 /* Point+CoreGraphcs.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F296D42D2B33E3008E5B82 /* Point+CoreGraphcs.swift */; };
+		B9FDE5192D58FE3B00AE2896 /* GameManager+Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FDE5182D58FE3600AE2896 /* GameManager+Loading.swift */; };
+		B9FDE51B2D58FE8600AE2896 /* Level+Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FDE51A2D58FE8100AE2896 /* Level+Loading.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -113,6 +115,8 @@
 		B9B6469B2156ED1A00AE3A1A /* UnselectorCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnselectorCollectionView.swift; sourceTree = "<group>"; };
 		B9B6469D215D211F00AE3A1A /* BlockFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockFactory.swift; sourceTree = "<group>"; };
 		B9F296D42D2B33E3008E5B82 /* Point+CoreGraphcs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Point+CoreGraphcs.swift"; sourceTree = "<group>"; };
+		B9FDE5182D58FE3600AE2896 /* GameManager+Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameManager+Loading.swift"; sourceTree = "<group>"; };
+		B9FDE51A2D58FE8100AE2896 /* Level+Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Level+Loading.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,6 +237,8 @@
 		B9A3BC862D41887F003F3C88 /* SystemExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				B9FDE51A2D58FE8100AE2896 /* Level+Loading.swift */,
+				B9FDE5182D58FE3600AE2896 /* GameManager+Loading.swift */,
 				B9A3BC892D4188BC003F3C88 /* AppState+Codable.swift */,
 				B9A3BC872D41888D003F3C88 /* EditMode+Codable.swift */,
 			);
@@ -475,6 +481,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9F296D52D2B33F3008E5B82 /* Point+CoreGraphcs.swift in Sources */,
+				B9FDE51B2D58FE8600AE2896 /* Level+Loading.swift in Sources */,
 				B95F037D212EFAA3003E84E8 /* ViewController.swift in Sources */,
 				B95F037B212EFAA3003E84E8 /* GameScene.swift in Sources */,
 				B9B6469C2156ED1A00AE3A1A /* UnselectorCollectionView.swift in Sources */,
@@ -483,6 +490,7 @@
 				B91F1105217F694900F15EA6 /* SpriteFactory.swift in Sources */,
 				B9B6469A2156EA1C00AE3A1A /* FirstResponderWindow.swift in Sources */,
 				B9A3BC8A2D4188C0003F3C88 /* AppState+Codable.swift in Sources */,
+				B9FDE5192D58FE3B00AE2896 /* GameManager+Loading.swift in Sources */,
 				B9B6469521553D5500AE3A1A /* TileItem.swift in Sources */,
 				B9A3BC882D418892003F3C88 /* EditMode+Codable.swift in Sources */,
 				B914DB66214C867300628D23 /* SliderView.swift in Sources */,

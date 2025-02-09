@@ -42,13 +42,6 @@ extension Double {
   public static let zero: Double = Double(0)
 }
 
-extension Double {
-  func format(_ f: String) -> String {
-//    return String(format: "%\(f)f", self)
-    fatalError("Not supported in embedded mode")
-  }
-}
-
 extension Double: Lerpable {
 
   /// Linear interpolation
@@ -60,7 +53,6 @@ extension Double: Lerpable {
   public func ilerp(min: Double, max: Double) -> Double {
     return (self - min) / (max - min)
   }
-
 }
 
 extension Double: Clampable {
@@ -147,11 +139,6 @@ func abs(_ value: Point) -> Point {
 }
 
 extension Point {
-  func format(_ f: String) -> String {
-//    return String(format: "(%\(f)f, %\(f)f)", self.x, self.y)
-    fatalError("Not implemented")
-  }
-
   func offsetX(x: Double) -> Point {
     return Point(x: self.x + x, y: self.y)
   }

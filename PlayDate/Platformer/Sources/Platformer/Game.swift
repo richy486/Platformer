@@ -14,6 +14,8 @@ final class Game: PlaydateGame {
   // MARK: Lifecycle
 
   init() {
+    print("Setup table")
+
     let table: Graphics.BitmapTable
     do {
       // 5 x 3 * 16px x 16px
@@ -24,12 +26,10 @@ final class Game: PlaydateGame {
     }
     self.table = table
 
-    // AppState.load()
-
-    gameManager.loadLevel()
-
+    print("Set background")
     background = Background(table: table, allBlocks: gameManager.allBlocks())
 
+    print("Add background to display list")
     background.addToDisplayList()
 
     gameManager.observer.doUpdate(from: self) { package, aSelf in

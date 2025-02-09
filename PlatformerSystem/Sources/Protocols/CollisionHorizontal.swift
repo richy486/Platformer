@@ -6,9 +6,6 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-//import CoreGraphics
-// import Foundation
-
 public protocol CollisionHorizontal {
   func collisionHorizontalResponse(vel: Point) -> Point
 }

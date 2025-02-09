@@ -56,6 +56,10 @@ final class Background: Sprite.Sprite {
           }
         } else if tileType & TileTypeFlag.player_start.rawValue == TileTypeFlag.player_start.rawValue {
           tile = 11
+        } else if tileType & TileTypeFlag.slope_left.rawValue == TileTypeFlag.slope_left.rawValue {
+          tile = 5
+        } else if tileType & TileTypeFlag.slope_right.rawValue == TileTypeFlag.slope_right.rawValue {
+          tile = 6
         } else if tileType & TileTypeFlag.solid.rawValue == TileTypeFlag.solid.rawValue {
           // Regular solid, not or-ed with anything else.
           tile = 0

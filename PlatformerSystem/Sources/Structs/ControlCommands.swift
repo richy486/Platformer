@@ -6,8 +6,6 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-// import Foundation
-
 public struct ControlCommands {
   public let left: Bool
   public let right: Bool

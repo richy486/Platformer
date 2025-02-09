@@ -4,7 +4,6 @@
 //
 //  Created by Richard Adem on 29/12/2024.
 //
-// import Foundation
 
 public struct Point {
   public var x: Double
@@ -15,7 +14,6 @@ public struct Point {
     self.y = y
   }
 }
-
 
 extension Point {
   public static var zero: Point { Point(x: 0, y: 0) }

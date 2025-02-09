@@ -161,8 +161,7 @@ class GameScene: SKScene {
     
     gameManager.loadLevel()
     setupBlocks()
-//    resetCamera()
-    
+
     addChild(selectedBlockNode)
     addChild(collideXBlockNode)
     addChild(collideYLeftBlockNode)

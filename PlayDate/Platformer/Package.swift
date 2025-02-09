@@ -42,8 +42,6 @@ var swiftSettings: [SwiftSetting] {[
       "-Xcc", "-I", "-Xcc", "\(gccIncludePrefix)/include-fixed",
       "-Xcc", "-I", "-Xcc", "\(gccIncludePrefix)/../../../../arm-none-eabi/include",
       "-I", "\(playdateSDKPath)/C_API",
-//      "-DPLAYDATE",
-//      "-Xswiftc", "-DPLAYDATE"
     ]),
     .define("PLAYDATE"),
 ]}

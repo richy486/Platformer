@@ -6,14 +6,6 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-//// import Foundation
-//import CoreGraphics
-//import UIKit
-// import Foundation
-
-
-//public typealias Actor = Collision & CollisionObject & CollisionHorizontal
-
 public class Actor: Collision, CollisionObject, CollisionHorizontal, ActorCarrier {
   public init () {}
 
@@ -26,15 +18,11 @@ public class Actor: Collision, CollisionObject, CollisionHorizontal, ActorCarrie
   }
 
   public var f: Point = .zero
-//  public var i: IntPoint = .zero
 
   public var i: IntPoint {
     return f.intPoint
   }
 
-
-//  public var _f: Point = .zero
-//  public var _i: IntPoint = .zero
   public var fOld: Point = .zero
   public var vel: Point = .zero
   public var inAir: Bool = false

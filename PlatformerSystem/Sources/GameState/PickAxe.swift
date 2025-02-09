@@ -6,16 +6,9 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-//import CoreGraphics
-//import UIKit
-// import Foundation
-
-
 public class PickAxe: Actor, UsesComponents, GravityComponent {
   public override init() {
     super.init()
-//    _i = IntPoint.zero
-//    _f = Point.zero
     vel = Point.zero //velocity on x, y axis
     fOld = Point.zero
     lastGroundPosition = Int.max
@@ -28,12 +21,6 @@ public class PickAxe: Actor, UsesComponents, GravityComponent {
   }
 
   public override func update(currentTime: TimeInterval, level: Level) -> Level {
-    
-    
-    //        // Lets add gravity here
-    //        if inAir {
-    //            vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
-    //        }
     var level = level
     level = updateComponents(currentTime: currentTime, level: level)
     
@@ -52,19 +39,15 @@ public class PickAxe: Actor, UsesComponents, GravityComponent {
   func stop() {
     vel.x = 0
   }
-  
-  
+
   public override func tryCollide(withObject object: Actor) -> CollideResult {
 
     if collisionDetection(withObject: object) {
       
       if let player = object as? Player {
         
-        //player->fOldY + PH <= iy && player->iy + PH >= iy
         if player.fOld.y + Double(player.size.height) <= Double(i.y) && player.i.y + player.size.height >= i.y {
           // was hit on top
-          
-          
           if vel.x != 0.0 {
             // Moving
             print("top: stop")

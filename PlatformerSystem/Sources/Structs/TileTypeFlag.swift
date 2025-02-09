@@ -6,8 +6,6 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-// import Foundation
-
 public struct TileTypeFlag: OptionSet {
   
   public let rawValue: Int
@@ -23,7 +21,7 @@ public struct TileTypeFlag: OptionSet {
   public static var powerup: TileTypeFlag { TileTypeFlag(rawValue: 1 << 5) }
 
   public static var slope_left: TileTypeFlag { TileTypeFlag(rawValue: 1 << 6) } // ◿
-  public static var slope_right: TileTypeFlag { TileTypeFlag(rawValue: 1 << 7) } // ◺ }
+  public static var slope_right: TileTypeFlag { TileTypeFlag(rawValue: 1 << 7) } // ◺
 
   public static var pickup: TileTypeFlag { TileTypeFlag(rawValue: 1 << 8) }
   public static var player_start: TileTypeFlag { TileTypeFlag(rawValue: 1 << 9) }

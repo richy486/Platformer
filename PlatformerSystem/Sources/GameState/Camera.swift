@@ -6,11 +6,6 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-//import CoreGraphics
-//import UIKit
-// import Foundation
-
-
 public enum CameraMode {
   case center
   case lockLeftOfPlayer
@@ -24,7 +19,6 @@ public final class Camera {
   private var lastUpdateTimeInterval: TimeInterval = 0
   
   func update<C: CollisionObject>(currentTime: TimeInterval, targetObject: C) {
-//    print(" Camera update")
     if lastUpdateTimeInterval == 0 {
       lastUpdateTimeInterval = currentTime
     }

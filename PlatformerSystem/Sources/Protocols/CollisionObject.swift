@@ -6,16 +6,10 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-//import CoreGraphics
-//import UIKit
-// import Foundation
-
 public protocol CollisionObject: AnyObject {
   
   var f: Point { get set }
   var i: IntPoint { get }
-//  var _f: Point { get set }
-//  var _i: IntPoint { get set }
   var fOld: Point { get set }
   var vel: Point { get set }
   var inAir: Bool { get set }
@@ -29,35 +23,9 @@ public protocol CollisionObject: AnyObject {
 }
 
 public extension CollisionObject where Self: Collision, Self: CollisionHorizontal {
-  
-  // MARK: Helper functions and vars
-//  var f: Point {
-//    set {
-//      print("set f \(Int(newValue.x)) \(Int(newValue.y))")
-//      _f = newValue
-//      _i = newValue.intPoint
-//    }
-//    get {
-//      return _f
-//    }
-//  }
-//  var i: IntPoint { //x, y coordinate (top left of the player rectangle)
-//    set {
-//      print("set i \(newValue.x) \(newValue.y)")
-//      _f = newValue.cgPoint
-//      _i = newValue
-//    }
-//    get {
-//      return _i
-//    }
-//  }
-
-//  var i: IntPoint {
-//    return f.intPoint
-//  }
 
   private func updateDirection() {
-    
+
     var direction: Direction = []
     if vel.x > 0.0 {
       direction = direction.union(.right)
@@ -91,7 +59,6 @@ public extension CollisionObject where Self: Collision, Self: CollisionHorizonta
     return velY
   }
   
-  //    let PH_SLOPE = PH - HALFPW - 1
   var heightSlope: Int {
     return size.height - (size.width/2) - 1
   }
@@ -195,9 +162,6 @@ public extension CollisionObject where Self: Collision, Self: CollisionHorizonta
       let iPlayerL = i.x / TILESIZE
       let iPlayerC = (i.x + (size.width/2)) / TILESIZE
       let iPlayerR = (i.x + size.width) / TILESIZE
-//      print("f \(Int(f.x)) \(Int(f.y))")
-//      print("i \(i.x) \(i.y)")
-//      print("iPlayerL: \(iPlayerL), iPlayerC: \(iPlayerC), iPlayerR: \(iPlayerR)")
 
       let txl = slopesBelow.left == nil ? iPlayerL : iPlayerC
       let txc = iPlayerC

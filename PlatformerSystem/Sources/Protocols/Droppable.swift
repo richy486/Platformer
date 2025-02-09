@@ -6,8 +6,6 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-//// import Foundation
-
 protocol Droppable {
   func drop(by actor: Actor)
 }

@@ -6,18 +6,7 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-//import CoreGraphics
-
-//#if !os(macOS)
-//import UIKit
-// // import Foundation
-
-
-
 public enum EditMode {
-  
-
-  
   case none
   case paint(tileType: TileTypeFlag)
   case erase

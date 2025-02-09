@@ -6,17 +6,10 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-//import CoreGraphics
-//import UIKit
-// import Foundation
-
-
 public class Player: Actor, UsesComponents, GravityComponent {
 
   public override init() {
     super.init()
-//    _i = IntPoint.zero
-//    _f = Point.zero
     vel = Point.zero //velocity on x, y axis
     fOld = Point.zero
     lastGroundPosition = Int.max
@@ -27,12 +20,9 @@ public class Player: Actor, UsesComponents, GravityComponent {
     direction = []
     actors = [:]
   }
-
-//  public var actors: [UUID: Actor] = [:]
-  
   private var lockjump = false
   
-  func restart() {
+  public func restart() {
     lockjump = false
     inAir = true
     lastSlopeTilePoint = nil
@@ -44,12 +34,6 @@ public class Player: Actor, UsesComponents, GravityComponent {
   }
   
   func update(currentTime: TimeInterval, controlCommands: ControlCommands, level: Level) -> Level {
-    
-    //        // Lets add gravity here
-    //        if inAir {
-    //            vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
-    //        }
-    
     var level = level
     level = updateComponents(currentTime: currentTime, level: level)
     
@@ -66,7 +50,6 @@ public class Player: Actor, UsesComponents, GravityComponent {
     //jump pressed?
     if controlCommands.jump {
       // Jump!
-      
       if !lockjump {
         if !inAir {
           if tryFallingThroughPlatform(inDirectionX: movementDirectionX) {

@@ -6,11 +6,6 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-//import CoreGraphics
-//import UIKit
-// import Foundation
-
-
 public class Piggy: Actor, UsesComponents, GravityComponent {
   public override init() {
     super.init()
@@ -26,12 +21,6 @@ public class Piggy: Actor, UsesComponents, GravityComponent {
   }
 
   public override func update(currentTime: TimeInterval, level: Level) -> Level {
-
-    
-    //        // Lets add gravity here
-    //        if inAir {
-    //            vel.y = cap(fallingVelocity: vel.y + AppState.shared.GRAVITATION)
-    //        }
     var level = level
     level = updateComponents(currentTime: currentTime, level: level)
     
@@ -39,8 +28,6 @@ public class Piggy: Actor, UsesComponents, GravityComponent {
     level = collisionDetection(level: level)
     return level
   }
-  
-  
 
   func kick(by object: Actor) {
     if object.f.x <= f.x {
@@ -49,23 +36,17 @@ public class Piggy: Actor, UsesComponents, GravityComponent {
       vel.x = -AppState.shared.VELKICK
     }
   }
+
   func stop() {
     vel.x = 0
   }
-  
-  
+
   public override func tryCollide(withObject object: Actor) -> CollideResult {
-
     if collisionDetection(withObject: object) {
-      
       if let player = object as? Player {
-
-        //player->fOldY + PH <= iy && player->iy + PH >= iy
         if player.fOld.y + Double(player.size.height) <= Double(i.y)
            && player.i.y + player.size.height >= i.y {
           // was hit on top
-
-
           if vel.x != 0.0 {
             // Moving
             print("top: stop")
@@ -79,7 +60,6 @@ public class Piggy: Actor, UsesComponents, GravityComponent {
           }
         } else {
           // was hit below
-
           print("self i, \(i.x) \(i.y) -- player i, \(player.i.x) \(player.i.y)")
           print("self f, \(Int(f.x)) \(Int(f.y)) -- player i, \(Int(player.f.x)) \(Int(player.f.y))")
 
@@ -89,7 +69,6 @@ public class Piggy: Actor, UsesComponents, GravityComponent {
             kick(by: player)
           } else if abs(player.vel.x) > AppState.shared.VELMOVING {
             // Stopped & player running
-            
             print("below: attach")
             return .attach
           } else {
@@ -98,7 +77,6 @@ public class Piggy: Actor, UsesComponents, GravityComponent {
             print("below: kick (Stopped)")
             kick(by: player)
           }
-          
         }
       }
       return .collide

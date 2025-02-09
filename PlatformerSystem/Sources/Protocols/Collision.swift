@@ -6,12 +6,6 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-//import CoreGraphics
-//import UIKit
-// import Foundation
-
-
-
 public enum CollideResult {
   case none
   case collide
@@ -117,23 +111,13 @@ extension Collision where Self: CollisionHorizontal {
       if AppState.shared.printCollisions {
         print("--: \(IntPoint(x: tx, y: ty))")
       }
-      // Disabled in embedded.
-      /*
-      NotificationCenter.default.post(name: Constants.kNotificationCollide,
-                                      object: self,
-                                      userInfo: [Constants.kCollideXPosition: Point(x: tx * TILESIZE, y: ty * TILESIZE)])
-      */
+      // TODO: call Constants.kNotificationCollide
     } else if level.collide(atPoint: bottomTilePoint, tileType: [.solid], direction: direction == 1 ? .left : .right) {
       collide = true
       if AppState.shared.printCollisions {
         print("--: \(IntPoint(x: tx, y: ty2))")
       }
-      // Disabled in embedded.
-      /*
-      NotificationCenter.default.post(name: Constants.kNotificationCollide,
-                                      object: self,
-                                      userInfo: [Constants.kCollideXPosition: Point(x: tx * TILESIZE, y: ty2 * TILESIZE)])
-       */
+      // TODO: call Constants.kNotificationCollide
     }
     
     if collide {
@@ -146,8 +130,6 @@ extension Collision where Self: CollisionHorizontal {
       }
       
       if abs(velocity.x) > 0.0 {
-        //                velocity.x = 0.0
-        //                velocity.x = velocity.x * -1.0
         velocity = collisionHorizontalResponse(vel: velocity)
       }
       
@@ -202,7 +184,6 @@ extension Collision where Self: CollisionHorizontal {
                               unAlignedBlockX: Int,
                               unAlignedBlockFX: Double,
                               level: Level) -> (position: Point, collide: Bool, inAir: Bool, groundPosition: Int, level: Level) {
-//    print("position \(Int(position.x)) \(Int(position.y))")
     var position = position
     var level = level
     
@@ -229,27 +210,14 @@ extension Collision where Self: CollisionHorizontal {
       if AppState.shared.printCollisions {
         print(" | d: \(IntPoint(x: txl, y: ty))")
       }
-//      print(" | l: \(Int(txl)), \(Int(ty))")
-
-      // Disabled in embedded.
-      /*
-      NotificationCenter.default.post(name: Constants.kNotificationCollide,
-                                      object: self,
-                                      userInfo: [Constants.kCollideYLeftPosition: Point(x: txl * TILESIZE, y: ty * TILESIZE)])
-       */
+      // TODO: call Constants.kNotificationCollide
     }
     
     if fSolidTileUnderPlayerRight || fSolidOnTopUnderPlayerRight {
       if AppState.shared.printCollisions {
         print(" | d: \(IntPoint(x: txr, y: ty))")
       }
-//      print(" | r: \(Int(txr)), \(Int(ty))")
-      // Disabled in embedded.
-      /*
-      NotificationCenter.default.post(name: Constants.kNotificationCollide,
-                                      object: self,
-                                      userInfo: [Constants.kCollideYRightPosition: Point(x: txr * TILESIZE, y: ty * TILESIZE)])
-       */
+      // TODO: call Constants.kNotificationCollide
     }
     
     let inAir: Bool
@@ -290,25 +258,11 @@ extension Collision {
     let o1b = o1.i.y + o1.size.height
     let o2r = o2.i.x + o2.size.width
     let o2b = o2.i.y + o2.size.height
-    
-    //        if o1r < o2.i.x {
-    //            return
-    ////                o1->ix + smw->ScreenWidth < o2r &&
-    ////                o1r + smw->ScreenWidth >= o2->ix &&
-    //                o1.i.y < o2b &&
-    //                o2.i.y <= o1b
-    //        } else if o2r < o1.i.x {
-    //            return
-    ////                o1->ix < o2r + smw->ScreenWidth &&
-    ////                o1r >= o2->ix + smw->ScreenWidth &&
-    //                o1.i.y < o2b &&
-    //                o1b >= o2.i.y
-    //        } else {
+
     return
       o1.i.x < o2r &&
-        o1r >= o2.i.x &&
-        o1.i.y < o2b &&
-        o1b >= o2.i.y
-    //        }
+      o1r >= o2.i.x &&
+      o1.i.y < o2b &&
+      o1b >= o2.i.y
   }
 }

@@ -7,30 +7,24 @@
 //
 //  This class manages the game logic of a level
 
-//import CoreGraphics
-//import UIKit
-// import Foundation
-
-class LevelManager: ActorCarrier {
-  var actors: [UUID: Actor] = [:]
+public class LevelManager: ActorCarrier {
+  public var actors: [UUID: Actor] = [:]
   let camera = Camera()
-  /*weak */var player: Player!
+  var player: Player!
   
-  var level: Level
+  public var level: Level
   
   init(level: Level, player: Player) {
+    print("Set level")
     self.level = level
+    print("Set player")
     self.player = player
     restart()
   }
   
   func update(currentTime: TimeInterval, controls: Controls) {
     
-    // Update Player vs Player?
-    // handleP2PCollisions();
-    
     // Update Actors vs Level
-    // list_players[i]->move();
     var player: Player?
     for actor in actors.values {
       
@@ -49,10 +43,6 @@ class LevelManager: ActorCarrier {
     }
     
     // Updated Actors vs Actors
-    // handleP2ObjCollisions();
-    // handleObj2ObjCollisions();
-    
-    //        var attachmentUUIDsToAttach: [(attach: UUID, to: UUID)] = []
     var attachmentActorsToAttach: [(attach: (uuid: UUID, actor: Actor), from: ActorCarrier, to: ActorCarrier)] = []
     for a in actors {
       for b in actors {
@@ -61,19 +51,10 @@ class LevelManager: ActorCarrier {
         }
 
         let collisionResult = a.value.tryCollide(withObject: b.value)
-//        let collisionResult = collide(a: a.value, b: b.value)
         switch collisionResult {
         case .attach:
-          // a will attach to b
-          //                    attachmentUUIDsToAttach.append((attach: a.key, to: b.key))
-
-//          if let newCarrier = b.value as? ActorCarrier {
-//            let uuidActor = (uuid: a.key, actor: a.value)
-//            attachmentActorsToAttach.append((attach: uuidActor, from: self, to: newCarrier))
-//          }
           let uuidActor = (uuid: a.key, actor: a.value)
           attachmentActorsToAttach.append((attach: uuidActor, from: self, to: b.value))
-
         default:
           break
         }
@@ -111,14 +92,14 @@ class LevelManager: ActorCarrier {
   }
   
   func restart() {
+    print("Restart")
     actors.removeAll()
     
     for (y, xBlocks) in level.blocks.enumerated() {
       for (x, blockVal) in xBlocks.enumerated() {
-        
         let tileType = TileTypeFlag(rawValue: blockVal)
         if tileType.contains(.player_start) {
-          
+
           if actors.contains(where: { $0.value is Player }) == false {
             actors[UUID()] = player
           }
@@ -140,7 +121,6 @@ class LevelManager: ActorCarrier {
           
           let pickup = Pickup()
           actors[UUID()] = pickup
-//          addActor(pickup)
 
           pickup.f = Point(x: x*TILESIZE,
                              y: y*TILESIZE)
@@ -154,6 +134,7 @@ class LevelManager: ActorCarrier {
           piggy.f = Point(x: x*TILESIZE,
                             y: y*TILESIZE)
         }
+        // TODO: Allow external items
 //        if tileType.contains(.jsItem) {
 //          // Create a Pickup actor
 //          

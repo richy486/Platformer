@@ -6,11 +6,6 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-//import CoreGraphics
-//import UIKit
-// import Foundation
-
-
 public let VELMOVINGFRICTION = Double(0.2)
 public let TILESIZE = Int(32)
 public let COLLISION_GIVE = Double(0.2) // Move back by this amount when colliding

@@ -6,9 +6,6 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-//import CoreGraphics
-// import Foundation
-
 public struct IntPoint: Hashable {
   public var x: Int
   public var y: Int

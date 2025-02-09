@@ -6,9 +6,6 @@
 //  Copyright © 2018 Richard Adem. All rights reserved.
 //
 
-//import CoreGraphics
-// import Foundation
-
 public struct Direction: OptionSet {
   
   public let rawValue: Int
@@ -49,14 +46,7 @@ public struct Direction: OptionSet {
         radians -= Double.pi / 4
       }
     }
-    
-    //        // Add left or right
-    //        if self.contains(.left) {
-    //            radians -= Double.pi / 4
-    //        } else if self.contains(.right) {
-    //            radians += Double.pi / 4
-    //        }
-    
+
     return radians
   }
   
