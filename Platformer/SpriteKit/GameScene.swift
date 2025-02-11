@@ -171,7 +171,7 @@ class GameScene: SKScene {
     addChild(forwardFocusBox)
     addChild(cameraCenter)
 
-    Observer.shared.doUpdate(from: self) { package, aSelf in
+    Observer.shared.setupUpdate(from: self) { package, unsafeSelf in
       print(package.message)
       switch package.message {
         case Constants.kNotificationMapChange:
@@ -183,7 +183,7 @@ class GameScene: SKScene {
           }
           let str = String(tileType.rawValue, radix: 2)
           print("map change: tile type \(str)")
-          aSelf.mapChange(point: point, tileType: tileType)
+          unsafeSelf.mapChange(point: point, tileType: tileType)
         case Constants.kNotificationCollide:
           // TODO: add this from the notification below.
           break

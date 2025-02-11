@@ -32,7 +32,7 @@ final class Game: PlaydateGame {
     print("Add background to display list")
     background.addToDisplayList()
 
-    Observer.shared.doUpdate(from: self) { package, aSelf in
+    Observer.shared.setupUpdate(from: self) { package, unsafeSelf in
       print(package.message)
       switch package.message {
         case Constants.kNotificationMapChange:
@@ -44,7 +44,7 @@ final class Game: PlaydateGame {
           }
           let str = String(tileType.rawValue, radix: 2)
           print("map change: tile type \(str)")
-          aSelf.background.mapChange(point: point, tileType: tileType)
+          unsafeSelf.background.mapChange(point: point, tileType: tileType)
         default: break
       }
     }

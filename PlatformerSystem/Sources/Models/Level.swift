@@ -119,7 +119,7 @@ extension Level {
     
     blocks[y][x] = tileType.rawValue
 
-    Observer.shared.update?(Observer.Package(
+    Observer.shared.sendUpdate?(Observer.Package(
       message: Constants.kNotificationMapChange,
       point: IntPoint(x: x, y: y),
       tileType: tileType
