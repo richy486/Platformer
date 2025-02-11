@@ -5,7 +5,10 @@
 //  Created by Richard Adem on 08/01/2025.
 //
 
-final public class Observer {
+final public class Observer: @unchecked Sendable {
+
+  public static let shared = Observer()
+
   public struct Package {
     public let message: String
     public let point: IntPoint?

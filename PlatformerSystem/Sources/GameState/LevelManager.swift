@@ -91,7 +91,7 @@ public class LevelManager: ActorCarrier {
     }
   }
   
-  func restart() {
+  public func restart() {
     print("Restart")
     actors.removeAll()
     

@@ -21,6 +21,7 @@ extension GameManager {
     levelManager.level = level
 
     player.restart()
+    levelManager.restart()
   }
 
 

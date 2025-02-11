@@ -13,7 +13,4 @@ extension Point {
   var cgPoint: CGPoint {
     CGPoint(x: x, y: y)
   }
-//  init(cgPoint: CGPoint) {
-//    self.init(x: Double(cgPoint.x), y: Double(cgPoint.y))
-//  }
 }

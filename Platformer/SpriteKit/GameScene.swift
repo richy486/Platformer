@@ -171,7 +171,7 @@ class GameScene: SKScene {
     addChild(forwardFocusBox)
     addChild(cameraCenter)
 
-    gameManager.observer.doUpdate(from: self) { package, aSelf in
+    Observer.shared.doUpdate(from: self) { package, aSelf in
       print(package.message)
       switch package.message {
         case Constants.kNotificationMapChange:
@@ -192,6 +192,7 @@ class GameScene: SKScene {
     }
 
 
+    // TODO: Move this to the observer.
     NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: Constants.kNotificationCollide),
                                            object: nil,//gameManager.player,
     queue: OperationQueue.main) { notification in
@@ -314,6 +315,7 @@ class GameScene: SKScene {
       gameManager.loadLevel()
       setupBlocks()
 //      resetCamera()
+      
     }
     
     if keysDown[.r] == true {

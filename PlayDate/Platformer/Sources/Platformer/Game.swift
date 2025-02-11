@@ -32,7 +32,7 @@ final class Game: PlaydateGame {
     print("Add background to display list")
     background.addToDisplayList()
 
-    gameManager.observer.doUpdate(from: self) { package, aSelf in
+    Observer.shared.doUpdate(from: self) { package, aSelf in
       print(package.message)
       switch package.message {
         case Constants.kNotificationMapChange:

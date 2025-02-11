@@ -12,7 +12,6 @@
 public class GameManager {
   public var levelManager: LevelManager
   public var player: Player
-  public let observer = Observer()
 
   public init() {
     print("Create player")
@@ -23,7 +22,9 @@ public class GameManager {
 
     print("Create Level Manager")
     levelManager = LevelManager(level: level, player: player)
-    print("Level Manager done")
+
+    let actorsCount = allActors().count
+    print("Level Manager loaded with \(actorsCount) actors (including sub actors)")
   }
   
   public func update(currentTime: TimeInterval, controls: Controls) {
@@ -67,10 +68,6 @@ public class GameManager {
   public func setMap(x: Int, y: Int, tileType: TileTypeFlag) {
     levelManager.level.setMap(x: x, y: y, tileType: tileType)
 
-    observer.update?(Observer.Package(
-      message: Constants.kNotificationMapChange,
-      point: IntPoint(x: x, y: y),
-      tileType: tileType
-    ))
+    
   }
 }
